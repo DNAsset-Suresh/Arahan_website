@@ -1,0 +1,259 @@
+/* =========================================================================
+   ARAHAN ENTERPRISES — TAMIL NADU → GUJARAT LOGISTICS ROUTE
+   Projects page, "Where we work" block only.
+
+   Every selector is namespaced .aarahan-logistics* / .aarahan-route* /
+   .aarahan-truck*, so nothing else on the site can be affected. The two
+   region cards keep their existing .region styling from style.css; this
+   file only adds the route, the truck and the card extras.
+   ========================================================================= */
+
+.aarahan-logistics {
+  --aarahan-orange: var(--accent, #EFB27E);
+  --aarahan-bg: var(--char-2, #2F665A);
+  --aarahan-border: var(--line, rgba(255, 255, 255, 0.09));
+  --aarahan-text: var(--text, #F7F3EC);
+  --aarahan-muted: var(--muted, #BFAE90);
+  --aarahan-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.aarahan-logistics__lede {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--aarahan-muted);
+}
+.aarahan-logistics__lede::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--aarahan-orange);
+}
+
+/* Desktop / tablet: card — route — card */
+.aarahan-logistics__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 0.9fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* ---- Region cards (existing .region look, plus map + hover) ---- */
+.aarahan-logistics__card { overflow: hidden; transition: border-color 0.45s var(--aarahan-ease), box-shadow 0.5s var(--aarahan-ease), translate 0.5s var(--aarahan-ease); }
+.aarahan-logistics__card:hover {
+  translate: 0 -6px;
+  border-color: rgba(239, 178, 126, 0.5);
+  box-shadow: 0 26px 46px -28px rgba(40, 88, 78, 0.28), 0 0 0 1px rgba(239, 178, 126, 0.12);
+}
+.aarahan-logistics__card:hover .region__pin { color: #F7CBA5; }
+.aarahan-logistics__card .region__pin { transition: color 0.4s ease, transform 0.5s var(--aarahan-ease); }
+.aarahan-logistics__card:hover .region__pin { transform: translateY(-2px); }
+
+/* Subtle state outline behind the copy — decorative, not a real map */
+.aarahan-map {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  width: clamp(84px, 30%, 128px);
+  opacity: 0.16;
+  pointer-events: none;
+  transition: opacity 0.5s var(--aarahan-ease);
+}
+.aarahan-logistics__card:hover .aarahan-map { opacity: 0.3; }
+.aarahan-map path { fill: none; stroke: var(--aarahan-text); stroke-width: 1.4; stroke-linejoin: round; }
+.aarahan-map circle { fill: var(--aarahan-orange); }
+.aarahan-map .aarahan-map__dot { animation: aarahan-map-dot 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+/* ---- The route ---- */
+.aarahan-route {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  min-height: 200px;
+  padding: 10px 0;
+}
+.aarahan-route__stage { position: relative; }
+.aarahan-route svg { width: 100%; height: auto; overflow: visible; }
+.aarahan-route__v { display: none; }
+
+/* Route strokes */
+.aarahan-route__glow {
+  fill: none;
+  stroke: var(--aarahan-orange);
+  stroke-width: 11;
+  stroke-linecap: round;
+  opacity: 0.22;
+  filter: blur(6px);
+}
+.aarahan-route__base {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 4 7;
+}
+.aarahan-route__line {
+  fill: none;
+  stroke: var(--aarahan-orange);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+/* The bright segment that runs just behind the truck */
+.aarahan-route__trail {
+  fill: none;
+  stroke: #F7CBA5;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+/* Endpoint markers */
+.aarahan-node circle { fill: var(--aarahan-orange); }
+.aarahan-node__ring { fill: none; stroke: var(--aarahan-orange); stroke-width: 1.4; opacity: 0.5; }
+.aarahan-node__pulse {
+  fill: none;
+  stroke: var(--aarahan-orange);
+  stroke-width: 1.6;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.aarahan-logistics.is-arrived .aarahan-node--end .aarahan-node__pulse { animation: aarahan-pulse 1.6s ease-out 2; }
+.aarahan-logistics.is-arrived .aarahan-node--end circle { filter: drop-shadow(0 0 6px rgba(239, 178, 126, 0.9)); }
+.aarahan-node text {
+  fill: var(--aarahan-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+/* Waypoints */
+.aarahan-waypoint { fill: rgba(255, 255, 255, 0.65); }
+.aarahan-logistics.is-running .aarahan-waypoint { animation: aarahan-way 2.4s ease-in-out infinite; }
+.aarahan-logistics.is-running .aarahan-waypoint:nth-of-type(2) { animation-delay: 0.4s; }
+.aarahan-logistics.is-running .aarahan-waypoint:nth-of-type(3) { animation-delay: 0.8s; }
+
+/* ---- The truck ---- */
+.aarahan-truck { opacity: 0; transition: opacity 0.4s ease; }
+.aarahan-logistics.is-running .aarahan-truck,
+.aarahan-logistics.is-arrived .aarahan-truck { opacity: 1; }
+.aarahan-truck__body { fill: #456F65; stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; stroke-linejoin: round; }
+.aarahan-truck__container { fill: #1D423A; stroke: var(--aarahan-orange); stroke-width: 1.1; stroke-linejoin: round; }
+.aarahan-truck__ribs { stroke: rgba(239, 178, 126, 0.35); stroke-width: 0.7; }
+.aarahan-truck__glass { fill: rgba(220, 208, 188, 0.8); }
+.aarahan-truck__wheel { fill: #1D423A; stroke: rgba(255, 255, 255, 0.5); stroke-width: 1; }
+.aarahan-truck__chassis { stroke: rgba(255, 255, 255, 0.35); stroke-width: 1; }
+.aarahan-truck__lamp { fill: #F7CBA5; }
+
+/* ---- Status badges ---- */
+.aarahan-status {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(239, 178, 126, 0.45);
+  background: rgba(29, 66, 58, 0.92);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aarahan-orange);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.45s ease, transform 0.55s var(--aarahan-ease);
+  pointer-events: none;
+}
+.aarahan-status::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.aarahan-status--transit { opacity: 0; }
+.aarahan-status--arrived { opacity: 0; }
+.aarahan-logistics.is-drawing .aarahan-status--dispatch,
+.aarahan-logistics.is-running .aarahan-status--transit,
+.aarahan-logistics.is-arrived .aarahan-status--arrived { opacity: 1; transform: translateX(-50%) translateY(0); }
+.aarahan-logistics .aarahan-status { transform: translateX(-50%) translateY(6px); }
+.aarahan-logistics.is-running .aarahan-status--transit::before { animation: aarahan-blink 1.4s ease-in-out infinite; }
+
+/* Route end labels */
+.aarahan-route__ends {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aarahan-muted);
+  padding-inline: 4px;
+}
+
+/* ---- Keyframes (transform / opacity only) ---- */
+@keyframes aarahan-pulse {
+  0% { opacity: 0.85; transform: scale(0.5); }
+  100% { opacity: 0; transform: scale(2.6); }
+}
+@keyframes aarahan-way {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+@keyframes aarahan-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@keyframes aarahan-map-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Organisations card keeps its own row */
+.regions--orgs { grid-template-columns: minmax(0, 440px) !important; }
+
+/* ---- Tablet ---- */
+@media (max-width: 1024px) {
+  .aarahan-logistics__grid { grid-template-columns: minmax(0, 1fr) minmax(150px, 0.8fr) minmax(0, 1fr); gap: 12px; }
+  .aarahan-route { min-height: 190px; }
+  .aarahan-map { width: clamp(70px, 26%, 100px); }
+}
+
+/* ---- Mobile: stack the cards, route runs vertically ---- */
+@media (max-width: 760px) {
+  .aarahan-logistics__grid { grid-template-columns: 1fr; gap: 0; }
+  .aarahan-route { min-height: 0; padding: 0; }
+  .aarahan-route__h { display: none; }
+  .aarahan-route__v { display: block; width: auto; height: clamp(190px, 44vw, 240px); margin-inline: auto; }
+  .aarahan-status { top: 50%; left: auto; right: 4px; transform: translateY(-50%) translateX(6px); }
+  .aarahan-logistics.is-drawing .aarahan-status--dispatch,
+  .aarahan-logistics.is-running .aarahan-status--transit,
+  .aarahan-logistics.is-arrived .aarahan-status--arrived { transform: translateY(-50%) translateX(0); }
+  .aarahan-route__ends { display: none; }
+  .regions--orgs { grid-template-columns: 1fr !important; }
+}
+
+/* ---- Reduced motion: completed route, no travel ----
+   Follows the site's single motion flag (html.rm), like every other module. */
+.rm .aarahan-logistics *,
+.rm .aarahan-logistics *::before { animation: none !important; transition: none !important; }
+.rm .aarahan-truck { opacity: 1; }
+.rm .aarahan-logistics .aarahan-status--arrived { opacity: 1; transform: translateX(-50%); }
+@media (prefers-reduced-motion: reduce) {
+  html:not(.js) .aarahan-logistics *, html:not(.js) .aarahan-logistics *::before { animation: none !important; }
+}
+
+@media print { .aarahan-route { display: none; } }

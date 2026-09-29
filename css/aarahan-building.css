@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Arahan Enterprises — hero building showcase
+
+   Replaces the procedural hero canvas on the home page with the supplied
+   construction video. The composition follows the hero it sits in: copy on
+   the left, the building on the right, and on small screens the building
+   drops below the copy instead of sitting behind it.
+
+   The clip is portrait (1080x1920) and carries its own warm sand backdrop.
+   Rather than frame it, the section is tuned to that backdrop and the clip's
+   own rectangle is feathered away, so the footage reads as floating directly
+   in the page with no container of any kind.
+
+   The Civil page keeps its own 3D canvas; nothing here touches it.
+   ========================================================================== */
+
+.aarahan-building-showcase {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 48%;                 /* the brief's 45-50% of the section */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--header-h) + 26px) clamp(16px, 3vw, 54px) clamp(58px, 7vw, 96px) 0;
+  pointer-events: none;       /* never intercepts the hero's own interactions */
+  z-index: 0;                 /* behind the copy, above the veil */
+}
+
+/* --------------------------------------------------------------------------
+   Section tone
+
+   The clip is rendered on its own warm backdrop, and the home hero was a
+   lighter sand with a bright radial bloom sitting exactly where the panel
+   goes - which is what made the video read as a pasted-on rectangle.
+
+   Rather than push the video towards the page (which needs saturate(0.18)
+   and drains the blue out of the glass), the section is taken to the video:
+   the stops below are sampled from the clip's own backdrop, measured down
+   its left and right margins, so panel and hero share one tone and the edge
+   disappears. The bloom is dropped entirely, since the clip supplies its own
+   depth and the bloom peaked exactly where the footage sits.
+
+   Scoped to .hero--building: the Civil page keeps its original sand hero.
+   -------------------------------------------------------------------------- */
+.hero--building {
+  /* Sampled from the clip's own backdrop, which in this render is flat:
+     220-225 R across the whole eight seconds. A flat section tone therefore
+     matches the footage at ANY height, which is what lets the side-by-side
+     and stacked layouts share one value - a gradient only ever aligned with
+     the panel in the layout it was tuned for. Max deviation is ~4 levels.
+
+     The radial bloom the hero used to carry is gone: it peaked right where
+     the panel sits and was the single biggest source of mismatch. */
+  background: #dfccb1;
+}
+
+/* The veil washes rgba(216,203,184) over the hero to back the copy. Left
+   where it is, it lightens the area around the panel and re-opens the seam
+   the gradient above just closed, so it is faded out before the panel
+   begins - but ONLY in the side-by-side layout. Below 861px the panel moves
+   underneath the copy, the copy spans the full width, and pulling the veil
+   off the right half drops two small green runs to 4.3-4.4:1, under AA. */
+@media (min-width: 861px) {
+  .hero--building .hero__veil {
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 57%);
+    mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 57%);
+  }
+}
+
+/* Stacked, the same problem appears vertically: the veil's bottom wash sits
+   right over the footage and lifts the section away from the clip's tone,
+   so the feathered edge fades into something lighter than itself and the
+   rectangle shows again.
+
+   The cut is expressed in the panel's OWN height rather than as a share of
+   the hero. The copy clears the panel by barely 1-2% of hero height, so a
+   percentage stop would have to be re-tuned per breakpoint and would drift
+   with the viewport; measured from the bottom, it tracks the panel exactly.
+   Nothing but the footage lives below this line, so no copy loses backing. */
+@media (max-width: 860px) {
+  .hero--building .hero__veil {
+    -webkit-mask-image: linear-gradient(to top,
+      transparent 0,
+      transparent calc(min(62vh, 520px) + 34px),
+      #000 calc(min(62vh, 520px) + 92px));
+    mask-image: linear-gradient(to top,
+      transparent 0,
+      transparent calc(min(62vh, 520px) + 34px),
+      #000 calc(min(62vh, 520px) + 92px));
+  }
+}
+
+@media (max-width: 480px) {
+  .hero--building .hero__veil {
+    -webkit-mask-image: linear-gradient(to top,
+      transparent 0,
+      transparent calc(min(56vh, 440px) + 34px),
+      #000 calc(min(56vh, 440px) + 92px));
+    mask-image: linear-gradient(to top,
+      transparent 0,
+      transparent calc(min(56vh, 440px) + 34px),
+      #000 calc(min(56vh, 440px) + 92px));
+  }
+}
+
+/* The panel: a mounted architectural render, not a video player.
+   Sized by HEIGHT, not width - a 9:16 panel set to the column's full width
+   would stand about 1200px tall and run off the bottom of the viewport. */
+.aarahan-building-frame {
+  position: relative;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;       /* the clip's own ratio - nothing is cropped */
+  overflow: hidden;
+
+  /* No plate, no frame. The clip's backdrop and the section gradient are the
+     same tone, so the only thing that ever gave the video away was its
+     rectangle - and this dissolves it. The fades are lopsided because the
+     footage fills the frame: cranes and structure run to within 0.3-0.5% of
+     every edge at some point in the clip, so the sides can afford a wide,
+     gentle falloff while the top and bottom have to stay short or they eat
+     the crane tips and the podium.
+
+     Note the literal percentage stops: calc(100% - 8%) inside a mask
+     gradient renders the element completely invisible in Chrome. */
+  background: transparent;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%),
+    linear-gradient(180deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%),
+    linear-gradient(180deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  mask-composite: intersect;
+
+  pointer-events: auto;
+  transition: transform 0.55s var(--ease, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aarahan-building-frame:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* Browser extensions that add video controls (speed controllers and the
+   like) inject their badge into the video's PARENT - which here is the
+   frame. That badge is not ours and no visitor sees it unless they run the
+   same extension, but it lands on top of the footage and breaks the clean
+   edge, so nothing but the clip itself is allowed to paint inside the frame.
+
+   This only reaches extensions that inject into the page DOM; one that
+   renders into a closed shadow root or an iframe is beyond CSS, and the
+   extension's own setting is the fix there. */
+.aarahan-building-frame > *:not(.aarahan-building-video) {
+  display: none !important;
+}
+
+.aarahan-building-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* never crop the building */
+  /* No filter and no backdrop of its own: the section is matched to these
+     pixels, so any correction here would pull the two back out of step. */
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 1180px) {
+  .aarahan-building-showcase { width: 46%; padding-right: clamp(14px, 2.4vw, 32px); }
+}
+
+@media (max-width: 1024px) {
+  .aarahan-building-showcase {
+    width: 44%;
+    padding: calc(var(--header-h) + 20px) clamp(12px, 2vw, 24px) clamp(70px, 9vw, 110px) 0;
+  }
+}
+
+/* Phones and small tablets: the building stops sitting beside the copy and
+   takes its own place below it, centred. Height-capped rather than
+   full-width, because a full-width 9:16 panel on a phone is taller than the
+   screen and would push the rest of the page out of reach. */
+@media (max-width: 860px) {
+  .aarahan-building-showcase {
+    position: static;
+    width: 100%;
+    padding: 0 0 clamp(18px, 4vw, 30px);
+    margin-top: clamp(14px, 3vw, 26px);
+    order: 2;
+  }
+  .aarahan-building-frame {
+    height: min(62vh, 520px);
+    width: auto;
+    max-width: min(100%, 420px);
+    margin-inline: auto;
+
+  }
+}
+
+@media (max-width: 480px) {
+  .aarahan-building-frame { height: min(56vh, 440px); }
+}
+
+/* Reduced motion needs no rule of its own beyond stilling the hover: the
+   script parks the clip on its closing frame, so the panel is simply a still
+   of the finished building. */
+.rm .aarahan-building-frame {
+  transition: none;
+}
+.rm .aarahan-building-frame:hover {
+  transform: none;
+}

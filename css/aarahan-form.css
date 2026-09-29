@@ -1,0 +1,303 @@
+/* =========================================================================
+   ARAHAN ENTERPRISES — "DISCUSS YOUR PROJECT" FORM
+   Contact page only. Presentation layer only: no layout rebuild, no new
+   markup, no change to fields, text, destination or behaviour.
+
+   Everything is scoped under .page-contact .form (or [data-enquiry]) so no
+   other page, section or component can be affected. Animations use only
+   transform / opacity / box-shadow so they stay on the compositor.
+   ========================================================================= */
+
+.page-contact .form {
+  --af-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --af-line: rgba(40, 88, 78, 0.18);
+  --af-ink: #28584E;
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.6s var(--af-ease), border-color 0.6s var(--af-ease);
+}
+.page-contact .form > * { position: relative; z-index: 1; }
+
+/* ---- 21. Architectural background grid (extremely subtle) ---- */
+.page-contact .form::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(40, 88, 78, 0.05) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(40, 88, 78, 0.05) 0 1px, transparent 1px 28px);
+  -webkit-mask-image: radial-gradient(130% 100% at 100% 0%, #000 0%, transparent 68%);
+  mask-image: radial-gradient(130% 100% at 100% 0%, #000 0%, transparent 68%);
+  opacity: 0.55;
+  transition: opacity 0.7s var(--af-ease);
+}
+.page-contact .form:focus-within::before { opacity: 0.9; }
+
+/* ---- 23. Animated corner-line decorations (drawing-sheet registration marks) ---- */
+.page-contact .form::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 0;
+  pointer-events: none;
+  --af-c: rgba(40, 88, 78, 0.45);
+  background-image:
+    linear-gradient(var(--af-c), var(--af-c)), linear-gradient(var(--af-c), var(--af-c)),
+    linear-gradient(var(--af-c), var(--af-c)), linear-gradient(var(--af-c), var(--af-c)),
+    linear-gradient(var(--af-c), var(--af-c)), linear-gradient(var(--af-c), var(--af-c)),
+    linear-gradient(var(--af-c), var(--af-c)), linear-gradient(var(--af-c), var(--af-c));
+  background-repeat: no-repeat;
+  background-size: 18px 1px, 1px 18px, 18px 1px, 1px 18px, 18px 1px, 1px 18px, 18px 1px, 1px 18px;
+  background-position: 0 0, 0 0, 100% 0, 100% 0, 0 100%, 0 100%, 100% 100%, 100% 100%;
+  opacity: 0;
+  transform: scale(1.015);
+  transition: opacity 0.9s var(--af-ease) 0.25s, transform 0.9s var(--af-ease) 0.25s;
+}
+.page-contact .form.is-in::after { opacity: 0.5; transform: scale(1); }
+.page-contact .form:focus-within::after { opacity: 0.85; }
+
+/* ---- 1 + 3. Page-load / scroll reveal of the heading block ----
+   Driven by the site's existing IntersectionObserver, which adds .is-in
+   to [data-reveal] elements — no second observer is introduced. */
+.page-contact .form__title,
+.page-contact .form__note {
+  transition: opacity 0.7s ease, transform 0.85s var(--af-ease);
+}
+.js .page-contact .form:not(.is-in) .form__title { opacity: 0; transform: translateY(16px); }
+.js .page-contact .form:not(.is-in) .form__note { opacity: 0; transform: translateY(12px); }
+.page-contact .form.is-in .form__note { transition-delay: 0.1s; }
+
+/* ---- 22. Blueprint / technical line under the heading ---- */
+.page-contact .form__head::after {
+  content: "";
+  display: block;
+  margin-top: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--af-ink) 0 40px, var(--af-line) 40px);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s var(--af-ease) 0.18s;
+}
+.page-contact .form.is-in .form__head::after { transform: scaleX(1); }
+
+/* ---- 2. Staggered field entrance ---- */
+.page-contact .field {
+  position: relative;
+  display: block;            /* was grid; the label is now positioned */
+  padding-top: 18px;
+  transition: opacity 0.6s ease, transform 0.7s var(--af-ease);
+}
+.js .page-contact .form:not(.is-in) .field { opacity: 0; transform: translateY(18px); }
+.page-contact .form.is-in .field:nth-child(1) { transition-delay: 0.14s; }
+.page-contact .form.is-in .field:nth-child(2) { transition-delay: 0.21s; }
+.page-contact .form.is-in .field:nth-child(3) { transition-delay: 0.28s; }
+.page-contact .form.is-in .field:nth-child(4) { transition-delay: 0.35s; }
+.page-contact .form.is-in .field:nth-child(5) { transition-delay: 0.42s; }
+.page-contact .form.is-in .field:nth-child(6) { transition-delay: 0.49s; }
+.page-contact .form.is-in .field:nth-child(7) { transition-delay: 0.56s; }
+
+/* ---- 5 + 8. Floating label with letter-spacing animation ----
+   At rest the label sits on the input line; on focus or once the field
+   holds a value it floats up into exactly the position it occupied before,
+   so the form's height and rhythm are unchanged. */
+.page-contact .field > label {
+  position: absolute;
+  left: 2px;
+  top: 30px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6B5A45;
+  white-space: nowrap;
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    transform 0.45s var(--af-ease),
+    letter-spacing 0.45s var(--af-ease),
+    color 0.3s ease;
+}
+.page-contact .field.has-value > label,
+.page-contact .field:focus-within > label {
+  transform: translateY(-30px) scale(0.85);
+  letter-spacing: 0.14em;
+  color: #2B2B2B;
+}
+.page-contact .field:focus-within > label { color: var(--af-ink); }
+
+/* ---- 6 + 7. Input hover / focus transitions ---- */
+.page-contact .field input,
+.page-contact .field select,
+.page-contact .field textarea {
+  position: relative;
+  z-index: 1;
+  transition:
+    border-color 0.35s var(--af-ease),
+    background-color 0.35s var(--af-ease),
+    box-shadow 0.45s var(--af-ease);
+}
+.page-contact .field:hover input,
+.page-contact .field:hover textarea,
+.page-contact .field:hover select { border-bottom-color: rgba(40, 88, 78, 0.42); }
+.page-contact .field:focus-within input,
+.page-contact .field:focus-within select,
+.page-contact .field:focus-within textarea { box-shadow: 0 10px 22px -18px rgba(40, 88, 78, 0.9); }
+
+/* ---- 4. Animated underline that draws in on hover, completes on focus ---- */
+.page-contact .field::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  z-index: 2;
+  background: var(--af-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s var(--af-ease), background-color 0.3s ease;
+  pointer-events: none;
+}
+.page-contact .field:hover::after { transform: scaleX(0.34); }
+.page-contact .field:focus-within::after { transform: scaleX(1); }
+.page-contact .field.is-invalid::after { background: #A33A22; transform: scaleX(1); }
+
+/* ---- 9. Textarea focus ---- */
+.page-contact .field--full textarea {
+  transition:
+    border-color 0.35s var(--af-ease),
+    background-color 0.35s var(--af-ease),
+    box-shadow 0.45s var(--af-ease);
+}
+.page-contact .field--full:focus-within textarea { box-shadow: 0 14px 30px -24px rgba(40, 88, 78, 0.95); }
+
+/* ---- 11 + 12. Native select kept (accessible on every device),
+   with its arrow replaced by a chevron that rotates open on focus.
+   :has() guards it: where unsupported, the original arrow stays. ---- */
+@supports selector(:has(*)) {
+  .page-contact .field:has(select) select { background-image: none; }
+  .page-contact .field:has(select)::before {
+    content: "";
+    position: absolute;
+    right: 7px;
+    bottom: 19px;
+    width: 8px; height: 8px;
+    z-index: 2;
+    border-right: 1.5px solid #2B2B2B;
+    border-bottom: 1.5px solid #2B2B2B;
+    transform: rotate(45deg);
+    transform-origin: center;
+    transition: transform 0.45s var(--af-ease), border-color 0.3s ease;
+    pointer-events: none;
+  }
+  .page-contact .field:has(select):hover::before { border-color: var(--af-ink); }
+  .page-contact .field:has(select):focus-within::before {
+    transform: rotate(-135deg) translate(-1px, -1px);
+    border-color: var(--af-ink);
+  }
+}
+
+/* ---- 13–17. Submit button: lift, shadow, existing left→right fill, arrow slide ---- */
+.page-contact .form .btn--dark {
+  transform: translateY(0);
+  transition:
+    color 0.35s var(--af-ease),
+    border-color 0.35s var(--af-ease),
+    transform 0.45s var(--af-ease),
+    box-shadow 0.5s var(--af-ease),
+    translate 0.35s var(--af-ease);
+}
+.page-contact .form .btn--dark:hover,
+.page-contact .form .btn--dark:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 32px -20px rgba(40, 88, 78, 0.85);
+}
+.page-contact .form .btn--dark:active { transform: translateY(-1px); transition-duration: 0.12s; }
+.page-contact .form .btn--dark .btn__icon { position: relative; }
+.page-contact .form .btn--dark:hover .btn__icon .icon { transform: translateX(5px); }
+
+/* ---- 18. Loading state (added while the email is being prepared) ---- */
+.page-contact .form .btn--dark.is-loading { pointer-events: none; }
+.page-contact .form .btn--dark.is-loading .btn__icon .icon { opacity: 0; transform: scale(0.6); }
+.page-contact .form .btn--dark.is-loading .btn__icon::after {
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ae-form-spin 0.7s linear infinite;
+}
+.page-contact .form .btn--dark .btn__icon .icon { transition: opacity 0.25s ease, transform 0.45s var(--af-ease); }
+
+/* ---- 19. Success state with a drawn checkmark ---- */
+.page-contact .form .btn--dark.is-success .btn__icon .icon { opacity: 0; transform: scale(0.6); }
+.page-contact .form .btn--dark.is-success .btn__icon::after {
+  content: "";
+  position: absolute;
+  width: 6px; height: 11px;
+  margin-top: -2px;
+  border: solid #fff;
+  border-width: 0 1.7px 1.7px 0;
+  transform-origin: center;
+  animation: ae-form-check 0.5s var(--af-ease) forwards;
+}
+.page-contact .form__status { transition: opacity 0.4s ease, transform 0.5s var(--af-ease); }
+.page-contact .form__status.is-ok,
+.page-contact .form__status.is-error { animation: ae-form-status-in 0.5s var(--af-ease) both; }
+
+/* ---- 20. Validation error shake (re-armed by the script on each submit) ---- */
+.page-contact .field.is-invalid.ae-shake { animation: ae-form-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+.page-contact .field.is-invalid > label { color: #A33A22; }
+
+@keyframes ae-form-spin { to { transform: rotate(360deg); } }
+@keyframes ae-form-check {
+  0% { transform: rotate(45deg) scale(0); opacity: 0; }
+  60% { transform: rotate(45deg) scale(1.12); opacity: 1; }
+  100% { transform: rotate(45deg) scale(1); opacity: 1; }
+}
+@keyframes ae-form-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+@keyframes ae-form-status-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- 27. Touch devices: no hover-only effects ---- */
+@media (hover: none) {
+  .page-contact .field:hover::after { transform: scaleX(0); }
+  .page-contact .form .btn--dark:hover { transform: none; box-shadow: none; }
+}
+
+/* ---- Small screens: single column already; keep the label rhythm ---- */
+@media (max-width: 700px) {
+  .page-contact .field > label { font-size: 0.76rem; }
+  .page-contact .form::after { inset: 8px; }
+}
+
+/* ---- 26. Reduced motion: state changes remain, movement does not ----
+   Covers the OS setting and the site's own "Reduce motion" toggle (html.rm). */
+@media (prefers-reduced-motion: reduce) {
+  .page-contact .form *,
+  .page-contact .form *::before,
+  .page-contact .form *::after { transition: none !important; animation: none !important; }
+  .js .page-contact .form:not(.is-in) .form__title,
+  .js .page-contact .form:not(.is-in) .form__note,
+  .js .page-contact .form:not(.is-in) .field { opacity: 1; transform: none; }
+  .page-contact .form__head::after,
+  .page-contact .form.is-in::after { transform: none; opacity: 0.5; }
+  .page-contact .form__head::after { transform: scaleX(1); }
+}
+.rm .page-contact .form *,
+.rm .page-contact .form *::before,
+.rm .page-contact .form *::after { transition: none !important; animation: none !important; }
+.rm.js .page-contact .form:not(.is-in) .form__title,
+.rm.js .page-contact .form:not(.is-in) .form__note,
+.rm.js .page-contact .form:not(.is-in) .field { opacity: 1; transform: none; }
+.rm .page-contact .form__head::after { transform: scaleX(1); }
+.rm .page-contact .form::after { opacity: 0.5; transform: none; }

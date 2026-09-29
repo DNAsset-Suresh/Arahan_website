@@ -1,0 +1,11 @@
+# Secrets — never commit. Ship .env.example instead.
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# OS / editor noise
+Thumbs.db
+.DS_Store

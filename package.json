@@ -1,0 +1,19 @@
+{
+  "name": "arahan-enterprises-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Arahan Enterprises static website plus the small mail API behind the enquiry form.",
+  "type": "commonjs",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --env-file=.env server/server.js",
+    "mail:check": "node --env-file=.env server/verify-smtp.js"
+  },
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}

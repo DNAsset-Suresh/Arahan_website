@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Arahan Enterprises — construction convoy
+   A decorative band of site vehicles tracking across the bottom of the
+   viewport, right to left, on an endless loop:
+
+       excavator  →  wheel loader  →  concrete mixer  →  (gap)  →  repeat
+
+   The band is presentational only: it is aria-hidden, never takes pointer
+   events, and clips its own overflow so it can never produce a horizontal
+   scrollbar. Everything is driven by transform/opacity so it stays on the
+   compositor.
+
+   Tuning — all four knobs live on .aarahan-convoy below:
+     --convoy-cycle   how long one vehicle takes to cross (speed)
+     --convoy-gap-1   excavator → wheel loader spacing
+     --convoy-gap-2   excavator → concrete mixer spacing
+     --convoy-height  vehicle size (a clamp, so it scales with the viewport)
+   ========================================================================== */
+
+.aarahan-convoy {
+  /* Convoy spacing, edge to edge — the empty space between the tail of one
+     vehicle and the nose of the next. aarahan-vehicles.js converts these
+     into animation delays using each vehicle's measured width, so the gaps
+     hold exactly at any viewport and the vehicles can never overlap.
+     Raise these values for a longer, sparser convoy. */
+  --vehicle-gap: clamp(140px, 14vw, 240px);
+  --vehicle-cycle-gap: clamp(250px, 25vw, 400px);
+
+  /* Travel speed in px per second, kept constant at every viewport: the
+     script derives the duration from it, so widening the gaps lengthens
+     the cycle instead of making the vehicles race. */
+  --convoy-speed: 78;
+
+  /* Run-in and run-off beyond the screen edges. The script widens the
+     run-in when the convoy is longer than the viewport, which is what lets
+     a phone carry the same generous gaps as a desktop. */
+  --convoy-lead: 0px;
+  --convoy-exit: 200px;
+  --convoy-cycle: 22s;        /* no-JS fallback duration */
+
+  --convoy-height: clamp(50px, 5vw, 80px);
+  --convoy-lift: 10px;        /* wheels sit this far above the ground line */
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--convoy-height) + var(--convoy-lift) + 12px);
+  overflow: hidden;           /* clips the off-screen travel */
+  pointer-events: none;       /* never intercepts clicks, taps or focus */
+  z-index: 40;                /* over page content, well under the header */
+}
+
+/* Ground: a thin site line with a soft haze, not a drawn road */
+.aarahan-convoy__ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--convoy-lift);
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(96, 59, 37, 0.26) 10%,
+    rgba(96, 59, 37, 0.26) 90%,
+    transparent 100%);
+}
+.aarahan-convoy__ground::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26px;
+  background: linear-gradient(0deg, rgba(96, 59, 37, 0.055), transparent);
+}
+
+/* A unit carries the horizontal travel; the image inside carries the
+   road vibration, so the two transforms never fight each other. */
+.aarahan-convoy__unit {
+  position: absolute;
+  left: 0;
+  bottom: var(--convoy-lift);
+  will-change: transform;
+  animation: aarahan-convoy-travel var(--convoy-cycle) linear infinite backwards;
+}
+
+/* starts fully off the right edge, ends fully off the left edge */
+@keyframes aarahan-convoy-travel {
+  from { transform: translate3d(calc(100vw + var(--convoy-lead)), 0, 0); }
+  to   { transform: translate3d(calc(-1 * var(--convoy-exit)), 0, 0); }
+}
+
+/* contact shadow travelling with the vehicle */
+.aarahan-convoy__unit::after {
+  content: "";
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: -5px;
+  height: 10px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(96, 59, 37, 0.2), transparent 72%);
+}
+
+.aarahan-convoy__unit img {
+  display: block;
+  height: var(--convoy-height);
+  width: auto;
+  object-fit: contain;
+  animation: aarahan-convoy-jolt 0.9s ease-in-out infinite;
+}
+
+/* 1.5px of travel: enough to read as a running engine, no bounce */
+@keyframes aarahan-convoy-jolt {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -1.5px, 0); }
+}
+
+/* Convoy order: the excavator always leads. These delays are a static
+   fallback for the no-JS case; the script overwrites them with values
+   derived from --vehicle-gap and the measured widths. */
+.aarahan-convoy__unit--excavator { animation-delay: 0s; }
+.aarahan-convoy__unit--loader    { animation-delay: calc(var(--convoy-cycle) * 0.11); }
+.aarahan-convoy__unit--mixer     { animation-delay: calc(var(--convoy-cycle) * 0.24); }
+
+/* Per-vehicle heights — desktop */
+.aarahan-convoy__unit--excavator img { height: clamp(50px, 5vw, 80px); }
+.aarahan-convoy__unit--loader img    { height: clamp(45px, 4.5vw, 75px); animation-duration: 1.05s; }
+.aarahan-convoy__unit--mixer img     { height: clamp(50px, 5vw, 80px); animation-duration: 1.2s; }
+
+/* --------------------------------------------------------------------------
+   Responsive: the clamp does most of the work; these trim the band further
+   on small and short viewports so it never crowds the page.
+   -------------------------------------------------------------------------- */
+/* Tablet */
+@media (max-width: 1024px) {
+  .aarahan-convoy { --convoy-exit: 170px; --convoy-lift: 9px; }
+  .aarahan-convoy__unit--excavator img { height: clamp(45px, 6vw, 70px); }
+  .aarahan-convoy__unit--loader img    { height: clamp(40px, 5.5vw, 65px); }
+  .aarahan-convoy__unit--mixer img     { height: clamp(45px, 6vw, 70px); }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .aarahan-convoy {
+    --convoy-height: clamp(35px, 11vw, 55px);
+    --convoy-exit: 120px;
+    --convoy-lift: 8px;
+  }
+  .aarahan-convoy__unit--excavator img { height: clamp(35px, 11vw, 55px); }
+  .aarahan-convoy__unit--loader img    { height: clamp(32px, 10vw, 50px); }
+  .aarahan-convoy__unit--mixer img     { height: clamp(35px, 11vw, 55px); }
+}
+
+/* Landscape phones and other short viewports: the band would eat too much
+   of the screen, so it stands down. */
+@media (max-height: 520px) {
+  .aarahan-convoy { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion. Honours the OS setting and the site's own motion toggle
+   (html.rm), so the footer switch turns the convoy off too.
+   -------------------------------------------------------------------------- */
+/* html.rm is the site's authoritative motion flag: navigation.js sets it from
+   the OS preference *unless* the visitor has explicitly chosen full motion with
+   the footer toggle. Keying off .rm honours that override; a bare media query
+   would hide the convoy even for someone who asked for motion. */
+.rm .aarahan-convoy { display: none; }
+
+/* No-JS fallback only — with JS the .rm rule above governs. */
+@media (prefers-reduced-motion: reduce) {
+  html:not(.js) .aarahan-convoy { display: none; }
+}
+
+/* Printing a page of moving plant helps nobody */
+@media print {
+  .aarahan-convoy { display: none; }
+}

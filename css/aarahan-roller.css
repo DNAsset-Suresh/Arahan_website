@@ -1,0 +1,243 @@
+/* ==========================================================================
+   Arahan Enterprises — engineering fabric roller
+
+   A signature scroll interaction for the Method section: a technical sheet
+   unrolls from a metal roller and reveals "How we execute the work" step by
+   step. The Method section was chosen because its content is already a
+   five-stage sequence, so the sheet reveals real content in its real order
+   rather than a decorative demo.
+
+   Deliberately NOT built on a tall sticky scroll track. The usual pattern
+   (300vh of track + a sticky stage) would have added two to three extra
+   screens to a home page that was just shortened on purpose. Instead the
+   unroll is driven by the section's own travel through the viewport, so the
+   effect costs zero additional page height and causes no layout shift.
+
+   Everything animates through one custom property, --p (0 to 1), written by
+   js/aarahan-roller.js. Only transform and opacity read it, so the whole
+   interaction stays on the compositor.
+   ========================================================================== */
+
+.ae-roll {
+  /* Defaults to 1 - fully unrolled - on purpose. If the script never runs,
+     is blocked, or errors, the section still shows all of its content. The
+     script writes the real progress as soon as it loads. */
+  --p: 1;
+  --tube-h: 26px;
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   The roller
+   -------------------------------------------------------------------------- */
+.ae-roll__machine {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
+/* Cylinder: the stacked stops read as a lit metal tube - bright along the
+   top third, core shadow just below centre, bounce light at the bottom. */
+.ae-roll__tube {
+  position: relative;
+  height: var(--tube-h);
+  border-radius: calc(var(--tube-h) / 2);
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #fbf8f2 0%,
+    #e3ddd0 14%,
+    #b9b0a0 38%,
+    #8a8274 56%,
+    #a9a092 72%,
+    #ded7ca 90%,
+    #f6f2ea 100%
+  );
+  box-shadow:
+    0 14px 26px -16px rgba(96, 59, 37, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(96, 59, 37, 0.18);
+}
+
+/* Fine machined lines. Translating them vertically inside the tube reads as
+   the cylinder turning - on a horizontal roller, surface detail moves up and
+   down, it does not spin in the plane of the screen. */
+.ae-roll__grain {
+  position: absolute;
+  inset: -140% 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(96, 59, 37, 0.13) 0 1px,
+    transparent 1px 7px
+  );
+  transform: translate3d(0, calc(var(--p) * 130px), 0);
+  will-change: transform;
+}
+
+/* A thin green seam where the sheet leaves the roller. */
+.ae-roll__tube::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(40, 88, 78, 0.35), transparent);
+}
+
+/* End caps, so the tube reads as an object with ends rather than a bar. */
+.ae-roll__cap {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: calc(var(--tube-h) + 10px);
+  margin-top: calc((var(--tube-h) + 10px) / -2);
+  border-radius: 3px;
+  background: linear-gradient(180deg, #6f6658, #443d33 60%, #6f6658);
+  box-shadow: 0 6px 14px -8px rgba(96, 59, 37, 0.6);
+}
+.ae-roll__cap--l { left: -14px; }
+.ae-roll__cap--r { right: -14px; }
+
+/* --------------------------------------------------------------------------
+   The sheet
+   -------------------------------------------------------------------------- */
+/* The sheet must be exactly as wide as the roller it hangs from, so it
+   takes the same measurements as .container rather than running full
+   bleed. The section's own surface shows either side, which reads as a
+   sheet laid on a surface. */
+.ae-roll__sheet {
+  position: relative;
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+
+  /* THE UNROLL. The sheet is revealed downward from the roller while the
+     content stays anchored where it belongs. An earlier version translated
+     the whole paper down instead, which just looked like the site's normal
+     scroll-reveal: the copy slid in and nothing appeared to unroll.
+     drop-shadow follows the clip outline, so the descending bottom edge
+     casts its own shadow and reads as the leading edge of a sheet. */
+  clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0);
+  filter: drop-shadow(0 10px 16px rgba(96, 59, 37, 0.2));
+}
+
+/* The paper supplies the sheet's own inner gutter, so the content inside
+   keeps the site's normal measure without a second .container inset. */
+.ae-roll__paper > .container {
+  max-width: none;
+}
+
+.ae-roll__paper {
+  position: relative;
+  /* The paper does not move - the clip above does the revealing. Keeping it
+     anchored is what makes this read as material being unrolled rather than
+     a block sliding into place. */
+  border: 1px solid rgba(40, 88, 78, 0.1);
+  border-top: 0;
+  background:
+    /* blueprint grid - deliberately faint, the copy has to stay first */
+    repeating-linear-gradient(90deg, rgba(40, 88, 78, 0.055) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(180deg, rgba(40, 88, 78, 0.055) 0 1px, transparent 1px 64px),
+    linear-gradient(180deg, #fffdfa 0%, #fbf8f2 45%, #f6f1e8 100%);
+  will-change: transform;
+}
+
+/* Curl shadow: the sheet is darker where it leaves the roller and the
+   gradient fades as it flattens out. */
+.ae-roll__paper::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 90px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(96, 59, 37, 0.19), transparent);
+  opacity: calc(0.35 + (1 - var(--p)) * 0.65);
+}
+
+/* Soft weight along the bottom edge, so the sheet hangs rather than floats. */
+/* A soft fold sitting just behind the unrolling edge. It rides down with
+   the clip because it is positioned as a share of the sheet's own height,
+   and it fades out as the sheet flattens. */
+.ae-roll__paper::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(var(--p) * 100%);
+  height: 46px;
+  margin-top: -46px;
+  pointer-events: none;
+  opacity: calc((1 - var(--p)) * 0.9);
+  background: linear-gradient(0deg, rgba(96, 59, 37, 0.16), rgba(96, 59, 37, 0.04) 55%, transparent);
+}
+
+/* Faint measurement ticks down the left edge - an engineering cue, not decor. */
+.ae-roll__rule {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 14px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(40, 88, 78, 0.22) 0 1px,
+    transparent 1px 24px
+  );
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   Staged reveal of the five method steps
+
+   Each step carries --i (its index). The expression turns the single scroll
+   progress into a per-step fade: step n starts appearing once --p passes
+   roughly n/7 and is solid a short way later.
+   -------------------------------------------------------------------------- */
+/* The roller owns the motion inside this section, so the site-wide scroll
+   reveal is neutralised here - otherwise every element animates twice. */
+.js .ae-roll [data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* The steps then get their staged values back. This block must come AFTER
+   the neutraliser above and match its specificity (0,3,0): .mini-step
+   carries data-reveal too, so a weaker selector loses and every step stays
+   at opacity 1. */
+.js .ae-roll .mini-step,
+.ae-roll .mini-step {
+  --r: clamp(0, calc((var(--p) * 6 - var(--i, 0)) * 1.3), 1);
+  opacity: var(--r);
+  transform: translate3d(0, calc((1 - var(--r)) * 16px), 0);
+  transition: none;
+}
+.ae-roll .mini-step:nth-child(1) { --i: 3.3; }
+.ae-roll .mini-step:nth-child(2) { --i: 3.75; }
+.ae-roll .mini-step:nth-child(3) { --i: 4.2; }
+.ae-roll .mini-step:nth-child(4) { --i: 4.65; }
+.ae-roll .mini-step:nth-child(5) { --i: 5.1; }
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .ae-roll { --tube-h: 22px; }
+}
+
+/* Phones: keep the roller and the unroll, drop the 3D tilt and lighten the
+   shadows. The effect should never be the reason a phone drops frames. */
+@media (max-width: 860px) {
+  .ae-roll { --tube-h: 18px; }
+  .ae-roll__paper::before { height: 60px; opacity: calc(0.3 + (1 - var(--p)) * 0.5); }
+  .ae-roll__rule { display: none; }
+  .ae-roll__cap { width: 12px; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: the sheet is simply already unrolled. No movement, no
+   staged fade, nothing hidden - all of the content is present and readable.
+   -------------------------------------------------------------------------- */
+.rm .ae-roll__sheet { clip-path: none; }
+.rm .ae-roll .mini-step { transform: none; }
+.rm .ae-roll .mini-step { opacity: 1; }
+.rm .ae-roll__grain { transform: none; }
+.rm .ae-roll__paper::before { opacity: 0.35; }

@@ -1,0 +1,240 @@
+/* ==========================================================================
+   AARAHAN 3D SCROLL SYSTEM
+   ==========================================================================
+
+   Each major section's CONTENT arrives from depth, flattens as it reaches
+   reading position, and recedes slightly once it is behind you. The tilt
+   direction alternates down the page.
+
+   Driven by custom properties written from JS onto the section:
+     --dp   entering,  0 (deep, tilted) to 1 (flat, in place)
+     --xp   leaving,   0 (in place)     to 1 (receded behind)
+     --dir  1 = tilted from the right, -1 = from the left
+
+   WHY THE TRANSFORM IS ON .container AND NOT ON THE SECTION
+
+   The coloured bands - stats, ink, orgs, cta - paint their background on the
+   section, which runs full bleed. Scaling that section made it narrower than
+   the viewport, so the page background showed down both sides and every band
+   gained a visible seam and a ragged inset edge. Transforming the inner
+   container instead keeps every band flush to the viewport while the content
+   still travels in depth. Same effect, no seams.
+
+   Tuning note: the brief suggested rotateY up to 35deg. That is far too much
+   for panels that are mostly body copy - text edges go soft and it reads as
+   a gimmick. Rotation peaks at 6deg here; depth and scale carry the effect.
+
+   Constraints carried from earlier bugs on this project:
+
+   1. At rest the transform is REMOVED, not left as an identity transform.
+      Any transform makes an element a containing block for fixed-position
+      descendants, which broke the sticky header once already.
+
+   2. The clip lives on the container element, never on a transformed one:
+      overflow on a transformed element clips its children while its own box
+      still widens the document (that caused 170px of horizontal scroll).
+
+   3. `clip` rather than `hidden`, because `hidden` would make <main> a
+      scroll container and break .who__visual / .tl-sticky.
+   ========================================================================== */
+
+.ae-depth-host {
+  overflow-x: clip;
+}
+
+/* --------------------------------------------------------------------------
+   Panels: the section holds the variables, its content does the moving
+   -------------------------------------------------------------------------- */
+.ae-depth {
+  --dp: 1;
+  --xp: 0;
+  --dir: 1;
+}
+
+.ae-depth > .container,
+.ae-depth > .marquee {
+  transform-origin: calc(50% + var(--dir) * 30%) 50%;
+
+  /* The full journey, in one transform:
+       --dp  arriving   far away and slightly turned, flattening to normal
+       --xp  departing  continuing TOWARD the viewer and past, fading out
+
+     The departing half used to recede backwards. It now moves forward on Z
+     instead, which is what makes the page read as travelling through space
+     rather than watching panels shuffle: the section you are leaving passes
+     you, and the next one is already coming up out of the depth behind it.
+
+     The brief suggested zooming to scale(1.25). That is far too much for a
+     page of body copy - it overflows the measure and text resampling goes
+     soft. +70px of Z against a 1900px perspective is about 4%, with 3% of
+     scale on top: clearly felt, never blurry. */
+  transform:
+    perspective(1900px)
+    translate3d(
+      calc(var(--dir) * (1 - var(--dp)) * 1.8%),
+      0,
+      calc((1 - var(--dp)) * -110px + var(--xp) * 70px))
+    rotateY(calc(var(--dir) * (1 - var(--dp)) * 5deg))
+    scale(calc(0.972 + var(--dp) * 0.028 + var(--xp) * 0.03));
+  /* Floor the arrival fade at 0.82. Lower than that and the content reads as
+     failed to load rather than arriving, because the section's own
+     background is already at full strength behind it. The departing fade can
+     go further, since that content is on its way off screen anyway. */
+  opacity: calc(0.82 + var(--dp) * 0.18 - var(--xp) * 0.35);
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   Parallax layers
+
+   --tp is "through progress": 0 as the section's top meets the bottom of the
+   screen, 1 as its bottom leaves the top. Shifting each layer by a different
+   share of (tp - 0.5) makes them travel at slightly different speeds, so a
+   section reads as having front and back rather than being one flat plane.
+
+   Ranges are small on purpose. Anything larger and headings visibly drift
+   out of their own layout, which looks like a bug rather than depth.
+   -------------------------------------------------------------------------- */
+.ae-depth .figure__media,
+.ae-depth .cap-card__media {
+  transform: translate3d(0, calc((var(--tp, 0.5) - 0.5) * 30px), 0);
+}
+.ae-depth .section-head {
+  transform: translate3d(0, calc((var(--tp, 0.5) - 0.5) * -14px), 0);
+}
+.ae-depth .btn-row,
+.ae-depth .link-arrow {
+  transform: translate3d(0, calc((var(--tp, 0.5) - 0.5) * -22px), 0);
+}
+
+/* Settled: transform removed outright - see note 1 above. */
+.ae-depth.is-flat > .container,
+.ae-depth.is-flat > .marquee {
+  transform: none;
+  opacity: 1;
+  will-change: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Hero: recedes as you scroll away, so the page opens with depth rather than
+   the hero simply sliding off. Applied to the hero's CONTENT for the same
+   reason as above - scaling the hero section itself would inset its sand
+   background and expose the page behind it.
+   -------------------------------------------------------------------------- */
+.ae-hero-depth {
+  --xp: 0;
+  --mx: 0;
+  --my: 0;
+}
+
+.ae-hero-depth .hero__inner,
+.ae-hero-depth .aarahan-building-showcase {
+  will-change: transform;
+}
+
+/* Recede and pointer parallax composed into one transform each, so the two
+   never overwrite one another. Parallax values sit in the 3-7px range the
+   brief asks for: enough to feel alive, never readable as an effect. */
+.ae-hero-depth .hero__inner {
+  transform:
+    translate3d(calc(var(--mx) * 4px), calc(var(--my) * 3px), calc(var(--xp) * -90px))
+    scale(calc(1 - var(--xp) * 0.018));
+  opacity: calc(1 - var(--xp) * 0.2);
+}
+.ae-hero-depth .aarahan-building-showcase {
+  transform:
+    translate3d(calc(var(--mx) * -7px), calc(var(--my) * -5px), calc(var(--xp) * -60px));
+  opacity: calc(1 - var(--xp) * 0.25);
+}
+
+.ae-hero-depth.is-flat .hero__inner,
+.ae-hero-depth.is-flat .aarahan-building-showcase {
+  opacity: 1;
+  will-change: auto;
+}
+
+/* Touch devices get no pointer parallax at all. */
+@media (hover: none), (pointer: coarse) {
+  .ae-hero-depth { --mx: 0; --my: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll progress: a hairline across the very top. Deliberately minimal.
+   -------------------------------------------------------------------------- */
+.ae-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 200;
+  pointer-events: none;
+}
+.ae-progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(var(--sp, 0));
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--primary-green, #28584E), var(--accent, #EFB27E));
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive: same concept, less depth
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .ae-depth > .container,
+  .ae-depth > .marquee {
+    transform:
+      perspective(1500px)
+      translate3d(calc(var(--dir) * (1 - var(--dp)) * 1.6%), 0, calc((1 - var(--dp)) * -110px))
+      rotateY(calc(var(--dir) * (1 - var(--dp)) * 4deg))
+      scale(calc(0.975 + var(--dp) * 0.025 + var(--xp) * 0.018));
+  }
+  .ae-depth .figure__media,
+  .ae-depth .cap-card__media { transform: translate3d(0, calc((var(--tp, 0.5) - 0.5) * 18px), 0); }
+  .ae-depth .section-head { transform: translate3d(0, calc((var(--tp, 0.5) - 0.5) * -8px), 0); }
+  .ae-depth .btn-row,
+  .ae-depth .link-arrow { transform: none; }
+}
+
+/* Phones: keep the arrival, drop the rotation. A tilted panel on a narrow
+   screen costs legibility for an effect nobody can really see. */
+@media (max-width: 860px) {
+  .ae-depth > .container,
+  .ae-depth > .marquee {
+    transform: translate3d(0, calc((1 - var(--dp)) * 16px), 0);
+    opacity: calc(0.85 + var(--dp) * 0.15);
+  }
+  /* Phones get no layer parallax: it costs paint work for depth that is
+     barely perceptible on a narrow screen. */
+  .ae-depth .figure__media,
+  .ae-depth .cap-card__media,
+  .ae-depth .section-head,
+  .ae-depth .btn-row,
+  .ae-depth .link-arrow { transform: none; }
+  .ae-hero-depth .hero__inner,
+  .ae-hero-depth .aarahan-building-showcase {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: no 3D at all. Everything sits flat and complete.
+   The progress hairline stays - reduced motion is about vestibular safety,
+   and a 2px indicator is an affordance rather than decoration.
+   -------------------------------------------------------------------------- */
+.rm .ae-depth .figure__media,
+.rm .ae-depth .cap-card__media,
+.rm .ae-depth .section-head,
+.rm .ae-depth .btn-row,
+.rm .ae-depth .link-arrow,
+.rm .ae-depth > .container,
+.rm .ae-depth > .marquee,
+.rm .ae-hero-depth .hero__inner,
+.rm .ae-hero-depth .aarahan-building-showcase {
+  transform: none;
+  opacity: 1;
+}

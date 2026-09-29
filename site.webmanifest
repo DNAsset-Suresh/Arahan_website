@@ -1,0 +1,13 @@
+{
+  "name": "Aarahan Enterprises",
+  "short_name": "Aarahan",
+  "description": "Interior finishing and civil works contractor, Chennai.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#F7F3EC",
+  "theme_color": "#28584E",
+  "icons": [
+    { "src": "assets/icons/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

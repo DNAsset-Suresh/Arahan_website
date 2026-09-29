@@ -1,0 +1,280 @@
+/* =========================================================================
+   ARAHAN ENTERPRISES — 3D SOCIAL TILES
+   FOOTER ONLY. Every selector is prefixed .aarahan-social-* so nothing
+   else on the site can be affected. Loaded by all pages, used only by
+   the block that sits between the footer grid and the footer bottom bar.
+   ========================================================================= */
+
+.aarahan-social-footer {
+  --ast-face: #F7F3EC;          /* tile front  */
+  --ast-face-2: #EDE4D6;        /* tile front, lower edge */
+  --ast-side: #6B5A45;          /* extruded side */
+  --ast-side-2: #28584E;
+  --ast-ink: #28584E;
+  --ast-depth: 14px;
+  --ast-brand: #EFB27E;         /* per-tile brand accent, set below */
+  display: none;
+  padding-bottom: 42px;
+}
+.aarahan-social-footer:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px clamp(28px, 5vw, 64px);
+}
+
+.aarahan-social-heading {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.aarahan-social-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px clamp(18px, 2.6vw, 30px);
+  margin: 0;
+  padding: 14px 0 26px;
+  list-style: none;
+  perspective: 900px;
+  perspective-origin: 50% 40%;
+}
+
+/* ---- The tile ---- */
+.aarahan-social-tile {
+  --ast-ry: 0deg;
+  --ast-rx: 0deg;
+  --ast-lift: 0px;
+  --ast-pop: 0px;
+  position: relative;
+  display: block;
+  width: clamp(124px, 12vw, 152px);
+  transform-style: preserve-3d;
+  transform:
+    translateY(calc(var(--ast-float, 0px) + var(--ast-lift)))
+    translateZ(var(--ast-pop))
+    rotateX(calc(var(--ast-tilt, 0deg) + var(--ast-rx)))
+    rotateY(calc(var(--ast-turn, 0deg) + var(--ast-ry)));
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 8px;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+/* One straight row: every tile shares the same resting angle and baseline.
+   Depth still reads through the extruded side, shadow and hover lift. */
+.aarahan-social-grid li:nth-child(n) .aarahan-social-tile { --ast-turn: 0deg; --ast-tilt: 6deg; --ast-float: 0px; }
+
+/* Extruded side / thickness */
+.aarahan-social-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: linear-gradient(160deg, var(--ast-side), var(--ast-side-2));
+  transform: translateZ(calc(var(--ast-depth) * -1));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 10px 18px -10px rgba(40, 88, 78, 0.3);
+}
+/* Contact shadow on the footer surface */
+.aarahan-social-tile::after {
+  content: "";
+  position: absolute;
+  left: 8%; right: 8%;
+  bottom: -18px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(40, 88, 78, 0.2), transparent 72%);
+  filter: blur(6px);
+  transform: translateZ(calc(var(--ast-depth) * -1));
+  transition: opacity 0.5s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+/* Front face */
+.aarahan-social-face {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px 14px 13px;
+  border-radius: 8px;
+  background: linear-gradient(158deg, #fff 0%, var(--ast-face) 52%, var(--ast-face-2) 100%);
+  color: var(--ast-ink);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.06) inset,
+    0 16px 28px -18px rgba(40, 88, 78, 0.26);
+  transition: box-shadow 0.45s ease, background 0.45s ease;
+}
+/* Thin brand line that grows along the top edge on hover */
+.aarahan-social-face::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 2px;
+  border-radius: 8px 8px 0 0;
+  background: var(--ast-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aarahan-social-icon {
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  flex: none;
+  border-radius: 6px;
+  background: rgba(40, 88, 78, 0.06);
+  color: #28584E;
+  transition: color 0.4s ease, background 0.4s ease;
+}
+.aarahan-social-icon svg { width: 17px; height: 17px; }
+.aarahan-social-label {
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ast-ink);
+  white-space: nowrap;
+}
+
+/* ---- Hover / focus: lift, come forward, brand accent ---- */
+.aarahan-social-tile:hover,
+.aarahan-social-tile:focus-visible {
+  --ast-lift: -15px;
+  --ast-pop: 30px;
+}
+.aarahan-social-tile:hover .aarahan-social-face,
+.aarahan-social-tile:focus-visible .aarahan-social-face {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 26px 42px -20px rgba(40, 88, 78, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.aarahan-social-tile:hover .aarahan-social-face::after,
+.aarahan-social-tile:focus-visible .aarahan-social-face::after { transform: scaleX(1); }
+.aarahan-social-tile:hover .aarahan-social-icon,
+.aarahan-social-tile:focus-visible .aarahan-social-icon {
+  color: var(--ast-brand);
+  background: color-mix(in srgb, var(--ast-brand) 14%, transparent);
+}
+.aarahan-social-tile:hover::after,
+.aarahan-social-tile:focus-visible::after { opacity: 0.55; transform: translateZ(calc(var(--ast-depth) * -1)) scale(1.1); }
+.aarahan-social-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+
+/* ---- Press ---- */
+.aarahan-social-tile:active {
+  --ast-pop: 5px;
+  --ast-lift: -4px;
+  transition-duration: 0.12s;
+}
+.aarahan-social-tile:active .aarahan-social-face { transform: scale(0.98); }
+
+/* Brand accents (used only on hover / focus) */
+.aarahan-social-tile--facebook { --ast-brand: #28584E; }
+.aarahan-social-tile--whatsapp { --ast-brand: #28584E; }
+.aarahan-social-tile--google { --ast-brand: #28584E; }
+.aarahan-social-tile--instagram { --ast-brand: #28584E; }
+
+/* ---- Entrance (staggered), triggered by IntersectionObserver ---- */
+.aarahan-social-grid .aarahan-social-tile {
+  opacity: 0;
+  transition:
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.7s ease;
+}
+.aarahan-social-grid:not(.is-in) .aarahan-social-tile {
+  --ast-lift: 26px;
+  --ast-pop: -40px;
+}
+.aarahan-social-grid.is-in .aarahan-social-tile { opacity: 1; }
+.aarahan-social-grid.is-in li:nth-child(1) .aarahan-social-tile { transition-delay: 0s; }
+.aarahan-social-grid.is-in li:nth-child(2) .aarahan-social-tile { transition-delay: 0.1s; }
+.aarahan-social-grid.is-in li:nth-child(3) .aarahan-social-tile { transition-delay: 0.2s; }
+.aarahan-social-grid.is-in li:nth-child(4) .aarahan-social-tile { transition-delay: 0.3s; }
+/* Hover must never wait for the entrance delay */
+.aarahan-social-grid.is-in .aarahan-social-tile:hover,
+.aarahan-social-grid.is-in .aarahan-social-tile:focus-visible { transition-delay: 0s; }
+
+/* ---- Local preview only: tile shown but not yet linked ---- */
+.aarahan-social-tile--pending { cursor: default; }
+.aarahan-social-tile--pending .aarahan-social-face { opacity: 0.86; }
+.aarahan-social-tile--pending .aarahan-social-label::after {
+  content: "Link pending";
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  color: #28584E;
+}
+.aarahan-social-footer--preview .aarahan-social-heading::after {
+  content: " · preview";
+  color: var(--muted);
+}
+
+/* ---- Tablet ---- */
+@media (max-width: 1024px) {
+  .aarahan-social-footer:not([hidden]) { gap: 16px 32px; }
+  .aarahan-social-tile { width: clamp(118px, 15vw, 140px); }
+  .aarahan-social-grid { perspective: 700px; }
+}
+
+/* ---- Mobile: clean 2 × 2 grid, flatter and calmer ---- */
+@media (max-width: 700px) {
+  .aarahan-social-footer { padding-bottom: 34px; }
+  .aarahan-social-footer:not([hidden]) { display: block; }
+  .aarahan-social-heading { display: block; margin-bottom: 4px; }
+  .aarahan-social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 14px 0 20px;
+    perspective: 600px;
+  }
+  .aarahan-social-tile { width: 100%; }
+  /* :nth-child(n) keeps specificity equal to the resting-angle rules above */
+  .aarahan-social-grid li:nth-child(n) .aarahan-social-tile { --ast-turn: 0deg; --ast-tilt: 3deg; --ast-float: 0px; }
+  .aarahan-social-tile::after { bottom: -12px; }
+  .aarahan-social-face { padding: 13px 12px; gap: 9px; }
+  .aarahan-social-label { font-size: 0.68rem; letter-spacing: 0.06em; }
+}
+@media (max-width: 380px) {
+  .aarahan-social-icon { width: 26px; height: 26px; }
+  .aarahan-social-label { font-size: 0.62rem; }
+}
+
+/* ---- Touch devices: no sticky hover lift ---- */
+@media (hover: none) {
+  .aarahan-social-tile:hover { --ast-lift: 0px; --ast-pop: 0px; }
+}
+
+/* ---- Reduced motion: static tiles, links still work ----
+   Covers both the OS setting and the site's own "Reduce motion" toggle. */
+@media (prefers-reduced-motion: reduce) {
+  .aarahan-social-tile,
+  .aarahan-social-tile::after,
+  .aarahan-social-face,
+  .aarahan-social-face::after { transition: none !important; }
+  .aarahan-social-grid .aarahan-social-tile { opacity: 1; --ast-lift: 0px; --ast-pop: 0px; }
+  .aarahan-social-tile:hover, .aarahan-social-tile:focus-visible { --ast-lift: 0px; --ast-pop: 0px; }
+}
+.rm .aarahan-social-tile,
+.rm .aarahan-social-tile::after,
+.rm .aarahan-social-face,
+.rm .aarahan-social-face::after { transition: none !important; }
+.rm .aarahan-social-grid .aarahan-social-tile { opacity: 1; --ast-lift: 0px; --ast-pop: 0px; }
+.rm .aarahan-social-tile:hover, .rm .aarahan-social-tile:focus-visible { --ast-lift: 0px; --ast-pop: 0px; }
+
+/* ---- Print: hide the tiles ---- */
+@media print { .aarahan-social-footer { display: none !important; } }
