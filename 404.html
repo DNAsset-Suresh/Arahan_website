@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-IN" class="static-site rm no-loader is-ready">
+<html lang="en-IN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,9 +33,11 @@
 
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css?v=20260924">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/aarahan-depth.css">
 <link rel="stylesheet" href="css/aarahan-social.css">
-<link rel="stylesheet" href="css/aarahan-static.css">
+<link rel="stylesheet" href="css/aarahan-vehicles.css?v=20260924">
 <script src="js/navigation.js"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Page Not Found | Arahan Enterprises", "url": "https://arahanenterprises.com/404.html", "description": "The page you were looking for could not be found. Continue to Arahan Enterprises’ home page.", "publisher": {"@id": "https://arahanenterprises.com/#organization"}}</script>
 </head>
@@ -70,7 +72,7 @@
 </div>
 
 <main id="main">
-<section class="nf bp-grid" id="top">
+<section class="nf bp-grid" data-spotlight id="top">
   <div class="container nf__inner">
     <p class="eyebrow"><span class="eyebrow__idx">404</span>Drawing not found</p>
     <h1 class="nf__title"><span>4</span><span class="nf__zero" aria-hidden="true"><i></i><i></i><i></i></span><span class="visually-hidden">0</span><span>4</span></h1>
@@ -151,13 +153,28 @@
 <div class="container footer__bottom">
     <span>© <span data-year>2026</span> Arahan Enterprises. All rights reserved.</span>
     <span class="footer__domain">arahanenterprises.com</span>
-    <span class="motion-toggle" aria-label="Website motion is off">Motion off</span>
+    <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Reduce motion</button>
     <a class="footer__top link-u" href="#top">Back to top ↑</a>
   </div>
 </footer>
+<script src="js/animations.js" defer></script>
 <script src="js/main.js" defer></script>
+<script src="js/aarahan-depth.js" defer></script>
 <script src="js/aarahan-social.js" defer></script>
+<script src="js/aarahan-vehicles.js?v=20260924" defer></script>
 <!-- Construction convoy: decorative only — aria-hidden, pointer-events: none.
      Order is fixed by the CSS delays: excavator, wheel loader, concrete mixer. -->
+<div class="aarahan-convoy" aria-hidden="true">
+  <div class="aarahan-convoy__ground"></div>
+  <div class="aarahan-convoy__unit aarahan-convoy__unit--excavator">
+    <img src="assets/vehicles/excavator.png" alt="" width="313" height="320" decoding="async">
+  </div>
+  <div class="aarahan-convoy__unit aarahan-convoy__unit--loader">
+    <img src="assets/vehicles/wheel-loader.png" alt="" width="690" height="320" decoding="async">
+  </div>
+  <div class="aarahan-convoy__unit aarahan-convoy__unit--mixer">
+    <img src="assets/vehicles/concrete-mixer.png" alt="" width="691" height="320" decoding="async">
+  </div>
+</div>
 </body>
 </html>

@@ -11,26 +11,109 @@
   var AE = window.AE;
   var html = document.documentElement;
 
-  /* Static page utilities: keep functional controls, not decorative motion. */
+  /* ---------- Loader ---------- */
   function initLoader() {
     var loader = document.querySelector("[data-loader]");
-    if (loader) loader.remove();
-    html.classList.add("is-ready");
+    function ready() {
+      html.classList.add("is-ready");
+      document.dispatchEvent(new CustomEvent("ae:ready"));
+    }
+    if (!loader || html.classList.contains("no-loader") || AE.reduced()) {
+      if (loader) loader.remove();
+      ready();
+      return;
+    }
+    var t0 = performance.now();
+    var MIN = 1500; // long enough for the wireframe to draw, never longer than needed
+    function done() {
+      var wait = Math.max(0, MIN - (performance.now() - t0));
+      window.setTimeout(function () {
+        loader.classList.add("is-done");
+        AE.store.set("ae-loaded", "1", true);
+        ready();
+        window.setTimeout(function () { loader.remove(); }, 800);
+      }, wait);
+    }
+    if (document.readyState === "complete") done();
+    else window.addEventListener("load", done);
+    // Never hold the page hostage to a slow asset
+    window.setTimeout(function () { if (!html.classList.contains("is-ready")) done(); }, 3200);
   }
+
+  /* ---------- Footer: year + motion toggle ---------- */
   function initFooter() {
     document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+    var t = document.querySelector("[data-motion-toggle]");
+    if (!t) return;
+    function sync() { t.setAttribute("aria-pressed", String(AE.reduced())); }
+    sync();
+    t.addEventListener("click", function () { AE.setMotion(!AE.reduced()); sync(); });
   }
+
+  /* ---------- About: capability stack ----------
+     Buttons select a layer; the matching 3D plate lifts. Auto-cycles
+     until the visitor interacts. Mouse nudges the isometric view. */
   function initStack() {
     var root = document.querySelector("[data-stack]");
     if (!root) return;
-    var buttons = root.querySelectorAll("[data-layer-btn]");
+    var world = root.querySelector("[data-stack-world]");
+    var stage = root.querySelector("[data-stack-stage]");
+    var btns = Array.prototype.slice.call(root.querySelectorAll("[data-layer-btn]"));
     var plates = root.querySelectorAll("[data-layer]");
-    buttons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b === button)); });
-        plates.forEach(function (p) { p.classList.toggle("is-active", p.dataset.layer === button.dataset.layerBtn); });
-      });
+    var idx = 0, timer = null, userTook = false;
+
+    function select(i) {
+      idx = i;
+      var key = btns[i].getAttribute("data-layer-btn");
+      btns.forEach(function (b, j) { b.setAttribute("aria-pressed", String(j === i)); });
+      plates.forEach(function (p) { p.classList.toggle("is-active", p.getAttribute("data-layer") === key); });
+      root.classList.add("has-active");
+    }
+    btns.forEach(function (b, i) {
+      b.addEventListener("click", function () { userTook = true; stop(); select(i); });
+      b.addEventListener("mouseenter", function () { if (AE.finePointer()) { userTook = true; stop(); select(i); } });
     });
+    function stop() { if (timer) { window.clearInterval(timer); timer = null; } }
+    function start() {
+      if (userTook || AE.reduced() || timer) return;
+      timer = window.setInterval(function () { select((idx + 1) % btns.length); }, 3200);
+    }
+    select(0);
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) start(); else stop(); });
+      }, { threshold: 0.3 }).observe(root);
+    }
+
+    if (AE.finePointer()) {
+      stage.parentElement.addEventListener("pointermove", function (e) {
+        if (AE.reduced()) return;
+        var r = root.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        world.style.setProperty("--rz", (px * 16).toFixed(2) + "deg");
+        world.style.setProperty("--rx", (py * -10).toFixed(2) + "deg");
+      });
+      root.addEventListener("pointerleave", function () {
+        world.style.setProperty("--rz", "0deg");
+        world.style.setProperty("--rx", "0deg");
+      });
+    }
+  }
+
+  /* ---------- About: values colonnade responds to the pointer ---------- */
+  function initColonnade() {
+    var root = document.querySelector("[data-colonnade]");
+    if (!root || !AE.finePointer()) return;
+    var row = root.querySelector(".colonnade__row");
+    root.addEventListener("pointermove", function (e) {
+      if (AE.reduced()) return;
+      var r = root.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      row.style.setProperty("--ry", (px * 14).toFixed(2) + "deg");
+    });
+    root.addEventListener("pointerleave", function () { row.style.setProperty("--ry", "0deg"); });
   }
 
   /* ---------- Services: ecosystem hub ---------- */
@@ -48,6 +131,9 @@
       nodes.forEach(function (n, j) { n.classList.toggle("is-active", j === i); });
       var tpl = i >= 0 ? root.querySelector('template[data-eco-item="' + i + '"]') : null;
       detail.innerHTML = tpl ? tpl.innerHTML : initial;
+      detail.classList.remove("is-swap");
+      void detail.offsetWidth; // restart the swap animation
+      detail.classList.add("is-swap");
     }
     root.querySelectorAll("[data-eco]").forEach(function (b) {
       var i = parseInt(b.getAttribute("data-eco"), 10);
@@ -63,6 +149,7 @@
     if (!root) return;
     var tabs = Array.prototype.slice.call(root.querySelectorAll("[data-cx-tab]"));
     var panels = root.querySelectorAll("[data-cx-panel]");
+    var chosen = false; // set once the visitor picks a tab themselves
 
     function activate(i, focus) {
       tabs.forEach(function (t, j) {
@@ -75,32 +162,81 @@
         var on = p.getAttribute("data-cx-panel") === key;
         p.hidden = !on;
         p.classList.remove("is-drawn");
-        if (on) p.classList.add("is-drawn");
+        if (on) { void p.offsetWidth; p.classList.add("is-drawn"); }
       });
       if (focus) tabs[i].focus();
     }
     tabs.forEach(function (t, i) {
-      t.addEventListener("click", function () { activate(i); });
+      t.addEventListener("click", function () { chosen = true; activate(i); });
       t.addEventListener("keydown", function (e) {
         var n = null;
         if (e.key === "ArrowDown" || e.key === "ArrowRight") n = (i + 1) % tabs.length;
         if (e.key === "ArrowUp" || e.key === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length;
         if (e.key === "Home") n = 0;
         if (e.key === "End") n = tabs.length - 1;
-        if (n !== null) { e.preventDefault(); activate(n, true); }
+        if (n !== null) { e.preventDefault(); chosen = true; activate(n, true); }
       });
     });
-    activate(0);
+    // Draw the first drawing when the explorer scrolls into view
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { if (!chosen) activate(0); io.disconnect(); }
+      }, { threshold: 0.25 });
+      io.observe(root);
+    } else activate(0);
   }
 
-  /* Method: every execution stage is visible in a normal vertical list. */
+  /* ---------- Method: scroll-driven execution timeline ----------
+     Desktop: the section is pinned and the track translates horizontally.
+     Smaller screens / reduced motion: a vertical timeline whose
+     progress line fills as you scroll. */
   function initTimeline() {
     var sec = document.querySelector("[data-timeline]");
     if (!sec) return;
-    sec.classList.add("tl--v");
-    sec.querySelectorAll("[data-tl-step]").forEach(function (step) { step.classList.add("is-active"); });
+    var track = sec.querySelector("[data-tl-track]");
     var bar = sec.querySelector("[data-tl-bar]");
-    if (bar) bar.style.setProperty("--tp", "1");
+    var steps = sec.querySelectorAll("[data-tl-step]");
+    var counter = sec.querySelector("[data-tl-current]");
+    var mode = "";
+
+    function setMode() {
+      var horizontal = window.innerWidth >= 1025 && window.innerHeight >= 620 && !AE.reduced();
+      var next = horizontal ? "h" : "v";
+      if (next === mode) return;
+      mode = next;
+      sec.classList.toggle("tl--h", horizontal);
+      sec.classList.toggle("tl--v", !horizontal);
+      track.style.transform = "";
+      update(window.pageYOffset);
+    }
+
+    function setActive(p) {
+      var n = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999 + 0.15));
+      steps.forEach(function (s, i) { s.classList.toggle("is-active", i <= n); });
+      if (counter) counter.textContent = "0" + (n + 1);
+    }
+
+    function update() {
+      var r = sec.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var p;
+      if (mode === "h") {
+        var total = sec.offsetHeight - vh;
+        p = AE.clamp(-r.top / total, 0, 1);
+        var dist = track.scrollWidth - window.innerWidth;
+        track.style.transform = "translate3d(" + (-p * Math.max(0, dist)).toFixed(1) + "px,0,0)";
+      } else {
+        p = AE.clamp((vh * 0.65 - r.top) / (r.height * 0.85), 0, 1);
+      }
+      bar.parentElement.parentElement.style.setProperty("--tp", p.toFixed(4));
+      bar.style.setProperty("--tp", p.toFixed(4));
+      setActive(p);
+    }
+
+    setMode();
+    AE.onScroll(update);
+    window.addEventListener("resize", function () { setMode(); update(); });
+    document.addEventListener("ae:motion", function () { setMode(); update(); });
   }
 
   /* ---------- Contact: server-side enquiry API ---------- */
@@ -250,6 +386,7 @@
     initLoader();
     initFooter();
     initStack();
+    initColonnade();
     initEco();
     initExplorer();
     initTimeline();
