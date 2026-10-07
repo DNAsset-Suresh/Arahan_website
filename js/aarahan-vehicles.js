@@ -107,6 +107,10 @@
   }
 
   whenImagesReady(layout);
+  // Retain convoy phase while a background tab is not being viewed.
+  function visibility() { band.classList.toggle('ae-convoy-paused', document.hidden); }
+  document.addEventListener('visibilitychange', visibility);
+  visibility();
 
   /* Recompute only when the width actually changes: re-setting a delay
      restarts the animation, so we never do it on scroll or on the

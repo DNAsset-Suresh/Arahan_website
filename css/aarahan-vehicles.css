@@ -166,6 +166,8 @@
    the footer toggle. Keying off .rm honours that override; a bare media query
    would hide the convoy even for someone who asked for motion. */
 .rm .aarahan-convoy { display: none; }
+.ae-convoy-paused .aarahan-convoy__unit,
+.ae-convoy-paused .aarahan-convoy__unit img { animation-play-state: paused; }
 
 /* No-JS fallback only — with JS the .rm rule above governs. */
 @media (prefers-reduced-motion: reduce) {

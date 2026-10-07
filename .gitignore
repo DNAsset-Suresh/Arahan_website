@@ -5,6 +5,8 @@
 
 # Dependencies
 node_modules/
+public/
+.vercel/
 
 # OS / editor noise
 Thumbs.db

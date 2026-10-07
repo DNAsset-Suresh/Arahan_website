@@ -63,6 +63,8 @@
    underneath the copy, the copy spans the full width, and pulling the veil
    off the right half drops two small green runs to 4.3-4.4:1, under AA. */
 @media (min-width: 861px) {
+  /* Keep the complete name clear of the cranes, including font fallback. */
+  .hero--building .hero__name { font-size: clamp(3.2rem, min(9vw, 14.5vh), 9rem); }
   .hero--building .hero__veil {
     -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 57%);
     mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 57%);

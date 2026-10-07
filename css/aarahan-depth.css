@@ -49,7 +49,13 @@
   --dp: 1;
   --xp: 0;
   --dir: 1;
+  --depth-strength: 1;
+  --arrival: calc((1 - var(--dp)) * var(--depth-strength));
 }
+
+/* Reading and interaction stay stable; the major visual sections lead. */
+.ae-depth--quiet { --depth-strength: .25; }
+.ae-depth--book { --depth-strength: .45; }
 
 .ae-depth > .container,
 .ae-depth > .marquee {
@@ -71,12 +77,12 @@
   transform:
     perspective(1900px)
     translate3d(
-      calc(var(--dir) * (1 - var(--dp)) * 1%),
-      calc((1 - var(--dp)) * 16px),
-      calc((1 - var(--dp)) * -90px + var(--xp) * 35px))
-    rotateY(calc(var(--dir) * (1 - var(--dp)) * 2.5deg))
-    rotateX(calc((1 - var(--dp)) * 1.5deg))
-    scale(calc(0.98 + var(--dp) * 0.02 + var(--xp) * 0.012));
+      calc(var(--dir) * var(--arrival) * 1.2%),
+      calc(var(--arrival) * 26px),
+      calc(var(--arrival) * -130px + var(--xp) * 25px))
+    rotateY(calc(var(--dir) * var(--arrival) * 3.5deg))
+    rotateX(calc(var(--arrival) * 1.5deg))
+    scale(calc(1 - var(--arrival) * .025 + var(--xp) * .008));
   /* Floor the arrival fade at 0.82. Lower than that and the content reads as
      failed to load rather than arriving, because the section's own
      background is already at full strength behind it. The departing fade can
@@ -97,7 +103,8 @@
    out of their own layout, which looks like a bug rather than depth.
    -------------------------------------------------------------------------- */
 .ae-depth :is(.figure__media, .cap-card__media, .sector-card__media, .svc__media) img {
-  scale: calc(1.045 - var(--dp) * .045 + var(--tp, .5) * .018);
+  scale: calc(1.055 + var(--arrival) * .035);
+  translate: 0 calc((var(--tp, .5) - .5) * -3%);
 }
 .ae-depth .section-head {
   translate: 0 calc((var(--tp, 0.5) - 0.5) * -8px);
@@ -114,6 +121,7 @@
   opacity: 1;
   will-change: auto;
 }
+.ae-depth.ae-depth--quiet > .container { transform: none; opacity: 1; }
 
 /* --------------------------------------------------------------------------
    Hero: recedes as you scroll away, so the page opens with depth rather than
@@ -195,6 +203,10 @@
   .ae-depth .section-head,
   .ae-depth .btn-row,
   .ae-depth .link-arrow { transform: none; }
+  .ae-depth :is(.figure__media, .cap-card__media, .sector-card__media, .svc__media) img {
+    translate: none;
+    scale: none;
+  }
   .ae-hero-depth .hero__inner,
   .ae-hero-depth .aarahan-building-showcase,
   .ae-hero-depth .page-hero__visual,
@@ -227,7 +239,7 @@
   scale: none;
   opacity: 1;
 }
-.rm .ae-depth :is(.figure__media, .cap-card__media, .sector-card__media, .svc__media) img { scale: none; }
+.rm .ae-depth :is(.figure__media, .cap-card__media, .sector-card__media, .svc__media) img { scale: none; translate: none; }
 .ae-motion-paused, .ae-motion-paused .marquee__track { animation-play-state: paused; }
 @keyframes ae-building-arrive {
   from { opacity: .35; transform: translate3d(0, 12px, 0) scale(.975); }

@@ -15,6 +15,7 @@ require("nodemailer").createTransport = () => ({ sendMail: async mail => {
   return { accepted: mail.to.split(", "), messageId: "mock" };
 }});
 const server = require("./server");
+server.listen(0);
 test("contact validation, concurrent dedupe, partial retry, and private files", async () => {
   if (!server.listening) await new Promise(resolve => server.once("listening", resolve));
   const base = "http://127.0.0.1:" + server.address().port;

@@ -4,7 +4,7 @@ Static, framework-free website for **Aarahan Enterprises**, an interior finishin
 
 > Quality spaces. Strong foundations. Built for what’s next.
 
-Built with **HTML5, CSS3 and vanilla JavaScript** only. There is no build step, no backend and no package manager. Open `index.html` and it works.
+Frontend built with **HTML5, CSS3 and vanilla JavaScript**, with a small Node.js/Nodemailer enquiry API. No frontend framework or animation dependency is required. Opening `index.html` previews the design; email submission requires the Node server or the Vercel API.
 
 ---
 
@@ -21,7 +21,7 @@ aarahan-enterprises/
 ├── safety-quality.html         Safety, quality, statutory compliance, housekeeping
 ├── clients.html                Organisations (text only) + client value
 ├── commercial.html             Contract models and commercial terms
-├── contact.html                Contact details, Call / Email / Directions, email-composing enquiry form
+├── contact.html                Contact details, Call / Email / Directions, server-backed enquiry form
 ├── 404.html                    Not-found page
 ├── sitemap.xml · robots.txt · site.webmanifest
 ├── css/
@@ -32,7 +32,7 @@ aarahan-enterprises/
 ├── js/
 │   ├── navigation.js           Loaded in <head>: shared AE helpers, header, menu, progress bar, page transitions
 │   ├── animations.js           Split text, scroll reveal, counters, 3D tilt, magnetic buttons, grid spotlight, parallax
-│   ├── 3d.js                   Three.js hero scenes (home tower, civil site) with graceful fallback
+│   ├── 3d.js                   Existing Three.js Civil hero with graceful fallback
 │   ├── main.js                 Loader, footer, capability stack, colonnade, ecosystem, explorer, timeline, enquiry form
 │   └── aarahan-social.js       Footer 3D social tiles + SOCIAL LINK CONFIG (see §9)
 └── assets/
@@ -43,30 +43,34 @@ aarahan-enterprises/
 
 ## 2. Run locally
 
-Double-click `index.html`, or serve the folder (recommended, since it matches production):
+Use Node.js 20.6 or newer. Copy `.env.example` to `.env` and configure SMTP privately (see `server/EMAIL-SETUP.md`). Then:
 
 ```bash
-python -m http.server 8080
+npm ci
+npm run dev
 ```
 
-Then open http://localhost:8080.
+Open the localhost URL printed by the server. `npm test` runs SMTP-mocked API and motion-state tests without sending email. `npm run build` copies only public website files into the ignored `public/` folder.
 
 ## 3. Deploy
 
-The folder is ready as-is for any static host. Upload the **contents** of `aarahan-enterprises/` as the site root.
+The existing production project is **dn-asset1/aarahan-enterprises-website** on Vercel, connected to **DNAsset-Suresh/Arahan_website**, branch `main`. Pushes use its existing Git integration; do not create another project. `vercel.json` builds the static allowlist into `public/`, and `api/contact.mjs` reuses the local server's validation/mail handler. Server sources and secrets are not public assets. Configure SMTP in the existing Vercel project's environment settings, not in Git.
 
-- **Netlify:** drag the folder onto app.netlify.com/drop, or connect a repo with no build command and publish directory `/`.
-- **Vercel:** `vercel deploy` from inside the folder (framework preset "Other", no build command).
-- **GitHub Pages:** push the files to a repo and enable Pages from the `main` branch root. `404.html` is picked up automatically.
-- **Any web server (Apache/Nginx/cPanel):** upload via FTP to `public_html/`. To use the custom 404 on Apache, add `ErrorDocument 404 /404.html` to `.htaccess`.
+- **Static hosts:** publish only the generated `public/` output, never the source folder containing `.env`. A static-only host also requires a separately deployed enquiry API.
+- **Vercel:** use the existing Git-connected project and checked-in `vercel.json`. Production: https://aarahan-enterprises-website.vercel.app/ . `/api/health` reports whether required email settings exist, not whether SMTP delivery has succeeded.
+- **Any web server (Apache/Nginx/cPanel):** publish `public/` and route `/api/contact` to the Node server. To use the custom 404 on Apache, add `ErrorDocument 404 /404.html` to `.htaccess`.
 
 After the domain is live, submit `https://arahanenterprises.com/sitemap.xml` in Google Search Console.
+
+### Motion hierarchy
+
+`css/aarahan-depth.css` and `js/aarahan-depth.js` own reversible section depth and image parallax. Reading strips, CTAs and forms stay flat; the machinery book gets reduced section motion so page turns remain usable. `animations.js` owns staggered reveals, damped card tilt and bounded magnetic buttons. Native vertical scrolling stays untouched. Pointer effects are desktop-only, mobile motion is lighter, and the existing footer motion preference is authoritative. The building video plays once; hidden tabs pause decoding and reduced motion holds the completed building. No custom cursor is introduced because the existing project has none.
 
 ## 4. External dependencies (CDN)
 
 | Dependency | Used for | Loaded from |
 |---|---|---|
-| Three.js r170 (ES module) | 3D hero on Home and Civil pages only | `cdn.jsdelivr.net/npm/three@0.170.0` via dynamic `import()` |
+| Three.js r170 (existing ES module) | Civil page hero only; Home uses the supplied video | `cdn.jsdelivr.net/npm/three@0.170.0` via dynamic `import()` |
 | Google Fonts: Barlow Condensed, Inter, IBM Plex Mono | Typography | `fonts.googleapis.com` |
 
 If either is unreachable, the site still works. The 3D hero falls back to a static line drawing, and text falls back to system fonts.
@@ -125,13 +129,13 @@ The semantic layer beneath the palette (`--ink`, `--char`, `--accent`, `--second
 - Service ecosystem hub, accessible tabbed infrastructure explorer with self-drawing isometric drawings, and a scroll-pinned horizontal execution timeline (vertical on smaller screens)
 - Scroll reveals, masked split headings, number counters, a progress bar, magnetic CTAs, a blueprint-grid cursor spotlight and soft page transitions
 - Sticky header that is transparent over the hero, turns solid on scroll and hides on scroll-down, with active-page indication and a full-screen mobile menu with focus management
-- Enquiry form that composes an email in the visitor's mail app (no backend, nothing stored)
+- Enquiry form that sends owner notifications and a visitor confirmation through the server-side SMTP service
 
 ## 7. Performance and accessibility
 
-- Three.js is loaded only on the two pages that use it. Rendering pauses when the hero is off-screen or the tab is hidden. Pixel ratio is capped, and on mobile there are no shadows and fewer particles.
+- The existing Three.js renderer is loaded only on Civil. Rendering pauses when the hero is off-screen or the tab is hidden. Pixel ratio is capped, and on mobile there are no shadows and fewer particles.
 - Images are WebP, lazy-loaded, with explicit dimensions.
-- The only external requests are the fonts and (on two pages) Three.js.
+- External frontend requests are the fonts and (on Civil) Three.js; SMTP runs server-side.
 - Semantic landmarks, one `h1` per page, skip link, visible focus states, ARIA on the menu, tabs and live regions, and keyboard support for the explorer tabs.
 - `prefers-reduced-motion` is respected, and visitors can also switch motion off with the **Reduce motion** toggle in every footer.
 - SEO: unique titles and descriptions, canonical URLs, Open Graph / Twitter tags, `GeneralContractor` + `BreadcrumbList` structured data, sitemap and robots.
@@ -168,4 +172,4 @@ A tile links out only when its URL is filled in.
 | `assets/images/og-image.png` | Generated share image. | Optional: a branded share image with a real project photo. |
 | Organisation logos | Not used. | Add client logos only with written permission to use them. |
 | Map | Google Maps address search link. | Optionally a pinned Maps link or embed once the exact office location is confirmed. |
-| Enquiry form | Opens the visitor's email app. | Optionally connect to a form service (Netlify Forms, Formspree, etc.). |
+| Enquiry form | Node/Nodemailer API plus Vercel adapter. | Configure production SMTP privately and verify delivery; see `server/EMAIL-SETUP.md`. |

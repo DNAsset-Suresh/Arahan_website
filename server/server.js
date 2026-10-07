@@ -55,13 +55,16 @@ function json(res, status, payload) {
 }
 
 function clientIp(req) {
-  var fwd = process.env.TRUST_PROXY === "1" && req.headers["x-forwarded-for"];
+  var fwd = (process.env.TRUST_PROXY === "1" || process.env.VERCEL === "1") && req.headers["x-forwarded-for"];
   if (fwd) return String(fwd).split(",")[0].trim();
   return req.socket.remoteAddress || "unknown";
 }
 
 function rateLimited(ip) {
   var now = Date.now();
+  hits.forEach(function (timestamps, key) {
+    if (!timestamps.length || now - timestamps[timestamps.length - 1] >= RATE_WINDOW) hits.delete(key);
+  });
   var list = (hits.get(ip) || []).filter(function (t) { return now - t < RATE_WINDOW; });
   if (list.length >= RATE_MAX) { hits.set(ip, list); return true; }
   list.push(now);
@@ -72,6 +75,12 @@ function rateLimited(ip) {
 /* Reads the body with a hard ceiling, so an oversized POST is dropped as it
    arrives rather than after it has all been buffered. */
 function readBody(req) {
+  // Vercel parses JSON before calling the function; local node:http streams it.
+  if (req.body !== undefined) {
+    var parsed = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+    if (Buffer.byteLength(parsed) > MAX_BODY) return Promise.reject(Object.assign(new Error('Payload too large'), { statusCode: 413 }));
+    return Promise.resolve(parsed);
+  }
   return new Promise(function (resolve, reject) {
     var chunks = [];
     var size = 0;
@@ -242,7 +251,7 @@ var server = http.createServer(function (req, res) {
   return serveStatic(req, res);
 });
 
-server.listen(PORT, function () {
+if (require.main === module) server.listen(PORT, function () {
   console.log("Arahan Enterprises site  -> http://localhost:" + PORT);
   console.log("Enquiry API              -> POST http://localhost:" + PORT + "/api/contact");
   if (mailer.isDryRun()) console.log("MAIL_DRYRUN=1 - emails are composed and logged, NOT sent.");
@@ -251,3 +260,4 @@ server.listen(PORT, function () {
 });
 
 module.exports = server;
+module.exports.handleContact = handleContact;

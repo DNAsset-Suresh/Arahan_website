@@ -46,6 +46,23 @@ exactly-once delivery. Use a persistent outbox for those requirements.
 
 ## Production
 
+### Existing Vercel project
+
+The repository now includes `/api/contact` and `/api/health` Vercel Functions.
+Keep the existing `dn-asset1/aarahan-enterprises-website` project and Git connection.
+Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_FROM`,
+`OWNER_EMAIL_1` and `OWNER_EMAIL_2` in its Production environment, then redeploy.
+Do not copy `.env` into the static output. `MAIL_DRYRUN` must be absent or `0`
+for real delivery. `/api/health` reports configuration presence only.
+The contact function has a 60-second execution limit; SMTP acceptance is not
+an inbox-delivery guarantee. In-memory rate limits and deduplication are best
+effort per warm instance, not global across concurrent serverless instances.
+Use platform firewall limits and a durable outbox if stronger abuse protection
+or delivery guarantees are required. Test real SMTP from the deployed environment
+before claiming email delivery works in production.
+
+### Other Node-capable hosts
+
 Deploy this project to a Node-capable host, install with `npm ci --omit=dev`,
 set secrets in the host's environment dashboard, and run `npm start`.
 Use HTTPS and serve frontend/API on the same origin. Static-only hosting needs

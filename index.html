@@ -798,8 +798,11 @@
   .aarahan-about-book.is-entered .aarahan-book-stage:hover .aarahan-book { --ab-lift: 0px; }
   .aarahan-book-leaf, .aarahan-book-endplate { left: 0; }
   .aarahan-book-leaf { visibility: hidden; pointer-events: none; transition-duration: .65s; }
-  .aarahan-book-leaf.is-mobile-page { visibility: visible; pointer-events: auto; }
-  .aarahan-book-leaf.is-mobile-back { transform: translateX(100%) rotateY(-180deg); }
+  /* A single readable plane on phones avoids nested back-face culling.
+     Desktop keeps the original double-sided 180-degree page turns. */
+  .aarahan-book-leaf.is-mobile-page { visibility: visible; pointer-events: auto; transform: none; }
+  .aarahan-book-leaf.is-mobile-back { transform: none; }
+  .aarahan-book-leaf.is-mobile-page .aarahan-book-face--back { transform: none; }
   .aarahan-book-leaf.is-mobile-page .aarahan-book-face { animation: ab-mobile-reveal .45s var(--ab-ease) backwards; }
   .aarahan-book-leaf.is-mobile-back .aarahan-book-face--front { visibility: hidden; }
   .aarahan-book-leaf.is-mobile-page:not(.is-mobile-back) .aarahan-book-face--back { visibility: hidden; }
@@ -831,7 +834,10 @@
   .aarahan-book-group h4 { font-size: 0.8rem; }
   .aarahan-book-group li { font-size: 0.64rem; line-height: 1.45; }
 }
-@keyframes ab-mobile-reveal { from { opacity: .6; } to { opacity: 1; } }
+@keyframes ab-mobile-reveal {
+  from { opacity: .75; translate: 6px 0; }
+  to { opacity: 1; translate: 0 0; }
+}
 @media (max-width: 480px) {
   .aarahan-book-page-inner { padding: 14px 12px; }
 }

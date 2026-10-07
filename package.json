@@ -6,6 +6,8 @@
   "type": "commonjs",
   "main": "server/server.js",
   "scripts": {
+    "test": "node --test server/*.test.js tests/*.test.js",
+    "build": "node scripts/build-static.js",
     "start": "node server/server.js",
     "dev": "node --env-file=.env server/server.js",
     "mail:check": "node --env-file=.env server/verify-smtp.js"

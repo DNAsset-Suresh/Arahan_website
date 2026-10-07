@@ -116,8 +116,10 @@
     var header = document.querySelector("[data-header]");
     if (!btn || !menu) return;
     var links = menu.querySelectorAll("a");
+    var focusTimer = null;
 
     function setOpen(open) {
+      window.clearTimeout(focusTimer);
       btn.setAttribute("aria-expanded", String(open));
       btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
       menu.classList.toggle("is-open", open);
@@ -126,7 +128,7 @@
       if (open) {
         menu.removeAttribute("inert");
         for (var i = 0; i < links.length; i++) links[i].style.transitionDelay = (0.18 + i * 0.045) + "s";
-        window.setTimeout(function () { if (links[0]) links[0].focus({ preventScroll: true }); }, 350);
+        focusTimer = window.setTimeout(function () { if (menu.classList.contains('is-open') && links[0]) links[0].focus({ preventScroll: true }); }, AE.reduced() ? 0 : 350);
       } else {
         menu.setAttribute("inert", "");
         for (var j = 0; j < links.length; j++) links[j].style.transitionDelay = "0s";
@@ -136,7 +138,14 @@
     btn.addEventListener("click", function () { setOpen(btn.getAttribute("aria-expanded") !== "true"); });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && menu.classList.contains("is-open")) { setOpen(false); btn.focus(); }
+      if (e.key === 'Tab' && menu.classList.contains('is-open')) {
+        var focusable = [btn].concat(Array.prototype.slice.call(menu.querySelectorAll('a[href], button:not([disabled])')));
+        var index = focusable.indexOf(document.activeElement);
+        if (e.shiftKey && index <= 0) { e.preventDefault(); focusable[focusable.length - 1].focus(); }
+        else if (!e.shiftKey && index === focusable.length - 1) { e.preventDefault(); btn.focus(); }
+      }
     });
+    links.forEach(function (link) { link.addEventListener('click', function () { setOpen(false); }); });
     // Keep focus inside the header + menu while open
     document.addEventListener("focusin", function (e) {
       if (!menu.classList.contains("is-open")) return;
@@ -159,6 +168,7 @@
 
   /* ---------- Soft page transitions between internal pages ---------- */
   function initTransitions() {
+    var leaving = false;
     document.addEventListener("click", function (e) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest && e.target.closest("a[href]");
@@ -168,12 +178,14 @@
       if (!/\.html(#.*)?$/i.test(href)) return;
       if (AE.reduced()) return;
       e.preventDefault();
+      if (leaving) return;
+      leaving = true;
       html.classList.add("is-leaving");
       window.setTimeout(function () { window.location.href = href; }, 260);
     });
     // Restore state when returning via the back/forward cache
     window.addEventListener("pageshow", function (e) {
-      if (e.persisted) html.classList.remove("is-leaving");
+      if (e.persisted) { leaving = false; html.classList.remove("is-leaving"); }
     });
   }
 })();

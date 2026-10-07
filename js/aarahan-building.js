@@ -21,6 +21,9 @@
 
   var finished = false;
   var heldForRm = false;   /* parked on the last frame, never actually played */
+  var played = false;
+  var visible = true;
+  video.addEventListener('playing', function () { played = true; });
 
   /* Belt and braces: the markup carries no `loop`, and nothing here adds it. */
   video.loop = false;
@@ -33,7 +36,7 @@
   });
 
   function attempt() {
-    if (finished || reduced() || !video.paused) return;
+    if (finished || reduced() || document.hidden || !visible || !video.paused) return;
     var p = video.play();
     if (p && typeof p.catch === "function") p.catch(function () { /* policy blocked it */ });
   }
@@ -49,9 +52,10 @@
      already spent so nothing can start it later. */
   function holdFinalFrame() {
     finished = true;
-    heldForRm = true;
+    heldForRm = !played;
     video.pause();
     function seek() {
+      if (!reduced()) return;
       if (!isFinite(video.duration)) return;
       /* a hair inside the end: seeking exactly to duration lands past the
          last decoded frame in some browsers and paints nothing */
@@ -80,18 +84,23 @@
      pause, never rewind, and never resume once the run has finished. */
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (entries) {
-      var visible = entries[0].isIntersecting;
+      visible = entries[0].isIntersecting;
       if (finished) return;
       if (visible) attempt();
       else if (!video.paused) video.pause();
     }, { threshold: 0.05 }).observe(showcase);
   }
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) video.pause();
+    else attempt();
+  });
   /* The footer toggle can turn motion back on after the page loaded with it
      off. Only then does the sequence get its single run. */
   document.addEventListener("ae:motion", function () {
+    if (reduced()) { holdFinalFrame(); return; }
     /* Only act when motion has just been turned ON and the sequence was
        parked rather than played. A clip that genuinely ran is spent. */
-    if (reduced() || !heldForRm) return;
+    if (!heldForRm) return;
     heldForRm = false;
     finished = false;
     showcase.removeAttribute("data-building-complete");

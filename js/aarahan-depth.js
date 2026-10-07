@@ -41,6 +41,8 @@
   /* Tilt alternates down the page and never repeats. */
   panels.forEach(function (el, i) {
     el.classList.add("ae-depth");
+    if (el.matches('.stats-band, .orgs-band, .cta-band, .map-band') || el.querySelector('form')) el.classList.add('ae-depth--quiet');
+    if (el.querySelector('.aarahan-about-book')) el.classList.add('ae-depth--book');
     el.style.setProperty("--dir", (i % 2) === 0 ? "1" : "-1");
   });
   if (hero) hero.classList.add("ae-hero-depth");
@@ -88,12 +90,12 @@
     el.classList.toggle("is-travelling", dp < 1 || xp > 0);
   }
 
-  function applyHero() {
+  function applyHero(rect) {
     if (!hero) return;
     var vh = window.innerHeight || 1;
-    var r = hero.getBoundingClientRect();
+    var r = rect || hero.getBoundingClientRect();
     var xp = clamp01(-r.top / (vh * 0.9));
-    xp = Math.round(xp * 100) / 100;
+    xp = Math.round(xp * 10000) / 10000;
     setVar(hero, "--xp", xp, "_xp");
     hero.classList.toggle("is-flat", xp <= 0);
   }
@@ -114,8 +116,9 @@
     frame = 0;
     if (document.hidden) return;
     if (reduced()) return;
-    applyHero();
+    var heroRect = hero && hero.getBoundingClientRect();
     var rectangles = active.map(function (el) { return el.getBoundingClientRect(); });
+    applyHero(heroRect);
     for (var i = 0; i < active.length; i++) applyPanel(active[i], rectangles[i]);
   }
 

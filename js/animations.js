@@ -51,6 +51,7 @@
     var dur = 1800;
     var start = null;
     function frame(t) {
+      if (AE.reduced()) { el.textContent = target; return; }
       if (start === null) start = t;
       var p = Math.min(1, (t - start) / dur);
       var eased = 1 - Math.pow(1 - p, 4); // easeOutQuart
@@ -65,6 +66,15 @@
   function initReveal() {
     var splits = document.querySelectorAll("[data-split]");
     splits.forEach(splitText);
+
+    // Rhythm within existing grids, without delaying an entire section.
+    document.querySelectorAll('.cap-grid, .sector-grid, .svc-grid, .vgrid, .cgrid, .icard-grid').forEach(function (grid) {
+      Array.prototype.forEach.call(grid.children, function (card, i) {
+        if (card.hasAttribute('data-reveal') && !card.hasAttribute('data-delay')) {
+          card.style.setProperty('--reveal-step', String((i % 3) * 0.65));
+        }
+      });
+    });
 
     var targets = document.querySelectorAll(
       "[data-reveal], [data-split], [data-count], [data-progress-line], .stat, .shield, .stack, .figure"
@@ -93,7 +103,7 @@
      A glare layer follows the pointer when data-tilt-glare is present. */
   function initTilt() {
     if (!AE.finePointer()) return;
-    document.querySelectorAll("[data-tilt]").forEach(function (el) {
+    document.querySelectorAll("[data-tilt], .sector-card").forEach(function (el) {
       var max = Math.min(5, parseFloat(el.getAttribute("data-tilt-max") || "5"));
       var glare = null;
       if (el.hasAttribute("data-tilt-glare")) {
@@ -102,17 +112,31 @@
         glare.setAttribute("aria-hidden", "true");
         el.appendChild(glare);
       }
-      var raf = null, resetTimer = null, rx = 0, ry = 0;
+      var raf = null, rx = 0, ry = 0, currentX = 0, currentY = 0, inside = false, lastTime = 0;
 
-      function apply() {
+      function apply(time) {
         raf = null;
         if (AE.reduced()) return;
-        el.style.transform = "perspective(1000px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+        var step = 1 - Math.exp(-Math.min(40, lastTime ? time - lastTime : 16) / 75);
+        lastTime = time;
+        currentX += (rx - currentX) * step;
+        currentY += (ry - currentY) * step;
+        el.style.transform = "perspective(1200px) rotateX(" + currentX.toFixed(3) + "deg) rotateY(" + currentY.toFixed(3) + "deg)";
+        if (Math.abs(rx - currentX) + Math.abs(ry - currentY) > 0.015) raf = requestAnimationFrame(apply);
+        else {
+          lastTime = 0;
+          if (!inside) reset();
+        }
+      }
+      function reset() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = null; lastTime = 0; rx = ry = currentX = currentY = 0;
+        el.style.transform = el.style.transition = el.style.willChange = '';
       }
       el.addEventListener("pointerenter", function () {
         if (AE.reduced()) return;
-        clearTimeout(resetTimer);
-        el.style.transition = "transform 0.2s ease-out";
+        inside = true;
+        el.style.transition = "none";
         el.style.willChange = "transform";
       });
       el.addEventListener("pointermove", function (e) {
@@ -129,20 +153,13 @@
         if (!raf) raf = window.requestAnimationFrame(apply);
       });
       el.addEventListener("pointerleave", function () {
-        if (raf) { cancelAnimationFrame(raf); raf = null; }
-        el.style.transition = "transform 0.7s cubic-bezier(.16,1,.3,1)";
-        el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
-        resetTimer = window.setTimeout(function () {
-          el.style.transform = "";
-          el.style.transition = "";
-          el.style.willChange = "";
-        }, 720);
+        inside = false; rx = ry = 0;
+        if (!raf) raf = requestAnimationFrame(apply);
       });
+      document.addEventListener('visibilitychange', function () { if (document.hidden) reset(); });
       document.addEventListener("ae:motion", function () {
         if (!AE.reduced()) return;
-        if (raf) { cancelAnimationFrame(raf); raf = null; }
-        clearTimeout(resetTimer);
-        el.style.transform = el.style.transition = el.style.willChange = "";
+        reset();
       });
     });
   }
@@ -153,15 +170,17 @@
   function initMagnetic() {
     if (!AE.finePointer()) return;
     document.querySelectorAll(".magnetic").forEach(function (el) {
-      var strength = 0.28;
+      var strength = 0.12;
       el.addEventListener("pointermove", function (e) {
         if (AE.reduced()) return;
         var r = el.getBoundingClientRect();
         var dx = e.clientX - (r.left + r.width / 2);
         var dy = e.clientY - (r.top + r.height / 2);
-        el.style.translate = (dx * strength).toFixed(1) + "px " + (dy * strength * 1.4).toFixed(1) + "px";
+        el.style.translate = AE.clamp(dx * strength, -6, 6).toFixed(1) + "px " + AE.clamp(dy * strength, -3, 3).toFixed(1) + "px";
       });
       el.addEventListener("pointerleave", function () { el.style.translate = ""; });
+      el.addEventListener('focus', function () { el.style.translate = ''; });
+      document.addEventListener('ae:motion', function () { if (AE.reduced()) el.style.translate = ''; });
     });
   }
 
@@ -177,12 +196,14 @@
         if (raf) return;
         raf = window.requestAnimationFrame(function () {
           raf = null;
+          if (AE.reduced()) return;
           el.style.setProperty("--mx", x + "px");
           el.style.setProperty("--my", y + "px");
         });
       });
       el.addEventListener("pointerenter", function () { if (!AE.reduced()) el.classList.add("is-lit"); });
       el.addEventListener("pointerleave", function () { el.classList.remove("is-lit"); });
+      document.addEventListener('ae:motion', function () { if (AE.reduced()) el.classList.remove('is-lit'); });
     });
   }
 
