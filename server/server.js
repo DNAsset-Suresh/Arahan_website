@@ -55,7 +55,7 @@ function json(res, status, payload) {
 }
 
 function clientIp(req) {
-  var fwd = req.headers["x-forwarded-for"];
+  var fwd = process.env.TRUST_PROXY === "1" && req.headers["x-forwarded-for"];
   if (fwd) return String(fwd).split(",")[0].trim();
   return req.socket.remoteAddress || "unknown";
 }
@@ -107,6 +107,9 @@ function applyCors(req, res) {
 }
 
 async function handleContact(req, res) {
+  if (!/^application\/json\b/i.test(req.headers["content-type"] || "")) {
+    return json(res, 415, { ok: false, error: "JSON content required." });
+  }
   var ip = clientIp(req);
 
   if (rateLimited(ip)) {
@@ -141,14 +144,28 @@ async function handleContact(req, res) {
   var hash = crypto.createHash("sha256")
     .update(JSON.stringify(check.data) + "|" + ip).digest("hex");
   var seen = recent.get(hash);
-  if (seen && Date.now() - seen.at < DEDUPE_TTL) {
+  recent.forEach(function (entry, key) {
+    if (!entry.pending && Date.now() - entry.at >= DEDUPE_TTL) recent.delete(key);
+  });
+  if (seen && !seen.pending && Date.now() - seen.at >= DEDUPE_TTL) seen = null;
+  if (seen && seen.result) {
     return json(res, 200, Object.assign({ duplicate: true }, seen.result));
   }
 
   try {
-    var out = await mailer.sendEnquiry(check.data);
+    if (!seen) {
+      seen = { at: Date.now(), delivery: { acceptedOwners: [], confirmationSent: false } };
+      recent.set(hash, seen);
+    }
+    if (!seen.pending) {
+      seen.pending = mailer.sendEnquiry(check.data, seen.delivery).finally(function () {
+        seen.pending = null;
+        seen.at = Date.now();
+      });
+    }
+    var out = await seen.pending;
     var result = { ok: true, message: "Enquiry received.", confirmationSent: out.confirmationSent };
-    recent.set(hash, { at: Date.now(), result: result });
+    seen.result = result;
     console.log("[enquiry] from %s <%s> -> %d owner(s), confirmation:%s",
       check.data.name, check.data.email, out.owners, out.confirmationSent);
     return json(res, 200, result);
@@ -185,8 +202,9 @@ async function serveStatic(req, res) {
 
   /* Never serve secrets or server code, whatever the URL asks for. */
   var rel = path.relative(ROOT, file).replace(/\\/g, "/");
-  if (rel.startsWith(".env") || rel.startsWith("server/") || rel === "package.json" ||
-      rel.startsWith("node_modules/")) {
+  if (!(/^[^/]+\.(html|webmanifest|ico)$/.test(rel) ||
+        /^(css|js|assets)\//.test(rel) || /^(robots\.txt|sitemap\.xml)$/.test(rel)) ||
+      rel.split("/").some(function (part) { return part.startsWith("."); })) {
     res.writeHead(404, { "content-type": "text/plain" }).end("Not found");
     return;
   }

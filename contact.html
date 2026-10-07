@@ -155,7 +155,7 @@
         <div class="field"><label for="f-phone">Phone <span aria-hidden="true">*</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required></div>
         <div class="field"><label for="f-email">Email <span aria-hidden="true">*</span></label><input id="f-email" name="email" type="email" autocomplete="email" required=""></div>
         <div class="field"><label for="f-type">Scope</label>
-          <select id="f-type" name="type">
+          <select id="f-type" name="type" required>
             <option>Interior &amp; finishing works</option>
             <option>Complete finishing package</option>
             <option>Civil &amp; structural</option>
@@ -164,7 +164,7 @@
             <option>Fencing &amp; boundary protection</option>
           </select></div>
         <div class="field"><label for="f-loc">Project location</label><input id="f-loc" name="location"></div>
-        <div class="field field--full"><label for="f-msg">Requirement / scope <span aria-hidden="true">*</span></label><textarea id="f-msg" name="message" rows="5" required></textarea></div>
+        <div class="field field--full"><label for="f-msg">Requirement / scope (optional)</label><textarea id="f-msg" name="message" rows="5" maxlength="5000"></textarea></div>
       </div>
       <p class="form__status" data-form-status role="status" aria-live="polite"></p>
       <button class="btn btn--dark magnetic" type="submit"><span class="btn__label">Prepare Email</span><span class="btn__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>

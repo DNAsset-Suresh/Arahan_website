@@ -781,28 +781,59 @@
 }
 
 /* ---- Mobile: single page, simplified 3D ---- */
-@media (max-width: 760px) {
-  .aarahan-about-book { --ab-pw: min(84vw, 340px); --ab-ph: 540px; --ab-ry: -4deg; --ab-rx: 5deg; }
-  .aarahan-book-page-inner { padding-bottom: 50px; }
+@media (max-width: 768px) {
+  .aarahan-about-book {
+    --ab-pw: min(calc(100vw - 64px), 410px);
+    --ab-ph: calc(var(--ab-pw) * 26 / 19);
+    --ab-ry: -1deg; --ab-rx: 2deg;
+    margin-top: 20px;
+  }
+  .aarahan-book-page-inner { padding: 16px; overflow-y: auto; touch-action: pan-y pinch-zoom; }
+  .aarahan-book-page-inner > :not(.amb-shot) { flex-shrink: 0; }
   .aarahan-book-note { font-size: 0.5rem; }
-  .aarahan-book-stage { perspective: 1500px; overflow: hidden; padding: 30px 0 40px; }
-  .aarahan-book { width: var(--ab-pw); }
+  .aarahan-book-stage { perspective: 2200px; overflow: clip; min-height: 0; padding: 18px 12px 80px; }
+  .aarahan-book { width: var(--ab-pw); flex: 0 0 var(--ab-pw); touch-action: pan-y pinch-zoom; }
   .aarahan-about-book .aarahan-book { --ab-shift: 0px; }
+  .aarahan-about-book:not(.is-entered) .aarahan-book { --ab-lift: 12px; --ab-rx: 6deg; --ab-ry: -4deg; }
+  .aarahan-about-book.is-entered .aarahan-book-stage:hover .aarahan-book { --ab-lift: 0px; }
   .aarahan-book-leaf, .aarahan-book-endplate { left: 0; }
+  .aarahan-book-leaf { visibility: hidden; pointer-events: none; transition-duration: .65s; }
+  .aarahan-book-leaf.is-mobile-page { visibility: visible; pointer-events: auto; }
+  .aarahan-book-leaf.is-mobile-back { transform: translateX(100%) rotateY(-180deg); }
+  .aarahan-book-leaf.is-mobile-page .aarahan-book-face { animation: ab-mobile-reveal .45s var(--ab-ease) backwards; }
+  .aarahan-book-leaf.is-mobile-back .aarahan-book-face--front { visibility: hidden; }
+  .aarahan-book-leaf.is-mobile-page:not(.is-mobile-back) .aarahan-book-face--back { visibility: hidden; }
   .aarahan-book-spine { left: -9px; width: 14px; }
   .aarahan-book-block--right { left: calc(var(--ab-pw) - 6px); }
   .aarahan-book-block--left { display: none; }
-  .aarahan-book-shadow { width: 86%; bottom: 18px; }
-  .aarahan-book-controls { bottom: 12px; padding: 0 14px; gap: 6px; }
-  .aarahan-book-btn { min-height: 32px; padding: 0 10px; font-size: 0.54rem; letter-spacing: 0.08em; }
-  .aarahan-book-counter { font-size: 0.58rem; letter-spacing: 0.1em; }
+  .aarahan-book-shadow { width: var(--ab-pw); bottom: 65px; height: 22px; }
+  .aarahan-book-controls { bottom: -58px; padding: 0; gap: 6px; transform: translateZ(8px); }
+  .aarahan-book-btn { min-height: 44px; padding: 0 10px; font-size: .6875rem; letter-spacing: .02em; }
+  .aarahan-book-counter { font-size: .6875rem; letter-spacing: .02em; padding: 5px 7px; }
+  .aarahan-book-meter { margin-top: 0; gap: 6px; }
+  .aarahan-book-label, .aarahan-book-hint { font-size: .6875rem; letter-spacing: .04em; }
+  .aarahan-book-cta { margin-top: 16px; }
+  .amb-table, .amb-spec--final .amb-table { font-size: .6875rem; line-height: 1.45; }
+  .amb-table th, .amb-table td { padding: 5px 3px; }
+  .amb-models li, .amb-note, .amb-figs span { font-size: .6875rem; letter-spacing: .02em; }
+  .amb-figs b { font-size: .8125rem; white-space: normal; }
+  .amb-page .aarahan-book-text { font-size: .8125rem; line-height: 1.5; }
+  .amb-shot { flex: 1 1 45%; min-height: 110px; }
+  .amb-shot img { max-height: 100%; }
+  .aarahan-book-cover { padding: 20px 20px 72px; }
+  .aarahan-book-cover h3 { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+  .aarahan-about-book .aarahan-book-cover h3 { color: #fff; }
+  .aarahan-book-cover-art { margin: 8px 0 auto; max-height: 28%; }
+  .aarahan-book-cover-role { margin-top: 8px; font-size: .6875rem; }
+  .aarahan-book-cover-tag { margin-top: 8px; padding-top: 8px; font-size: .85rem; }
+  .aarahan-book-open { left: 20px; bottom: 18px; min-height: 44px; font-size: .6875rem; letter-spacing: .03em; }
   .aarahan-book-groups { grid-template-columns: 1fr; gap: 9px; }
   .aarahan-book-group h4 { font-size: 0.8rem; }
   .aarahan-book-group li { font-size: 0.64rem; line-height: 1.45; }
 }
-@media (max-width: 380px) {
-  .aarahan-about-book { --ab-ph: 560px; }
-  .aarahan-book-page-inner { padding: 18px 16px 50px; }
+@keyframes ab-mobile-reveal { from { opacity: .6; } to { opacity: 1; } }
+@media (max-width: 480px) {
+  .aarahan-book-page-inner { padding: 14px 12px; }
 }
 </style>
 </head>
@@ -1466,6 +1497,44 @@
   var userOpened = false;
   var countersDone = false;
   var flipTimer = null;
+  var mobileBook = window.matchMedia("(max-width: 768px)");
+  var mobileFace = 0;
+  var mobileBusyUntil = 0;
+
+  /* Each desktop spread contains two faces. On phones visit both in order,
+     using the same leaves, images and tables rather than duplicating content. */
+  function updateMobileBook() {
+    var mobile = mobileBook.matches;
+    leaves.forEach(function (leaf, i) {
+      var active = i === Math.floor(mobileFace / 2);
+      leaf.classList.toggle("is-mobile-page", mobile && active);
+      leaf.classList.toggle("is-mobile-back", mobile && active && mobileFace % 2 === 1);
+      Array.from(leaf.children).forEach(function (face, side) {
+        if (!face.classList.contains("aarahan-book-face")) return;
+        if (mobile && (!active || side !== mobileFace % 2)) face.setAttribute("inert", "");
+        else face.removeAttribute("inert");
+      });
+    });
+    if (!mobile) { if (totalEl) totalEl.textContent = ("0" + total).slice(-2); return; }
+    if (curEl) curEl.textContent = ("0" + (mobileFace + 1)).slice(-2);
+    if (totalEl) totalEl.textContent = leaves.length * 2;
+    if (prevBtn) prevBtn.disabled = mobileFace === 0;
+    if (nextBtn) nextBtn.disabled = mobileFace === leaves.length * 2 - 1;
+    if (statusEl) statusEl.textContent = "Page " + (mobileFace + 1) + " of " + leaves.length * 2 + ": " + VIEWS[view];
+  }
+
+  function turnMobileBook(direction) {
+    if (Date.now() < mobileBusyUntil) return;
+    var next = Math.max(0, Math.min(leaves.length * 2 - 1, mobileFace + direction));
+    if (next === mobileFace) return;
+    mobileFace = next;
+    view = Math.ceil(mobileFace / 2);
+    mobileBusyUntil = Date.now() + (aarahanReducedMotion() ? 0 : 450);
+    updateArahanBookPage();
+    var current = leaves[Math.floor(mobileFace / 2)].children[mobileFace % 2];
+    var inner = current.querySelector(".aarahan-book-page-inner");
+    if (inner) inner.scrollTop = 0;
+  }
 
   function aarahanReducedMotion() {
     return document.documentElement.classList.contains("rm") ||
@@ -1507,6 +1576,7 @@
     if (nextBtn) nextBtn.disabled = view === total - 1;
     if (statusEl) statusEl.textContent = "Spread " + (view + 1) + " of " + total + ": " + VIEWS[view];
     if (view >= 1) aarahanBookCounters();
+    updateMobileBook();
   }
 
   /* Keep the leaf that is mid-flip above the rest of the stack */
@@ -1519,6 +1589,7 @@
   }
 
   function nextArahanBookPage() {
+    if (mobileBook.matches) { turnMobileBook(1); return; }
     if (view >= total - 1) return;
     var flipping = view;
     view += 1;
@@ -1527,6 +1598,7 @@
   }
 
   function previousArahanBookPage() {
+    if (mobileBook.matches) { turnMobileBook(-1); return; }
     if (view <= 0) return;
     view -= 1;
     updateArahanBookPage();
@@ -1566,7 +1638,7 @@
     /* Subtle mouse-driven 3D, desktop pointers only */
     if (aarahanFinePointer()) {
       stage.addEventListener("pointermove", function (e) {
-        if (!root.classList.contains("is-entered") || aarahanReducedMotion()) return;
+        if (mobileBook.matches || !root.classList.contains("is-entered") || aarahanReducedMotion()) return;
         var r = stage.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width - 0.5;
         var py = (e.clientY - r.top) / r.height - 0.5;
@@ -1579,12 +1651,35 @@
       });
     }
 
+    var startTouch = null;
+    stage.addEventListener("touchstart", function (event) {
+      startTouch = mobileBook.matches && event.touches.length === 1
+        ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
+    }, { passive: true });
+    stage.addEventListener("touchend", function (event) {
+      if (!startTouch || !event.changedTouches.length) return;
+      var dx = event.changedTouches[0].clientX - startTouch.x;
+      var dy = event.changedTouches[0].clientY - startTouch.y;
+      startTouch = null;
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.8) {
+        userOpened = true;
+        turnMobileBook(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+    stage.addEventListener("touchcancel", function () { startTouch = null; }, { passive: true });
+    mobileBook.addEventListener("change", function () {
+      mobileFace = Math.min(leaves.length * 2 - 1, view === 0 ? 0 : view * 2 - 1);
+      bookEl.style.removeProperty("--ab-rx");
+      bookEl.style.removeProperty("--ab-ry");
+      updateArahanBookPage();
+    });
+
     /* Entrance: lift in, then open the cover. Runs once. */
     function enter() {
       if (opened) return;
       opened = true;
       root.classList.add("is-entered");
-      if (aarahanReducedMotion()) { view = 1; updateArahanBookPage(); return; }
+      if (aarahanReducedMotion()) { view = 1; mobileFace = 1; updateArahanBookPage(); return; }
       window.setTimeout(function () { if (view === 0 && !userOpened) nextArahanBookPage(); }, 1250);
     }
 

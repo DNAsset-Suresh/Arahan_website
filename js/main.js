@@ -239,7 +239,7 @@
     document.addEventListener("ae:motion", function () { setMode(); update(); });
   }
 
-  /* ---------- Contact: compose an email (no backend required) ---------- */
+  /* ---------- Contact: server-side enquiry API ---------- */
   function initEnquiry() {
     var form = document.querySelector("[data-enquiry]");
     if (!form) return;
@@ -263,6 +263,10 @@
       if (sending) return;
 
       var ok = true;
+      var limits = { name: 120, company: 160, phone: 32, email: 254, location: 160, message: 5000 };
+      Object.keys(limits).forEach(function (key) {
+        form.elements[key].maxLength = limits[key];
+      });
       form.querySelectorAll("[required]").forEach(function (f) {
         var bad = !f.value.trim();
         f.closest(".field").classList.toggle("is-invalid", bad);
@@ -277,7 +281,20 @@
         ok = false;
       }
       var message = form.elements.message;
-      if (ok && message.value.trim().length < 5) {
+      Object.keys(limits).forEach(function (key) {
+        var field = form.elements[key];
+        var value = field.value.trim();
+        var bad = value.length > limits[key] ||
+          (key === "name" && value.length < 2) ||
+          (key === "phone" && value.replace(/\D/g, "").length < 6);
+        if (bad) {
+          field.closest(".field").classList.add("is-invalid");
+          field.setAttribute("aria-invalid", "true");
+          if (ok) field.focus();
+          ok = false;
+        }
+      });
+      if (ok && message.value.trim() && message.value.trim().length < 5) {
         message.closest(".field").classList.add("is-invalid");
         message.setAttribute("aria-invalid", "true");
         message.focus();
@@ -301,9 +318,10 @@
          leaving both off keeps the button in its loading state. */
       setStatus("", "Sending…");
 
-      /* Give up rather than hang forever on a dead connection. */
+      /* SMTP performs DNS, TLS, authentication and two deliveries. Its
+         normal latency can exceed 20s; don't abort before it can respond. */
       var controller = ("AbortController" in window) ? new AbortController() : null;
-      var timeout = window.setTimeout(function () { if (controller) controller.abort(); }, 20000);
+      var timeout = window.setTimeout(function () { if (controller) controller.abort(); }, 60000);
 
       window.fetch(ENDPOINT, {
         method: "POST",
@@ -316,8 +334,8 @@
         });
       }).then(function (r) {
         if (r.status === 200 && r.data && r.data.ok) {
-          setStatus("is-ok", "Thank you! Your enquiry has been submitted successfully. " +
-            "We will get back to you shortly.");
+          setStatus("is-ok", "Thank you for contacting Arahan Enterprises. Your enquiry has been received successfully. " +
+            "Our team will contact you shortly.");
           form.reset();                       /* only ever on success */
           form.querySelectorAll(".field.has-value").forEach(function (f) {
             var c = f.querySelector("input, textarea");
@@ -335,12 +353,20 @@
           return;
         }
         /* Anything else: show the safe message the server sent, never details. */
+        console.error("[enquiry] API returned HTTP " + r.status);
+        if (r.status === 404 || r.status === 405 || r.status === 501) {
+          setStatus("is-error", "The enquiry service is currently unavailable. Please contact " + EMAIL + " or call " + PHONE + ".");
+          return;
+        }
         setStatus("is-error", (r.data && r.data.error) ||
           "Something went wrong while submitting your enquiry. " +
           "Please try again or email " + EMAIL + ".");
-      }).catch(function () {
-        setStatus("is-error", "Something went wrong while submitting your enquiry. " +
-          "Please try again, email " + EMAIL + " or call " + PHONE + ".");
+      }).catch(function (err) {
+        var timedOut = err && err.name === "AbortError";
+        console.error("[enquiry] " + (timedOut ? "Request timed out waiting for delivery confirmation" : "Network request failed"));
+        setStatus("is-error", timedOut
+          ? "Delivery is taking longer than expected. We couldn't confirm whether your enquiry was received. Your details are still here; please contact " + EMAIL + " or call " + PHONE + "."
+          : "We couldn't connect to the enquiry service. Your details are still here. Please try again or contact " + EMAIL + " or call " + PHONE + ".");
       }).then(function () {
         window.clearTimeout(timeout);
         sending = false;

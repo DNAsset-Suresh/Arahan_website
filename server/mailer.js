@@ -60,9 +60,11 @@ function getTransporter() {
     port: port,
     /* 465 is implicit TLS; 587 starts plaintext and upgrades via STARTTLS. */
     secure: env("SMTP_SECURE", String(port === 465)) === "true" || port === 465,
+    requireTLS: true,
     auth: { user: env("SMTP_USER", ""), pass: env("SMTP_PASSWORD", "") },
     pool: true,
     maxConnections: 2,
+    dnsTimeout: 10000,
     connectionTimeout: 15000,
     greetingTimeout: 10000,
     socketTimeout: 20000
@@ -81,13 +83,10 @@ function safeAddress(addr) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(clean) ? clean : "";
 }
 
-/* Sends the owner notification and the visitor confirmation.
-
-   The two are NOT treated alike. If the owners' copy fails the enquiry is
-   effectively lost, so that is a hard failure. If only the visitor's
-   confirmation fails the business still has the lead, so it is logged and
-   reported as a partial success rather than throwing the enquiry away. */
-async function sendEnquiry(data) {
+/* Retain accepted recipients during the API retry window. A partial failure
+   returns an error; retry sends only the outstanding messages. */
+async function sendEnquiry(data, delivery) {
+  delivery = delivery || { acceptedOwners: [], confirmationSent: false };
   var tx = getTransporter();
   var now = new Date();
   var to = owners();
@@ -99,28 +98,41 @@ async function sendEnquiry(data) {
   var ownerMail = templates.ownerNotification(data, now);
   var replyTo = safeAddress(data.email);
 
+  var remaining = to.filter(function (address) {
+    return delivery.acceptedOwners.indexOf(address.toLowerCase()) === -1;
+  });
+  if (remaining.length) {
   var ownerInfo = await tx.sendMail({
     from: fromAddress(),          // must be an address the SMTP account owns
-    to: to.join(", "),
+    to: remaining.join(", "),
     replyTo: replyTo || undefined, // lets "Reply" answer the customer directly
     subject: ownerMail.subject,
     text: ownerMail.text,
     html: ownerMail.html
   });
+  var accepted = isDryRun() ? remaining : (ownerInfo.accepted || []);
+  accepted.forEach(function (address) {
+    delivery.acceptedOwners.push(String(address).toLowerCase());
+  });
+  if (to.some(function (address) {
+    return delivery.acceptedOwners.indexOf(address.toLowerCase()) === -1;
+  })) throw new Error("SMTP did not accept all owner recipients.");
+  }
 
-  var confirmationSent = false;
-  try {
+  if (!delivery.confirmationSent) {
     var userMail = templates.userConfirmation(data, now);
-    await tx.sendMail({
+    var userInfo = await tx.sendMail({
       from: fromAddress(),
       to: replyTo,
+      replyTo: to.join(", "),
       subject: userMail.subject,
       text: userMail.text,
       html: userMail.html
     });
-    confirmationSent = true;
-  } catch (err) {
-    console.error("[mail] owner copy delivered, visitor confirmation failed:", err.message);
+    if (!isDryRun() && !(userInfo.accepted || []).length) {
+      throw new Error("SMTP did not accept confirmation recipient.");
+    }
+    delivery.confirmationSent = true;
   }
 
   if (isDryRun()) {
@@ -128,7 +140,7 @@ async function sendEnquiry(data) {
     console.log("[mail] owner subject:", ownerMail.subject);
   }
 
-  return { owners: to.length, confirmationSent: confirmationSent, messageId: ownerInfo.messageId };
+  return { owners: to.length, confirmationSent: delivery.confirmationSent };
 }
 
 async function verify() {

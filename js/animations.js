@@ -94,7 +94,7 @@
   function initTilt() {
     if (!AE.finePointer()) return;
     document.querySelectorAll("[data-tilt]").forEach(function (el) {
-      var max = parseFloat(el.getAttribute("data-tilt-max") || "8");
+      var max = Math.min(5, parseFloat(el.getAttribute("data-tilt-max") || "5"));
       var glare = null;
       if (el.hasAttribute("data-tilt-glare")) {
         glare = document.createElement("span");
@@ -102,14 +102,16 @@
         glare.setAttribute("aria-hidden", "true");
         el.appendChild(glare);
       }
-      var raf = null, rx = 0, ry = 0;
+      var raf = null, resetTimer = null, rx = 0, ry = 0;
 
       function apply() {
         raf = null;
+        if (AE.reduced()) return;
         el.style.transform = "perspective(1000px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
       }
       el.addEventListener("pointerenter", function () {
         if (AE.reduced()) return;
+        clearTimeout(resetTimer);
         el.style.transition = "transform 0.2s ease-out";
         el.style.willChange = "transform";
       });
@@ -127,13 +129,20 @@
         if (!raf) raf = window.requestAnimationFrame(apply);
       });
       el.addEventListener("pointerleave", function () {
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
         el.style.transition = "transform 0.7s cubic-bezier(.16,1,.3,1)";
         el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
-        window.setTimeout(function () {
+        resetTimer = window.setTimeout(function () {
           el.style.transform = "";
           el.style.transition = "";
           el.style.willChange = "";
         }, 720);
+      });
+      document.addEventListener("ae:motion", function () {
+        if (!AE.reduced()) return;
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        clearTimeout(resetTimer);
+        el.style.transform = el.style.transition = el.style.willChange = "";
       });
     });
   }
@@ -162,6 +171,7 @@
     document.querySelectorAll("[data-spotlight]").forEach(function (el) {
       var raf = null, x = 0, y = 0;
       el.addEventListener("pointermove", function (e) {
+        if (AE.reduced()) return;
         var r = el.getBoundingClientRect();
         x = e.clientX - r.left; y = e.clientY - r.top;
         if (raf) return;
@@ -183,6 +193,7 @@
     AE.onScroll(function (y) {
       if (AE.reduced() || y > window.innerHeight * 1.2) return;
       items.forEach(function (el) {
+        if (el.closest(".ae-hero-depth")) { el.style.translate = ""; return; }
         var f = el.classList.contains("hero__inner") ? 0.12 : -0.08;
         el.style.translate = "0 " + (y * f).toFixed(1) + "px";
       });

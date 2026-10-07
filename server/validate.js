@@ -6,7 +6,7 @@
    before it is allowed anywhere near an email template.
 
    Field names mirror the existing form in contact.html exactly:
-     name* · company · phone* · email* · type · location · message*
+     name* · company · phone* · email* · type · location · message
    ========================================================================= */
 "use strict";
 
@@ -31,7 +31,7 @@ var RULES = {
   phone:    { required: true,  min: 6, max: 32,  label: "Phone" },
   email:    { required: true,  min: 5, max: 254, label: "Email" },
   location: { required: false, min: 0, max: 160, label: "Project location" },
-  message:  { required: true,  min: 5, max: 5000, label: "Requirement / scope" }
+  message:  { required: false, min: 5, max: 5000, label: "Requirement / scope" }
 };
 
 function asText(value) {
@@ -82,7 +82,8 @@ function validateEnquiry(body) {
   }
 
   var scope = stripControl(asText(body.type));
-  data.type = SCOPES.indexOf(scope) === -1 ? SCOPES[0] : scope;
+  if (SCOPES.indexOf(scope) === -1) errors.push("Please select a valid scope.");
+  data.type = scope;
 
   return { ok: errors.length === 0, errors: errors, data: errors.length ? null : data };
 }

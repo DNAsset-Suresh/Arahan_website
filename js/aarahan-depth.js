@@ -45,17 +45,10 @@
   });
   if (hero) hero.classList.add("ae-hero-depth");
 
-  /* Hairline progress bar. */
-  var bar = document.createElement("div");
-  bar.className = "ae-progress";
-  bar.setAttribute("aria-hidden", "true");
-  bar.innerHTML = "<span></span>";
-  document.body.appendChild(bar);
-  var barFill = bar.firstChild;
+  /* navigation.js owns the existing reading-progress bar on every page. */
 
   var active = [];
   var frame = 0;
-  var lastSp = -1;
 
   function reduced() { return html.classList.contains("rm"); }
   function clamp01(n) { return n < 0 ? 0 : (n > 1 ? 1 : n); }
@@ -71,9 +64,9 @@
     return true;
   }
 
-  function applyPanel(el) {
+  function applyPanel(el, rect) {
     var vh = window.innerHeight || 1;
-    var r = el.getBoundingClientRect();
+    var r = rect && rect.top !== undefined ? rect : el.getBoundingClientRect();
     var dp = clamp01((vh - r.top) / (vh * IN_SPAN));
     /* Zoom through only once the panel's bottom is leaving the top. */
     var xp = clamp01((vh * 0.25 - r.bottom) / (vh * OUT_SPAN));
@@ -82,8 +75,9 @@
        value that keeps moving across the whole traverse rather than
        saturating at 1 the moment the panel has arrived. */
     var tp = clamp01((vh - r.top) / (vh + r.height));
-    dp = Math.round(dp * 100) / 100;
-    xp = Math.round(xp * 100) / 100;
+    if (el.contains(document.activeElement)) { dp = 1; xp = 0; tp = 0.5; }
+    dp = Math.round(dp * 10000) / 10000;
+    xp = Math.round(xp * 10000) / 10000;
     tp = Math.round(tp * 1000) / 1000;
     setVar(el, "--dp", dp, "_dp");
     setVar(el, "--xp", xp, "_xp");
@@ -91,6 +85,7 @@
     /* Flat only when fully arrived AND not yet receding - otherwise the
        receding half of the effect would be switched off by the same class. */
     el.classList.toggle("is-flat", dp >= 1 && xp <= 0);
+    el.classList.toggle("is-travelling", dp < 1 || xp > 0);
   }
 
   function applyHero() {
@@ -103,81 +98,89 @@
     hero.classList.toggle("is-flat", xp <= 0);
   }
 
-  function applyProgress() {
-    var h = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-    var sp = Math.round(clamp01(window.scrollY / h) * 1000) / 1000;
-    if (sp === lastSp) return;
-    lastSp = sp;
-    barFill.style.setProperty("--sp", String(sp));
-  }
-
   function settle() {
     panels.forEach(function (el) {
       el.style.removeProperty("--dp");
       el.style.removeProperty("--xp");
       el.style.removeProperty("--tp");
       el.classList.add("is-flat");
+      el._dp = el._xp = el._tp = null;
+      el.classList.remove("is-travelling");
     });
-    if (hero) { hero.style.removeProperty("--xp"); hero.classList.add("is-flat"); }
+    if (hero) { hero.style.removeProperty("--xp"); hero._xp = null; hero.classList.add("is-flat"); }
   }
 
   function tick() {
     frame = 0;
-    for (var i = 0; i < active.length; i++) applyPanel(active[i]);
+    if (document.hidden) return;
+    if (reduced()) return;
     applyHero();
-    applyProgress();
+    var rectangles = active.map(function (el) { return el.getBoundingClientRect(); });
+    for (var i = 0; i < active.length; i++) applyPanel(active[i], rectangles[i]);
   }
 
   function request() {
-    if (frame || reduced()) return;
+    if (frame || document.hidden) return;
     frame = window.requestAnimationFrame(tick);
   }
 
-  if (reduced()) {
-    settle();
-    /* No panel motion, but the progress indicator still tracks the page. */
-    applyProgress();
-    window.addEventListener("scroll", function () {
-      if (reduced()) applyProgress();
-    }, { passive: true });
-  } else {
+  {
     if ("IntersectionObserver" in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           var at = active.indexOf(e.target);
           if (e.isIntersecting && at === -1) active.push(e.target);
-          else if (!e.isIntersecting && at !== -1) active.splice(at, 1);
+          else if (!e.isIntersecting && at !== -1) {
+            active.splice(at, 1);
+            e.target.classList.remove("is-travelling");
+          }
         });
         request();
       }, { rootMargin: "70% 0px 70% 0px" });
       panels.forEach(function (el) { io.observe(el); });
+      var loops = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle("ae-motion-paused", !entry.isIntersecting);
+        });
+      });
+      main.querySelectorAll(".frame3d, .marquee").forEach(function (el) { loops.observe(el); });
     } else {
       active = panels.slice();
     }
 
     /* CSS defaults to the settled state so a failed script leaves the page
        perfectly readable; claim the real values now that we are running. */
-    panels.forEach(applyPanel);
+    if (reduced()) settle();
+    else panels.forEach(applyPanel);
     applyHero();
-    applyProgress();
 
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request, { passive: true });
+    window.addEventListener("pageshow", request);
+    document.addEventListener("visibilitychange", request);
+    document.addEventListener("focusin", request);
+    document.addEventListener("focusout", request);
 
     /* Pointer parallax: hero only, fine pointers only, and throttled to the
        same rAF as everything else. Skipped entirely on touch. */
     if (hero && window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       var mFrame = 0, mx = 0, my = 0;
-      window.addEventListener("mousemove", function (e) {
+      hero.addEventListener("pointermove", function (e) {
         mx = (e.clientX / (window.innerWidth || 1)) * 2 - 1;
         my = (e.clientY / (window.innerHeight || 1)) * 2 - 1;
         if (mFrame || reduced()) return;
         mFrame = window.requestAnimationFrame(function () {
           mFrame = 0;
-          hero.style.setProperty("--mx", mx.toFixed(3));
-          hero.style.setProperty("--my", my.toFixed(3));
+          if (reduced()) return;
+          hero.style.setProperty("--depth-mx", mx.toFixed(3));
+          hero.style.setProperty("--depth-my", my.toFixed(3));
         });
       }, { passive: true });
+      hero.addEventListener("pointerleave", function () {
+        mx = my = 0;
+        hero.style.setProperty("--depth-mx", "0");
+        hero.style.setProperty("--depth-my", "0");
+      });
     }
   }
 
@@ -186,7 +189,6 @@
       if (frame) { window.cancelAnimationFrame(frame); frame = 0; }
       settle();
     } else {
-      active = panels.slice();
       request();
     }
   });

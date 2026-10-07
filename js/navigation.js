@@ -75,7 +75,10 @@
     if (!ticking) { ticking = true; window.requestAnimationFrame(runScroll); }
   }, { passive: true });
 
-  if (mq.addEventListener) mq.addEventListener("change", applyMotionPref);
+  if (mq.addEventListener) mq.addEventListener("change", function () {
+    var reduced = applyMotionPref();
+    document.dispatchEvent(new CustomEvent("ae:motion", { detail: { reduced: reduced } }));
+  });
 
   document.addEventListener("DOMContentLoaded", init);
 
