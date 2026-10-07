@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-IN">
+<html lang="en-IN" class="static-site rm no-loader is-ready">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,818 +30,14 @@
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/animations.css?v=20260924">
 <link rel="stylesheet" href="css/responsive.css">
-<link rel="stylesheet" href="css/aarahan-depth.css">
 <link rel="stylesheet" href="css/aarahan-social.css">
-<link rel="stylesheet" href="css/aarahan-vehicles.css?v=20260924">
 <link rel="stylesheet" href="css/aarahan-building.css">
-<link rel="stylesheet" href="css/aarahan-roller.css">
+<link rel="stylesheet" href="css/aarahan-static.css">
 <script src="js/navigation.js"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "GeneralContractor", "@id": "https://arahanenterprises.com/#organization", "name": "Arahan Enterprises", "description": "Interior finishing and civil works contractor based in Chennai, executing finishing and civil packages across Tamil Nadu and Gujarat.", "slogan": "Quality spaces. Strong foundations. Built for what’s next.", "url": "https://arahanenterprises.com/", "logo": "https://arahanenterprises.com/assets/images/aarahan-logo.png", "image": "https://arahanenterprises.com/assets/images/og-image.png", "telephone": ["+91-93819-40980", "+91-88254-53036"], "email": "arahanenterprises14@gmail.com", "foundingDate": "2021", "taxID": "33CBQPK8681Q1ZK", "numberOfEmployees": {"@type": "QuantitativeValue", "minValue": 150}, "address": {"@type": "PostalAddress", "streetAddress": "No. 9, Door No 525/6, Sri Malli Nagar, Railway Station Road, Pattamandiri, Vallur", "addressLocality": "Chennai", "addressRegion": "Tamil Nadu", "postalCode": "600120", "addressCountry": "IN"}, "areaServed": [{"@type": "State", "name": "Tamil Nadu"}, {"@type": "State", "name": "Gujarat"}], "hasMap": "https://www.google.com/maps/search/?api=1&query=No.+9%2C+Door+No+525%2F6%2C+Sri+Malli+Nagar%2C+Railway+Station+Road%2C+Pattamandiri%2C+Vallur%2C+Chennai+600120", "knowsAbout": ["Civil construction", "Structural concrete works", "Foundations and RCC works", "Substation civil works", "Pipeline excavation and backfilling", "Chain link fencing", "Tiles and ceramic flooring", "Granite and natural stone", "False ceiling", "Interior and exterior painting", "Epoxy flooring", "Stainless steel railings", "Industrial projects", "Industrial equipment", "Heavy machinery spare parts", "Man lifts", "Cranes", "Drilling machines"]}</script>
-<style id="aarahan-about-book-styles">
-/* =========================================
-   ARAHAN ABOUT 3D BOOK
-   ONLY FOR INDEX.HTML ABOUT SECTION
-   All selectors are prefixed .aarahan-* so nothing
-   outside this section is affected.
-   ========================================= */
-.aarahan-about-book {
-  --ab-pw: 380px;            /* page width  */
-  --ab-ph: 520px;            /* page height */
-  --ab-shift: calc(var(--ab-pw) / -2);
-  --ab-rx: 8deg;
-  --ab-ry: -7deg;
-  --ab-lift: 0px;
-  --ab-paper: #F7F3EC;
-  --ab-paper-2: #EDE4D6;
-  --ab-ink: #28584E;
-  --ab-ink-2: #2B2B2B;
-  --ab-cover: #1D423A;
-  --ab-accent: #EFB27E;
-  --ab-accent-deep: #28584E;
-  --ab-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  margin-top: clamp(36px, 5vw, 60px);
-}
-
-/* ---- Stage & book body ---- */
-.aarahan-book-stage {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(var(--ab-ph) + 110px);
-  padding: 40px 0 56px;
-  perspective: 2600px;
-  perspective-origin: 50% 42%;
-}
-.aarahan-book {
-  position: relative;
-  width: calc(var(--ab-pw) * 2);
-  height: var(--ab-ph);
-  transform-style: preserve-3d;
-  transform: translateY(var(--ab-lift)) rotateX(var(--ab-rx)) rotateY(var(--ab-ry)) translateX(var(--ab-shift));
-  transition: transform 1.5s var(--ab-ease), opacity 1s ease;
-}
-.aarahan-about-book:not(.is-entered) .aarahan-book {
-  opacity: 0;
-  --ab-lift: 64px;
-  --ab-rx: 26deg;
-  --ab-ry: -30deg;
-}
-.aarahan-about-book.is-open { --ab-shift: 0px; }
-.aarahan-about-book.is-entered .aarahan-book-stage:hover .aarahan-book { --ab-lift: -10px; }
-
-.aarahan-book-shadow {
-  position: absolute;
-  left: 50%; bottom: 26px;
-  width: min(74%, 620px); height: 42px;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(40, 88, 78, 0.42), rgba(40, 88, 78, 0.12) 45%, transparent 72%);
-  filter: blur(9px);
-  transition: opacity 0.9s ease, transform 0.9s var(--ab-ease);
-  pointer-events: none;
-}
-.aarahan-about-book:not(.is-entered) .aarahan-book-shadow { opacity: 0; transform: translateX(-50%) scale(0.8); }
-.aarahan-about-book.is-entered .aarahan-book-stage:hover .aarahan-book-shadow { transform: translateX(-50%) scale(1.06); opacity: 0.85; }
-
-/* ---- Binding, board thickness and page block ---- */
-.aarahan-book-spine {
-  position: absolute;
-  top: -3px; left: calc(50% - 11px);
-  width: 22px; height: calc(100% + 6px);
-  transform: translateZ(-13px);
-  background: linear-gradient(90deg, #16332C, #2F665A 40%, #1D423A 75%, #16332C);
-  border-radius: 3px;
-  box-shadow: 0 10px 26px rgba(40, 88, 78, 0.18);
-}
-.aarahan-book-endplate {
-  position: absolute;
-  top: 0; left: 50%;
-  width: var(--ab-pw); height: 100%;
-  transform: translateZ(-12px);
-  background: linear-gradient(135deg, #2F665A, #1F473E);
-  border-radius: 2px 5px 5px 2px;
-  box-shadow: 0 26px 50px -18px rgba(40, 88, 78, 0.2);
-  display: grid;
-  place-content: center;
-  gap: 10px;
-  text-align: center;
-  padding: 24px;
-}
-.aarahan-book-endplate span {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(239, 178, 126, 0.75);
-}
-.aarahan-book-endplate small {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.16em;
-  color: rgba(220, 208, 188, 0.45);
-}
-/* Cut page edges on the right, and on the left once the book is open */
-.aarahan-book-block {
-  position: absolute;
-  top: 6px; height: calc(100% - 12px);
-  width: 12px;
-  background: repeating-linear-gradient(180deg, #EFE8DC 0 1px, #CBBBA0 1px 3px);
-  box-shadow: 0 8px 20px rgba(40, 88, 78, 0.12);
-}
-.aarahan-book-block--right { left: calc(50% + var(--ab-pw) - 6px); transform: translateZ(-6px); border-radius: 0 3px 3px 0; }
-.aarahan-book-block--left {
-  left: calc(50% - var(--ab-pw) - 6px);
-  transform: translateZ(-6px);
-  border-radius: 3px 0 0 3px;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-}
-.aarahan-about-book.is-open .aarahan-book-block--left { opacity: 1; }
-
-/* ---- Leaves ---- */
-.aarahan-book-leaf {
-  position: absolute;
-  top: 0; left: 50%;
-  width: var(--ab-pw); height: 100%;
-  transform-origin: left center;
-  transform-style: preserve-3d;
-  transition: transform 1.25s cubic-bezier(0.62, 0.02, 0.35, 1);
-}
-.aarahan-book-leaf.is-turned { transform: rotateY(-180deg); }
-.aarahan-book-face {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 2px 5px 5px 2px;
-}
-.aarahan-book-face--back { transform: rotateY(180deg); border-radius: 5px 2px 2px 5px; }
-
-/* ---- Cover ---- */
-.aarahan-book-cover {
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.07), transparent 38%),
-    linear-gradient(160deg, #2F665A 0%, var(--ab-cover) 55%, #16332C 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 30px 60px -20px rgba(40, 88, 78, 0.22);
-  color: #F7F3EC;
-  display: flex;
-  flex-direction: column;
-  /* bottom space reserved for the "Open the book" button */
-  padding: clamp(26px, 3vw, 38px) clamp(26px, 3vw, 38px) clamp(78px, 9vw, 92px);
-}
-.aarahan-book-cover::before {   /* blueprint grid */
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(239, 178, 126, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(239, 178, 126, 0.09) 1px, transparent 1px);
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(120% 80% at 70% 30%, #000 30%, transparent 78%);
-  mask-image: radial-gradient(120% 80% at 70% 30%, #000 30%, transparent 78%);
-}
-.aarahan-book-cover::after {    /* spine shading */
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 26px;
-  background: linear-gradient(90deg, rgba(40, 88, 78, 0.18), transparent);
-}
-.aarahan-book-cover > * { position: relative; z-index: 1; }
-.aarahan-book-cover-frame {
-  position: absolute;
-  inset: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  z-index: 0;
-}
-.aarahan-book-cover-frame::before, .aarahan-book-cover-frame::after {
-  content: "";
-  position: absolute;
-  width: 18px; height: 18px;
-  border: 0 solid var(--ab-accent);
-}
-.aarahan-book-cover-frame::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
-.aarahan-book-cover-frame::after { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
-.aarahan-book-cover-kicker {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(239, 178, 126, 0.9);
-}
-.aarahan-book-cover-kicker::after { content: ""; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.16); }
-.aarahan-book-cover-art { margin: clamp(12px, 2vw, 22px) 0 auto; max-height: 34%; }
-.aarahan-book-cover-art svg { max-height: 100%; }
-.aarahan-book-cover-art svg { width: 100%; height: auto; stroke: rgba(247, 243, 236, 0.4); fill: none; stroke-width: 1.1; }
-.aarahan-book-cover-art svg .ab-acc { stroke: var(--ab-accent); }
-.aarahan-book-cover h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.9rem, 2.6vw, 2.5rem);
-  line-height: 0.92;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  color: #fff;
-}
-.aarahan-book-cover-role {
-  margin-top: 12px;
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.17em;
-  text-transform: uppercase;
-  color: var(--ab-accent);
-}
-.aarahan-book-cover-tag {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  font-family: var(--font-display);
-  font-size: 0.98rem;
-  line-height: 1.25;
-  text-transform: uppercase;
-  color: rgba(247, 243, 236, 0.72);
-}
-.aarahan-book-cover-marks {
-  position: absolute;
-  right: 22px; top: 60px; bottom: 60px;
-  width: 10px;
-  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0 1px, transparent 1px 12px);
-  z-index: 1;
-}
-
-/* Open affordance on the cover */
-.aarahan-book-open {
-  position: absolute;
-  left: clamp(26px, 3vw, 38px);
-  bottom: clamp(22px, 2.4vw, 30px);
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 38px;
-  padding: 0 16px;
-  border: 1px solid rgba(239, 178, 126, 0.55);
-  background: rgba(239, 178, 126, 0.12);
-  color: var(--ab-accent);
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
-}
-.aarahan-book-open:hover { background: var(--ab-accent); color: var(--ab-accent-ink, #1b1204); border-color: var(--ab-accent); transform: translateX(3px); }
-.aarahan-book-open:focus-visible { outline: 2px solid var(--ab-accent); outline-offset: 3px; }
-/* Once open, the cover is face-down: take its button out of the tab order */
-.aarahan-about-book.is-open .aarahan-book-open { visibility: hidden; pointer-events: none; }
-/* The whole closed cover is clickable */
-.aarahan-about-book:not(.is-open) .aarahan-book-cover { cursor: pointer; }
-
-/* ---- Paper pages ---- */
-.aarahan-book-page {
-  background:
-    linear-gradient(rgba(40, 88, 78, 0.045) 1px, transparent 1px) 0 0 / 100% 22px,
-    linear-gradient(90deg, rgba(40, 88, 78, 0.045) 1px, transparent 1px) 0 0 / 22px 100%,
-    linear-gradient(150deg, var(--ab-paper), var(--ab-paper-2));
-  color: var(--ab-ink);
-  display: flex;
-}
-.aarahan-book-face--front.aarahan-book-page::after {   /* gutter shading */
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(40, 88, 78, 0.22), transparent 9%);
-  pointer-events: none;
-}
-.aarahan-book-face--back.aarahan-book-page::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(-90deg, rgba(40, 88, 78, 0.22), transparent 9%);
-  pointer-events: none;
-}
-.aarahan-book-page-inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  /* extra room at the bottom so copy never sits under the control bar */
-  padding: clamp(22px, 2.6vw, 32px) clamp(22px, 2.6vw, 30px) 56px;
-}
-.aarahan-book-kicker {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid rgba(40, 88, 78, 0.18);
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #6B5A45;
-}
-.aarahan-book-kicker span:first-child { color: var(--ab-accent-deep); }
-.aarahan-book-title {
-  margin-top: 16px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.4rem, 1.9vw, 1.75rem);
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--ab-ink);
-}
-.aarahan-book-text {
-  margin-top: 12px;
-  font-size: 0.79rem;
-  line-height: 1.62;
-  color: var(--ab-ink-2);
-}
-.aarahan-book-note {
-  margin-top: 12px;
-  font-family: var(--font-mono);
-  font-size: 0.54rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ab-accent-deep);
-}
-.aarahan-book-foot {
-  margin-top: auto;
-  padding-top: 14px;
-  font-family: var(--font-mono);
-  font-size: 0.52rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #6B5A45;
-}
-.aarahan-book-quote {
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-left: 2px solid var(--ab-accent-deep);
-  background: rgba(239, 178, 126, 0.09);
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  line-height: 1.2;
-  text-transform: uppercase;
-  color: var(--ab-ink);
-}
-.aarahan-book-art { margin-top: 16px; }
-.aarahan-book-art svg { width: 100%; height: auto; fill: none; stroke: #6B5A45; stroke-width: 1.1; }
-.aarahan-book-art svg .ab-acc { stroke: var(--ab-accent-deep); }
-
-/* Page 2 — statistics */
-.aarahan-book-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
-.aarahan-book-stat { padding: 12px 12px 14px; border: 1px solid rgba(40, 88, 78, 0.16); background: rgba(255, 255, 255, 0.5); }
-.aarahan-book-stat b {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.9rem;
-  line-height: 0.95;
-  font-variant-numeric: tabular-nums;
-  color: var(--ab-ink);
-}
-.aarahan-book-stat b i { font-style: normal; color: var(--ab-accent-deep); }
-.aarahan-book-stat b span { font: inherit; letter-spacing: inherit; color: inherit; }
-.aarahan-book-stat > span {
-  display: block;
-  margin-top: 7px;
-  font-family: var(--font-mono);
-  font-size: 0.54rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #6B5A45;
-}
-
-/* Numbered lists (core strengths, finishing scope) */
-.aarahan-book-list { margin-top: 14px; display: grid; gap: 9px; }
-.aarahan-book-list li {
-  display: grid;
-  grid-template-columns: 26px minmax(0, 1fr);
-  gap: 10px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid rgba(40, 88, 78, 0.1);
-  font-size: 0.74rem;
-  line-height: 1.45;
-  color: var(--ab-ink-2);
-}
-.aarahan-book-list li:last-child { border-bottom: 0; }
-.aarahan-book-list em {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--ab-ink);
-}
-.aarahan-book-list i { font-style: normal; font-family: var(--font-mono); font-size: 0.6rem; color: var(--ab-accent-deep); padding-top: 2px; }
-
-/* Grouped capability blocks (civil page) */
-.aarahan-book-groups { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
-.aarahan-book-group h4 {
-  margin: 0 0 6px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.86rem;
-  text-transform: uppercase;
-  color: var(--ab-ink);
-  border-bottom: 1px solid rgba(40, 88, 78, 0.16);
-  padding-bottom: 4px;
-}
-.aarahan-book-group li {
-  position: relative;
-  padding-left: 11px;
-  font-size: 0.68rem;
-  line-height: 1.5;
-  color: var(--ab-ink-2);
-}
-.aarahan-book-group li::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0.62em;
-  width: 6px; height: 1px;
-  background: var(--ab-accent-deep);
-}
-
-/* Page 6 — mission, vision, values */
-.aarahan-book-mv { margin-top: 11px; display: grid; gap: 8px; }
-.aarahan-book-mv > div { padding: 9px 11px; border: 1px solid rgba(40, 88, 78, 0.14); background: rgba(255, 255, 255, 0.45); }
-.aarahan-book-mv h4 {
-  margin: 0 0 5px;
-  font-family: var(--font-mono);
-  font-size: 0.54rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ab-accent-deep);
-}
-.aarahan-book-mv p { font-size: 0.655rem; line-height: 1.45; color: var(--ab-ink-2); }
-.aarahan-book-values { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
-.aarahan-book-values li {
-  padding: 3px 7px;
-  border: 1px solid rgba(40, 88, 78, 0.2);
-  font-family: var(--font-mono);
-  font-size: 0.5rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ab-ink);
-}
-.aarahan-book-sign { margin-top: auto; padding-top: 10px; text-align: center; }
-.aarahan-book-sign b {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.aarahan-book-sign span { display: block; margin-top: 4px; font-size: 0.6rem; line-height: 1.4; color: var(--ab-ink-2); }
-
-/* Inside-cover endpaper */
-.aarahan-book-endpaper {
-  background: linear-gradient(150deg, #2F665A, #1D423A);
-  color: rgba(247, 243, 236, 0.8);
-  display: grid;
-  place-content: center;
-  gap: 12px;
-  text-align: center;
-  padding: 30px;
-}
-.aarahan-book-endpaper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(239, 178, 126, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(239, 178, 126, 0.07) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-.aarahan-book-endpaper > * { position: relative; }
-.aarahan-book-endpaper b {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.15rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #fff;
-}
-.aarahan-book-endpaper span {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  line-height: 1.7;
-  color: rgba(220, 208, 188, 0.7);
-}
-
-/* ---- Controls: a bar printed on the page, inside the book ---- */
-.aarahan-book-controls {
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 14px;
-  z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 0 clamp(18px, 2.4vw, 28px);
-  transform: translateZ(8px);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-}
-.aarahan-about-book.is-open .aarahan-book-controls { opacity: 1; pointer-events: auto; }
-.aarahan-book-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 34px;
-  padding: 0 13px;
-  border: 1px solid rgba(40, 88, 78, 0.22);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--ab-ink);
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border-radius: 2px;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 6px 14px -8px rgba(40, 88, 78, 0.5);
-  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, opacity 0.3s ease, transform 0.35s ease;
-}
-.aarahan-book-btn:hover:not(:disabled) { background: var(--ab-ink); border-color: var(--ab-ink); color: #fff; transform: translateY(-1px); }
-.aarahan-book-btn:disabled { opacity: 0.28; cursor: not-allowed; }
-.aarahan-book-counter {
-  padding: 5px 11px;
-  border: 1px solid rgba(40, 88, 78, 0.16);
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.72);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
-  color: #2B2B2B;
-  box-shadow: 0 6px 14px -8px rgba(40, 88, 78, 0.5);
-}
-.aarahan-book-counter b { color: var(--ab-accent-deep); font-weight: 500; }
-.aarahan-book-meter { margin-top: 10px; display: grid; justify-items: center; gap: 6px; }
-.aarahan-book-label {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ab-ink);
-  text-align: center;
-}
-
-/* ==========================================================================
-   MACHINERY BOOK — page styling
-   Builds on the existing book: same leaf, flip, shadow and perspective
-   machinery, only the page surfaces are re-skinned as an industrial
-   equipment catalogue. Specification figures come from the supplied
-   RE series specification sheets.
-   ========================================================================== */
-.amb-cover { --ab-cover: #101922; }
-.amb-cover-title { font-size: clamp(1.05rem, 1.6vw, 1.35rem); letter-spacing: 0.12em; }
-
-.amb-page {
-  background:
-    linear-gradient(180deg, #16202b 0%, #111923 100%);
-  color: #dfe7ef;
-}
-.amb-page::before {            /* blueprint grid, very low contrast */
-  content: "";
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(159, 179, 200, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(159, 179, 200, 0.07) 1px, transparent 1px);
-  background-size: 22px 22px;
-  pointer-events: none;
-}
-.amb-page .aarahan-book-kicker { color: #8ba0b8; border-bottom-color: rgba(159, 179, 200, 0.2); }
-.amb-page .aarahan-book-page-inner .aarahan-book-title { color: #f2f6fa; }
-.amb-page .aarahan-book-text { color: #b8c6d6; }
-
-/* ---- left face: the machine ---- */
-.amb-plate { display: flex; flex-direction: column; }
-.amb-shot {
-  margin: clamp(8px, 1.6vw, 16px) 0 0;
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.amb-shot img {
-  max-width: 100%; max-height: 100%;
-  width: auto; height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.45));
-}
-.amb-page .aarahan-book-page-inner .amb-plate-title {
-  margin: clamp(6px, 1.2vw, 12px) 0 0;
-  font-family: var(--font-display, inherit);
-  font-weight: 600;
-  font-size: clamp(1.15rem, 2vw, 1.7rem);
-  line-height: 1.02;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: #f2f6fa;
-}
-.amb-figs {
-  list-style: none; margin: clamp(8px, 1.4vw, 14px) 0 0; padding: 0;
-  display: grid; gap: 6px;
-}
-.amb-figs li {
-  display: flex; align-items: baseline; gap: 10px;
-  padding-top: 6px;
-  border-top: 1px solid rgba(159, 179, 200, 0.16);
-}
-.amb-figs b {
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(0.72rem, 1.15vw, 0.92rem);
-  color: #eaf1f8; font-weight: 500; white-space: nowrap;
-}
-.amb-figs span {
-  font-size: clamp(0.56rem, 0.9vw, 0.68rem);
-  letter-spacing: 0.1em; text-transform: uppercase; color: #8ba0b8;
-  margin-left: auto; text-align: right;
-}
-
-/* ---- right face: the specification ---- */
-.amb-models {
-  list-style: none; margin: clamp(8px, 1.3vw, 13px) 0 0; padding: 0;
-  display: flex; flex-wrap: wrap; gap: 4px;
-}
-.amb-models li {
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(0.5rem, 0.82vw, 0.62rem);
-  letter-spacing: 0.06em;
-  padding: 3px 7px;
-  border: 1px solid rgba(159, 179, 200, 0.28);
-  border-radius: 2px;
-  color: #cfdcea;
-}
-.amb-table-wrap { margin-top: clamp(8px, 1.3vw, 13px); }
-.amb-table {
-  width: 100%; border-collapse: collapse; table-layout: fixed;
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(0.44rem, 0.74vw, 0.58rem);
-  line-height: 1.35;
-}
-.amb-table th, .amb-table td {
-  padding: 4px 4px; text-align: right; white-space: normal; overflow-wrap: anywhere;
-  border-bottom: 1px solid rgba(159, 179, 200, 0.14);
-}
-.amb-table thead th {
-  color: #9fb3c8; font-weight: 500;
-  letter-spacing: 0.04em; text-transform: uppercase;
-  border-bottom-color: rgba(159, 179, 200, 0.3);
-}
-.amb-table tbody th, .amb-table thead th:first-child {
-  text-align: left; font-weight: 400; color: #93a7bd; width: 36%;
-}
-.amb-table tbody td { color: #e6eef6; }
-.amb-table tbody tr:nth-child(odd) td,
-.amb-table tbody tr:nth-child(odd) th { background: rgba(159, 179, 200, 0.045); }
-
-.amb-note {
-  margin-top: 8px;
-  font-size: clamp(0.5rem, 0.8vw, 0.62rem);
-  color: #8ba0b8; line-height: 1.5;
-}
-.amb-closing {
-  margin-top: auto; padding-top: clamp(8px, 1.4vw, 14px);
-  font-family: var(--font-display, inherit);
-  font-weight: 600; text-transform: uppercase;
-  font-size: clamp(0.85rem, 1.5vw, 1.2rem);
-  line-height: 1.05; color: #f2f6fa;
-}
-.amb-cta {
-  margin-top: 10px; align-self: flex-start;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 7px 13px;
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(0.52rem, 0.85vw, 0.64rem);
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: #101922; background: #EFB27E;
-  border-radius: 2px; text-decoration: none;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-.amb-cta:hover, .amb-cta:focus-visible { background: #f7cba5; transform: translateY(-2px); }
-.amb-spec { display: flex; flex-direction: column; }
-.amb-signoff { justify-content: center; gap: clamp(10px, 1.6vw, 18px); }
-.amb-signoff .amb-closing { margin-top: 0; }
-.amb-signoff .amb-cta { margin-top: 4px; }
-/* The closing page is a single page, so its photo gets a fixed slice of
-   height rather than flexing to nothing, and the figure row wraps. */
-.amb-shot--inline {
-  flex: 0 0 auto;
-  height: clamp(58px, 8.5vw, 116px);
-  margin-top: clamp(6px, 1vw, 12px);
-}
-.amb-figs--inline { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; }
-.amb-figs--inline li { flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; }
-.amb-figs--inline b { white-space: normal; overflow-wrap: anywhere; font-size: clamp(0.58rem, 0.95vw, 0.76rem); }
-.amb-figs--inline span { margin-left: 0; text-align: left; }
-/* keep the sign-off and CTA clear of the navigation row beneath the book */
-.amb-page--final .aarahan-book-page-inner { padding-bottom: clamp(30px, 5vw, 52px); }
-.amb-spec--final .amb-table { font-size: clamp(0.4rem, 0.66vw, 0.52rem); }
-
-/* Phones show one page at a time, so the table needs to breathe */
-@media (max-width: 700px) {
-  .amb-table { font-size: 0.5rem; }
-  .amb-table th, .amb-table td { padding: 3px 4px; }
-  .amb-figs span { font-size: 0.52rem; }
-}
-
-.aarahan-book-hint {
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #6B5A45;
-}
-.aarahan-book-cta { display: flex; justify-content: center; margin-top: 22px; }
-
-/* ---- Tablet ---- */
-@media (max-width: 1024px) {
-  .aarahan-about-book { --ab-pw: 330px; --ab-ph: 470px; }
-  .aarahan-book-stage { perspective: 2000px; }
-}
-
-/* ---- Mobile: single page, simplified 3D ---- */
-@media (max-width: 768px) {
-  .aarahan-about-book {
-    --ab-pw: min(calc(100vw - 64px), 410px);
-    --ab-ph: calc(var(--ab-pw) * 26 / 19);
-    --ab-ry: -1deg; --ab-rx: 2deg;
-    margin-top: 20px;
-  }
-  .aarahan-book-page-inner { padding: 16px; overflow-y: auto; touch-action: pan-y pinch-zoom; }
-  .aarahan-book-page-inner > :not(.amb-shot) { flex-shrink: 0; }
-  .aarahan-book-note { font-size: 0.5rem; }
-  .aarahan-book-stage { perspective: 2200px; overflow: clip; min-height: 0; padding: 18px 12px 80px; }
-  .aarahan-book { width: var(--ab-pw); flex: 0 0 var(--ab-pw); touch-action: pan-y pinch-zoom; }
-  .aarahan-about-book .aarahan-book { --ab-shift: 0px; }
-  .aarahan-about-book:not(.is-entered) .aarahan-book { --ab-lift: 12px; --ab-rx: 6deg; --ab-ry: -4deg; }
-  .aarahan-about-book.is-entered .aarahan-book-stage:hover .aarahan-book { --ab-lift: 0px; }
-  .aarahan-book-leaf, .aarahan-book-endplate { left: 0; }
-  .aarahan-book-leaf { visibility: hidden; pointer-events: none; transition-duration: .65s; }
-  /* A single readable plane on phones avoids nested back-face culling.
-     Desktop keeps the original double-sided 180-degree page turns. */
-  .aarahan-book-leaf.is-mobile-page { visibility: visible; pointer-events: auto; transform: none; }
-  .aarahan-book-leaf.is-mobile-back { transform: none; }
-  .aarahan-book-leaf.is-mobile-page .aarahan-book-face--back { transform: none; }
-  .aarahan-book-leaf.is-mobile-page .aarahan-book-face { animation: ab-mobile-reveal .45s var(--ab-ease) backwards; }
-  .aarahan-book-leaf.is-mobile-back .aarahan-book-face--front { visibility: hidden; }
-  .aarahan-book-leaf.is-mobile-page:not(.is-mobile-back) .aarahan-book-face--back { visibility: hidden; }
-  .aarahan-book-spine { left: -9px; width: 14px; }
-  .aarahan-book-block--right { left: calc(var(--ab-pw) - 6px); }
-  .aarahan-book-block--left { display: none; }
-  .aarahan-book-shadow { width: var(--ab-pw); bottom: 65px; height: 22px; }
-  .aarahan-book-controls { bottom: -58px; padding: 0; gap: 6px; transform: translateZ(8px); }
-  .aarahan-book-btn { min-height: 44px; padding: 0 10px; font-size: .6875rem; letter-spacing: .02em; }
-  .aarahan-book-counter { font-size: .6875rem; letter-spacing: .02em; padding: 5px 7px; }
-  .aarahan-book-meter { margin-top: 0; gap: 6px; }
-  .aarahan-book-label, .aarahan-book-hint { font-size: .6875rem; letter-spacing: .04em; }
-  .aarahan-book-cta { margin-top: 16px; }
-  .amb-table, .amb-spec--final .amb-table { font-size: .6875rem; line-height: 1.45; }
-  .amb-table th, .amb-table td { padding: 5px 3px; }
-  .amb-models li, .amb-note, .amb-figs span { font-size: .6875rem; letter-spacing: .02em; }
-  .amb-figs b { font-size: .8125rem; white-space: normal; }
-  .amb-page .aarahan-book-text { font-size: .8125rem; line-height: 1.5; }
-  .amb-shot { flex: 1 1 45%; min-height: 110px; }
-  .amb-shot img { max-height: 100%; }
-  .aarahan-book-cover { padding: 20px 20px 72px; }
-  .aarahan-book-cover h3 { font-size: clamp(1.7rem, 7vw, 2.2rem); }
-  .aarahan-about-book .aarahan-book-cover h3 { color: #fff; }
-  .aarahan-book-cover-art { margin: 8px 0 auto; max-height: 28%; }
-  .aarahan-book-cover-role { margin-top: 8px; font-size: .6875rem; }
-  .aarahan-book-cover-tag { margin-top: 8px; padding-top: 8px; font-size: .85rem; }
-  .aarahan-book-open { left: 20px; bottom: 18px; min-height: 44px; font-size: .6875rem; letter-spacing: .03em; }
-  .aarahan-book-groups { grid-template-columns: 1fr; gap: 9px; }
-  .aarahan-book-group h4 { font-size: 0.8rem; }
-  .aarahan-book-group li { font-size: 0.64rem; line-height: 1.45; }
-}
-@keyframes ab-mobile-reveal {
-  from { opacity: .75; translate: 6px 0; }
-  to { opacity: 1; translate: 0 0; }
-}
-@media (max-width: 480px) {
-  .aarahan-book-page-inner { padding: 14px 12px; }
-}
-</style>
 </head>
 
 <body class="page-home" data-page="home">
@@ -891,34 +87,23 @@
 </div>
 
 <main id="main">
-<section class="hero hero--building" id="top" data-hero data-spotlight>
+<section class="hero hero--building" id="top" data-hero>
   <div class="hero__veil" aria-hidden="true"></div>
-  <!-- Building showcase: replaces the procedural hero canvas on the home page.
-       The 3D scene still runs on the Civil page, which keeps its own canvas. -->
+  <!-- Static architectural illustration taken from the supplied building footage. -->
   <div class="aarahan-building-showcase" data-building-showcase>
     <div class="aarahan-building-frame">
-      <video class="aarahan-building-video"
-             autoplay muted playsinline preload="metadata"
-             aria-label="Arahan building construction showcase">
-        <!-- Referenced under the name the export actually has on disk.
-             Each new render lands in assets/videos/ under a fresh timestamped
-             name and replaces the previous file, so this line is the one thing
-             that must be updated when the clip is re-exported. Stale names are
-             not kept as extra <source> fallbacks: the folder only ever holds
-             the newest file, so each one would just cost a 404 on every load. -->
-        <source src="assets/videos/Building_glass_structure_in_video_20260925151739.mp4" type="video/mp4">
-      </video>
+      <img class="aarahan-building-video" src="assets/images/completed-building.webp" alt="Architectural illustration of the completed blue-glass corporate building" width="720" height="1280" fetchpriority="high" decoding="async">
     </div>
   </div>
   <div class="container hero__inner">
-    <p class="eyebrow hero__eyebrow" data-reveal><span class="eyebrow__idx">AE</span>Chennai · Tamil Nadu &amp; Gujarat · Since 2021</p>
+    <p class="eyebrow hero__eyebrow"><span class="eyebrow__idx">AE</span>Chennai · Tamil Nadu &amp; Gujarat · Since 2021</p>
     <h1 class="hero__title">
-      <span class="hero__name" data-split>Arahan<br>Enterprises</span>
-      <span class="hero__role" data-reveal data-delay="2">Interior Finishing &amp; Civil Works Contractor</span>
+      <span class="hero__name">Arahan<br>Enterprises</span>
+      <span class="hero__role">Interior Finishing &amp; Civil Works Contractor</span>
     </h1>
-    <p class="hero__tagline" data-reveal data-delay="3">Quality spaces. Strong foundations.<br><em>Built for what’s next.</em></p>
-    <p class="hero__text" data-reveal data-delay="4">Delivering civil, infrastructure, interior finishing and specialist construction packages across Tamil Nadu and Gujarat.</p>
-    <div class="btn-row hero__actions" data-reveal data-delay="5">
+    <p class="hero__tagline">Quality spaces. Strong foundations.<br><em>Built for what’s next.</em></p>
+    <p class="hero__text">Delivering civil, infrastructure, interior finishing and specialist construction packages across Tamil Nadu and Gujarat.</p>
+    <div class="btn-row hero__actions">
       <a class="btn btn--primary magnetic" href="services.html"><span class="btn__label">Explore Our Capabilities</span><span class="btn__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       <a class="btn btn--ghost magnetic" href="contact.html"><span class="btn__label">Start a Project</span><span class="btn__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
@@ -932,22 +117,22 @@
 </section>
 
 <section class="stats-band" aria-label="Company at a glance">
-  <div class="container stats"><div class="stat" data-reveal data-delay="0">
+  <div class="container stats"><div class="stat">
         <span class="stat__rule" aria-hidden="true"></span>
         <p class="stat__num"><span data-count="2021" data-count-from="2000">2021</span></p>
         <p class="stat__label">Established</p>
         <p class="stat__note">Proprietorship registered in Chennai</p>
-      </div><div class="stat" data-reveal data-delay="1">
+      </div><div class="stat">
         <span class="stat__rule" aria-hidden="true"></span>
         <p class="stat__num"><span data-count="150">150</span><span class="stat__suf">+</span></p>
         <p class="stat__label">Workforce</p>
         <p class="stat__note">Tilers, masons, painters &amp; fabricators on our rolls</p>
-      </div><div class="stat" data-reveal data-delay="2">
+      </div><div class="stat">
         <span class="stat__rule" aria-hidden="true"></span>
         <p class="stat__num"><span data-count="8">8</span></p>
         <p class="stat__label">Finishing Trades</p>
         <p class="stat__note">Substrate to final coat</p>
-      </div><div class="stat" data-reveal data-delay="3">
+      </div><div class="stat">
         <span class="stat__rule" aria-hidden="true"></span>
         <p class="stat__num"><span data-count="5">5</span></p>
         <p class="stat__label">Major Organisations</p>
@@ -960,269 +145,193 @@
     <div class="section-head">
       <p class="eyebrow eyebrow--dark"><span class="eyebrow__idx">01</span>Who we are</p>
       <div class="section-head__main">
-        <h2 class="h2" id="who-title" data-split>Finishing specialists with a<br><em>civil contractor’s backbone.</em></h2>
-        <p class="lede" data-reveal data-delay="1">A proprietorship registered in Chennai, executing finishing and civil packages across Tamil Nadu and Gujarat for EPC contractors, power utilities, manufacturers and workspace operators.</p>
+        <h2 class="h2" id="who-title">Finishing specialists with a<br><em>civil contractor’s backbone.</em></h2>
+        <p class="lede">A proprietorship registered in Chennai, executing finishing and civil packages across Tamil Nadu and Gujarat for EPC contractors, power utilities, manufacturers and workspace operators.</p>
       </div>
     </div>
-    <div class="aarahan-about-book" data-aarahan-book>
-      <div class="aarahan-book-stage">
-        <span class="aarahan-book-shadow" aria-hidden="true"></span>
-        <div class="aarahan-book" data-aarahan-book-el>
-          <span class="aarahan-book-spine" aria-hidden="true"></span>
-          <span class="aarahan-book-block aarahan-book-block--left" aria-hidden="true"></span>
-          <span class="aarahan-book-block aarahan-book-block--right" aria-hidden="true"></span>
-          <div class="aarahan-book-endplate" aria-hidden="true"><span>Arahan Enterprises</span><small>GSTIN 33CBQPK8681Q1ZK</small></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-cover amb-cover">
-        <span class="aarahan-book-cover-frame" aria-hidden="true"></span>
-        <span class="aarahan-book-cover-marks" aria-hidden="true"></span>
-        <p class="aarahan-book-cover-kicker">Machinery &amp; Equipment · Catalogue</p>
-        <div class="aarahan-book-cover-art" aria-hidden="true"><svg viewBox="0 0 300 150" aria-hidden="true">
-  <path d="M18 128h264"/>
-  <path class="ab-acc" d="M52 128V74l44-20v74"/>
-  <path d="M96 128V62l52-24v90"/>
-  <path class="ab-acc" d="M148 128V50l56 26v52"/>
-  <path d="M204 128V86l44 20v22"/>
-  <path class="ab-acc" d="M40 40h34M40 40v14M74 40v14"/>
-  <path d="M232 32l28 16-28 16z"/>
-</svg></div>
-        <h3>Arahan<br>Enterprises</h3>
-        <p class="aarahan-book-cover-role amb-cover-title">Machinery Book</p>
-        <p class="aarahan-book-cover-tag">Material Handling · Access Equipment<br>Power · Welding Solutions</p>
-        <button class="aarahan-book-open" type="button" data-ab-open>Explore our machinery <span aria-hidden="true">→</span></button>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 02</span><span>RE-VM / DVM Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/vertical-mast.png" alt="RE-VM series vertical mast lift with guarded work platform raised on a single mast" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Vertical Mast</h3>
-  <ul class="amb-figs"><li><b>8.0 – 16.0 m</b><span>Working height</span></li><li><b>150 – 250 kg</b><span>Loading capacity</span></li><li><b>1 – 2</b><span>Occupants</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-VM / DVM Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Vertical Mast</h3>
-  <p class="aarahan-book-text">Single and double mast platforms for compact indoor access, maintenance and fit-out work.</p>
-  <ul class="amb-models"><li>RE08SVM</li><li>RE08VM</li><li>RE10VM</li><li>RE12DVM</li><li>RE16DVM</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Vertical Mast technical specifications</caption>
+    <div class="machinery-catalogue" id="machinery" aria-labelledby="machinery-title">
+      <div class="catalogue-heading"><div><p class="eyebrow">Machinery &amp; equipment</p><h2 class="h2" id="machinery-title">Industrial machinery<br><em>&amp; equipment solutions.</em></h2></div><p>Material Handling · Access Equipment · Power · Welding Solutions</p></div>
+      <div class="machinery-grid">
+      <article class="machinery-card" aria-labelledby="machinery-1">
+        <div class="machinery-card__image"><img src="assets/machinery/vertical-mast.png" alt="RE-VM series vertical mast lift with guarded work platform raised on a single mast" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-VM / DVM Series</p>
+          <h3 id="machinery-1">Vertical Mast</h3>
+          <p>Single and double mast platforms for compact indoor access, maintenance and fit-out work.</p>
+          <ul class="machinery-card__highlights"><li><b>8.0 – 16.0 m</b><span>Working height</span></li><li><b>150 – 250 kg</b><span>Loading capacity</span></li><li><b>1 – 2</b><span>Occupants</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>RE08SVM</li><li>RE08VM</li><li>RE10VM</li><li>RE12DVM</li><li>RE16DVM</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Vertical Mast technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">RE08SVM</th><th scope="col">RE08VM</th><th scope="col">RE10VM</th></tr></thead>
       <tbody><tr><th scope="row">Max. working height</th><td>8.1 m</td><td>8.0 m</td><td>10.00 m</td></tr><tr><th scope="row">Max. platform height</th><td>6.1 m</td><td>6.0 m</td><td>8.00 m</td></tr><tr><th scope="row">Loading capacity</th><td>150 kg</td><td>159 kg</td><td>200 kg</td></tr><tr><th scope="row">Occupants</th><td>1</td><td>1</td><td>2</td></tr><tr><th scope="row">Overall width</th><td>0.76 m</td><td>0.81 m</td><td>1.00 m</td></tr><tr><th scope="row">Power type</th><td>AC / DC</td><td>Battery (DC)</td><td>Battery (DC)</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: RE12DVM, RE16DVM.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 03</span><span>RE-ES Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/scissor-lift.png" alt="RE-ES series electric scissor lifts shown stowed and fully elevated" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Electric Scissor Lift</h3>
-  <ul class="amb-figs"><li><b>7.9 – 15.8 m</b><span>Working height</span></li><li><b>230 – 320 kg</b><span>Rated capacity</span></li><li><b>120 kg</b><span>Extension deck</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-ES Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Electric Scissor Lift</h3>
-  <p class="aarahan-book-text">Battery scissor platforms with extension decks for indoor and hard-standing site work.</p>
-  <ul class="amb-models"><li>RE08ES</li><li>RE10ES</li><li>RE12ES</li><li>RE14ES</li><li>RE16ES</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Electric Scissor Lift technical specifications</caption>
+            <p class="machinery-card__note">Also available: RE12DVM, RE16DVM.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-2">
+        <div class="machinery-card__image"><img src="assets/machinery/scissor-lift.png" alt="RE-ES series electric scissor lifts shown stowed and fully elevated" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-ES Series</p>
+          <h3 id="machinery-2">Electric Scissor Lift</h3>
+          <p>Battery scissor platforms with extension decks for indoor and hard-standing site work.</p>
+          <ul class="machinery-card__highlights"><li><b>7.9 – 15.8 m</b><span>Working height</span></li><li><b>230 – 320 kg</b><span>Rated capacity</span></li><li><b>120 kg</b><span>Extension deck</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>RE08ES</li><li>RE10ES</li><li>RE12ES</li><li>RE14ES</li><li>RE16ES</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Electric Scissor Lift technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">RE08ES</th><th scope="col">RE10ES</th><th scope="col">RE12ES</th></tr></thead>
       <tbody><tr><th scope="row">Max. working height</th><td>7.9 m</td><td>10.1 m</td><td>12.2 m</td></tr><tr><th scope="row">Max. platform height</th><td>5.9 m</td><td>8.1 m</td><td>10.3 m</td></tr><tr><th scope="row">Rated capacity</th><td>230 kg</td><td>230 kg</td><td>320 kg</td></tr><tr><th scope="row">Rated capacity (extension)</th><td>120 kg</td><td>120 kg</td><td>120 kg</td></tr><tr><th scope="row">Platform size (L×W)</th><td>1.65 × 0.75 m</td><td>2.23 × 0.81 m</td><td>2.25 × 1.15 m</td></tr><tr><th scope="row">Gradeability</th><td>25%</td><td>25%</td><td>25%</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: RE14ES, RE16ES.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 04</span><span>RE-TM Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/boom-lift.png" alt="RE-TM series articulating boom lift with the boom raised and extended" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Boom Lift</h3>
-  <ul class="amb-figs"><li><b>17.15 – 34.4 m</b><span>Working height</span></li><li><b>8.37 – 18.3 m</b><span>Max. outreach</span></li><li><b>360°</b><span>Continuous turntable</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-TM Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Boom Lift</h3>
-  <p class="aarahan-book-text">Articulating booms with continuous turntable rotation for up-and-over reach on plant and infrastructure sites.</p>
-  <ul class="amb-models"><li>RE17AJ / Li</li><li>RE20AJ / Li</li><li>RE24AJ / Li</li><li>RE29AJLi</li><li>RE35TJLi</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Boom Lift technical specifications</caption>
+            <p class="machinery-card__note">Also available: RE14ES, RE16ES.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-3">
+        <div class="machinery-card__image"><img src="assets/machinery/boom-lift.png" alt="RE-TM series articulating boom lift with the boom raised and extended" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-TM Series</p>
+          <h3 id="machinery-3">Boom Lift</h3>
+          <p>Articulating booms with continuous turntable rotation for up-and-over reach on plant and infrastructure sites.</p>
+          <ul class="machinery-card__highlights"><li><b>17.15 – 34.4 m</b><span>Working height</span></li><li><b>8.37 – 18.3 m</b><span>Max. outreach</span></li><li><b>360°</b><span>Continuous turntable</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>RE17AJ / Li</li><li>RE20AJ / Li</li><li>RE24AJ / Li</li><li>RE29AJLi</li><li>RE35TJLi</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Boom Lift technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">RE17AJ / Li</th><th scope="col">RE20AJ / Li</th><th scope="col">RE24AJ / Li</th></tr></thead>
       <tbody><tr><th scope="row">Max. working height</th><td>17.15 m</td><td>20.4 m</td><td>24.2 m</td></tr><tr><th scope="row">Max. platform height</th><td>15.15 m</td><td>18.4 m</td><td>22.2 m</td></tr><tr><th scope="row">Max. outreach</th><td>8.37 m</td><td>11.3 m</td><td>15.5 m</td></tr><tr><th scope="row">Lift capacity</th><td>300 kg</td><td>300 / 400 kg</td><td>454 / 300 kg</td></tr><tr><th scope="row">Turntable rotation</th><td>360° cont.</td><td>360° cont.</td><td>360° cont.</td></tr><tr><th scope="row">Drive speed (stowed)</th><td>5 km/h</td><td>6.0 km/h</td><td>5.0 km/h</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: RE29AJLi, RE35TJLi.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 05</span><span>RE-HY Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/spider-lift.png" alt="RE-HY series tracked spider lift with outriggers and folded boom" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Spider Lift</h3>
-  <ul class="amb-figs"><li><b>21.8 – 30.1 m</b><span>Working height</span></li><li><b>8.6 – 14.85 m</b><span>Horizontal outreach</span></li><li><b>230 kg</b><span>Platform capacity</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-HY Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Spider Lift</h3>
-  <p class="aarahan-book-text">Tracked spider platforms with adjustable track width and radio remote control for restricted access.</p>
-  <ul class="amb-models"><li>RE22 / RE22HY</li><li>RE25 / RE25HY</li><li>RE30 / RE30HY</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Spider Lift technical specifications</caption>
+            <p class="machinery-card__note">Also available: RE29AJLi, RE35TJLi.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-4">
+        <div class="machinery-card__image"><img src="assets/machinery/spider-lift.png" alt="RE-HY series tracked spider lift with outriggers and folded boom" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-HY Series</p>
+          <h3 id="machinery-4">Spider Lift</h3>
+          <p>Tracked spider platforms with adjustable track width and radio remote control for restricted access.</p>
+          <ul class="machinery-card__highlights"><li><b>21.8 – 30.1 m</b><span>Working height</span></li><li><b>8.6 – 14.85 m</b><span>Horizontal outreach</span></li><li><b>230 kg</b><span>Platform capacity</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>RE22 / RE22HY</li><li>RE25 / RE25HY</li><li>RE30 / RE30HY</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Spider Lift technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">RE22 / RE22HY</th><th scope="col">RE25 / RE25HY</th><th scope="col">RE30 / RE30HY</th></tr></thead>
       <tbody><tr><th scope="row">Working height</th><td>21.8 m</td><td>24.6 m</td><td>30.1 m</td></tr><tr><th scope="row">Platform height</th><td>19.8 m</td><td>22.6 m</td><td>28.1 m</td></tr><tr><th scope="row">Horizontal outreach</th><td>8.6 m</td><td>11.1 m</td><td>14.85 m</td></tr><tr><th scope="row">Up &amp; over clearance</th><td>13.8 m</td><td>13.7 m</td><td>15.85 m</td></tr><tr><th scope="row">Track width (adjustable)</th><td>900 / 1150 mm</td><td>900 / 1150 mm</td><td>1200 / 1530 mm</td></tr><tr><th scope="row">Turntable rotation</th><td>360° cont.</td><td>360° cont.</td><td>360° cont.</td></tr></tbody>
     </table>
-  </div>
-  
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 06</span><span>RE-TM Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/truck-mounted.png" alt="RE-TM series truck mounted boom lift on an Ashok Leyland chassis" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Truck Mounted Boom Lift</h3>
-  <ul class="amb-figs"><li><b>20 – 60 m</b><span>Working height</span></li><li><b>11 – 34 m</b><span>Max. working radius</span></li><li><b>360°</b><span>Continuous rotation</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-TM Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Truck Mounted Boom Lift</h3>
-  <p class="aarahan-book-text">Chassis-mounted booms from 20 m to 60 m working height on BS-VI Ashok Leyland platforms.</p>
-  <ul class="amb-models"><li>RETM20</li><li>RETM25</li><li>RETM30</li><li>RETM36</li><li>RETM45</li><li>RETM60</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Truck Mounted Boom Lift technical specifications</caption>
+            <p class="machinery-card__note"></p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-5">
+        <div class="machinery-card__image"><img src="assets/machinery/truck-mounted.png" alt="RE-TM series truck mounted boom lift on an Ashok Leyland chassis" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-TM Series</p>
+          <h3 id="machinery-5">Truck Mounted Boom Lift</h3>
+          <p>Chassis-mounted booms from 20 m to 60 m working height on BS-VI Ashok Leyland platforms.</p>
+          <ul class="machinery-card__highlights"><li><b>20 – 60 m</b><span>Working height</span></li><li><b>11 – 34 m</b><span>Max. working radius</span></li><li><b>360°</b><span>Continuous rotation</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>RETM20</li><li>RETM25</li><li>RETM30</li><li>RETM36</li><li>RETM45</li><li>RETM60</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Truck Mounted Boom Lift technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">RETM20</th><th scope="col">RETM25</th><th scope="col">RETM30</th></tr></thead>
       <tbody><tr><th scope="row">Max. working height</th><td>20 m</td><td>25 m</td><td>30 m</td></tr><tr><th scope="row">Max. working radius</th><td>11 m</td><td>12 m</td><td>16 m</td></tr><tr><th scope="row">Platform rated load</th><td>200 kg</td><td>200 kg</td><td>200 kg</td></tr><tr><th scope="row">Boom configuration</th><td>4-section</td><td>5-section</td><td>6 / 7-section</td></tr><tr><th scope="row">Outrigger type</th><td>X-type hyd.</td><td>X-type hyd.</td><td>X-type hyd.</td></tr><tr><th scope="row">Emission standard</th><td>BS-VI</td><td>BS-VI</td><td>BS-VI</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: RETM36, RETM45, RETM60. RETM23 and RETM56 complete the range.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 07</span><span>RE-ST Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/battery-stacker.png" alt="RE-ST series battery powered pallet stacker with mast and forks" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Battery Stacker</h3>
-  <ul class="amb-figs"><li><b>3000 – 5500 mm</b><span>Lift height</span></li><li><b>5.2 / 5.5 km/h</b><span>Travel speed</span></li><li><b>24 V</b><span>Battery system</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-ST Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Battery Stacker</h3>
-  <p class="aarahan-book-text">AC-controlled electric stackers for pallet handling and racking in warehouse and stores operations.</p>
-  <ul class="amb-models"><li>REST1630</li><li>REST2030</li><li>REST1645</li><li>REST1655</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Battery Stacker technical specifications</caption>
+            <p class="machinery-card__note">Also available: RETM36, RETM45, RETM60. RETM23 and RETM56 complete the range.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-6">
+        <div class="machinery-card__image"><img src="assets/machinery/battery-stacker.png" alt="RE-ST series battery powered pallet stacker with mast and forks" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-ST Series</p>
+          <h3 id="machinery-6">Battery Stacker</h3>
+          <p>AC-controlled electric stackers for pallet handling and racking in warehouse and stores operations.</p>
+          <ul class="machinery-card__highlights"><li><b>3000 – 5500 mm</b><span>Lift height</span></li><li><b>5.2 / 5.5 km/h</b><span>Travel speed</span></li><li><b>24 V</b><span>Battery system</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>REST1630</li><li>REST2030</li><li>REST1645</li><li>REST1655</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Battery Stacker technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">REST1630</th><th scope="col">REST2030</th><th scope="col">REST1645</th></tr></thead>
       <tbody><tr><th scope="row">Lift</th><td>3000 mm</td><td>3000 mm</td><td>4500 mm</td></tr><tr><th scope="row">Free lift</th><td>166 mm</td><td>166 mm</td><td>2054 mm</td></tr><tr><th scope="row">Height of mast, extended</th><td>3408 mm</td><td>3408 mm</td><td>4500 mm</td></tr><tr><th scope="row">Lifting speed (with / without load)</th><td>80 / 130 mm/s</td><td>70 / 130 mm/s</td><td>165 / 260 mm/s</td></tr><tr><th scope="row">Battery voltage / capacity</th><td>24 / 210 V/Ah</td><td>24 / 210 V/Ah</td><td>24 / 240 V/Ah</td></tr><tr><th scope="row">Drive control</th><td>AC</td><td>AC</td><td>AC</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: REST1655.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 08</span><span>RE-REPT Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/pallet-truck.png" alt="RE-REPT series battery pallet trucks, ride-on and pedestrian models" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Battery Pallet Truck</h3>
-  <ul class="amb-figs"><li><b>200 mm</b><span>Lift</span></li><li><b>4.2 – 5.5 km/h</b><span>Travel speed</span></li><li><b>Electromagnetic</b><span>Service brake</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-REPT Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Battery Pallet Truck</h3>
-  <p class="aarahan-book-text">Electric pallet trucks with electromagnetic braking, in ride-on and pedestrian configurations.</p>
-  <ul class="amb-models"><li>REPT20B</li><li>REPT25B</li><li>REPT30B</li><li>REPT15S</li><li>REPT20S</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Battery Pallet Truck technical specifications</caption>
+            <p class="machinery-card__note">Also available: REST1655.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-7">
+        <div class="machinery-card__image"><img src="assets/machinery/pallet-truck.png" alt="RE-REPT series battery pallet trucks, ride-on and pedestrian models" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-REPT Series</p>
+          <h3 id="machinery-7">Battery Pallet Truck</h3>
+          <p>Electric pallet trucks with electromagnetic braking, in ride-on and pedestrian configurations.</p>
+          <ul class="machinery-card__highlights"><li><b>200 mm</b><span>Lift</span></li><li><b>4.2 – 5.5 km/h</b><span>Travel speed</span></li><li><b>Electromagnetic</b><span>Service brake</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>REPT20B</li><li>REPT25B</li><li>REPT30B</li><li>REPT15S</li><li>REPT20S</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Battery Pallet Truck technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">REPT20B</th><th scope="col">REPT25B</th><th scope="col">REPT30B</th></tr></thead>
       <tbody><tr><th scope="row">Lift</th><td>200 mm</td><td>200 mm</td><td>200 mm</td></tr><tr><th scope="row">Overall width</th><td>808 mm</td><td>808 mm</td><td>808 mm</td></tr><tr><th scope="row">Service weight with battery</th><td>2000 kg</td><td>2500 kg</td><td>3000 kg</td></tr><tr><th scope="row">Drive motor rating (60 min)</th><td>1.5 kW</td><td>2.5 kW</td><td>3.0 kW</td></tr><tr><th scope="row">Steering type</th><td>Electric</td><td>Electric</td><td>Electric</td></tr><tr><th scope="row">Drive control</th><td>AC</td><td>AC</td><td>AC</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: REPT15S, REPT20S.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 09</span><span>RE Welding Range</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/welding.png" alt="RE welding inverter range including ARC, TIG, MIG and plasma cutting sets" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Welding Solutions</h3>
-  <ul class="amb-figs"><li><b>220 V</b><span>Single phase input</span></li><li><b>85%</b><span>Efficiency</span></li><li><b>60%</b><span>Duty cycle</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE Welding Range</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Welding Solutions</h3>
-  <p class="aarahan-book-text">Single-phase 220 V inverter sets for MMA, TIG, MIG and plasma cutting, all rated at 60% duty cycle.</p>
-  <ul class="amb-models"><li>RE ARC 200</li><li>RE ARC 250</li><li>RE CUT 60</li><li>RE TIG 200 AC/DC</li><li>RE MIG 200</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Welding Solutions technical specifications</caption>
+            <p class="machinery-card__note">Also available: REPT15S, REPT20S.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-8">
+        <div class="machinery-card__image"><img src="assets/machinery/welding.png" alt="RE welding inverter range including ARC, TIG, MIG and plasma cutting sets" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE Welding Range</p>
+          <h3 id="machinery-8">Welding Solutions</h3>
+          <p>Single-phase 220 V inverter sets for MMA, TIG, MIG and plasma cutting, all rated at 60% duty cycle.</p>
+          <ul class="machinery-card__highlights"><li><b>220 V</b><span>Single phase input</span></li><li><b>85%</b><span>Efficiency</span></li><li><b>60%</b><span>Duty cycle</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>RE ARC 200</li><li>RE ARC 250</li><li>RE CUT 60</li><li>RE TIG 200 AC/DC</li><li>RE MIG 200</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Welding Solutions technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">RE ARC 200</th><th scope="col">RE ARC 250</th><th scope="col">RE CUT 60</th></tr></thead>
       <tbody><tr><th scope="row">MMA output range</th><td>20–200 A</td><td>20–250 A</td><td>—</td></tr><tr><th scope="row">TIG output range</th><td>—</td><td>—</td><td>—</td></tr><tr><th scope="row">MIG output range</th><td>—</td><td>—</td><td>—</td></tr><tr><th scope="row">Cut output range</th><td>—</td><td>—</td><td>20–60 A</td></tr><tr><th scope="row">Cutting thickness</th><td>—</td><td>—</td><td>1–20 mm</td></tr><tr><th scope="row">Protection class</th><td>IP21S</td><td>IP21S</td><td>IP21S</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: RE TIG 200 AC/DC, RE MIG 200.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-plate">
-  <p class="aarahan-book-kicker"><span>Sheet 10</span><span>RE-PS Series</span></p>
-  <figure class="amb-shot"><img src="assets/machinery/power-station.png" alt="RE-PS series portable power station in use on a fabrication site" loading="lazy" decoding="async"></figure>
-  <h3 class="amb-plate-title">Portable Power Station</h3>
-  <ul class="amb-figs"><li><b>3500 – 8000 W</b><span>Rated power</span></li><li><b>7000 – 16000 W</b><span>Peak power</span></li><li><b>2662 – 24115 Wh</b><span>Battery capacity</span></li></ul>
-</div>
-      </div></div>
-          <div class="aarahan-book-leaf"><div class="aarahan-book-face aarahan-book-face--front aarahan-book-page amb-page">
-<div class="aarahan-book-page-inner amb-spec">
-  <p class="aarahan-book-kicker"><span>RE-PS Series</span><span>Specifications</span></p>
-  <h3 class="aarahan-book-title">Portable Power Station</h3>
-  <p class="aarahan-book-text">LFP battery power stations for site tools, testing and standby supply, rated IP54.</p>
-  <ul class="amb-models"><li>PS3500X</li><li>PS3500 PRO</li><li>PS8000 X</li><li>PS8000 PRO</li><li>PS8000 PLUS</li><li>PS8000 MAX</li></ul>
-  <div class="amb-table-wrap">
-    <table class="amb-table"><caption class="visually-hidden">Portable Power Station technical specifications</caption>
+            <p class="machinery-card__note">Also available: RE TIG 200 AC/DC, RE MIG 200.</p>
+          </details>
+        </div>
+      </article>
+      <article class="machinery-card" aria-labelledby="machinery-9">
+        <div class="machinery-card__image"><img src="assets/machinery/power-station.png" alt="RE-PS series portable power station in use on a fabrication site" loading="lazy" decoding="async"></div>
+        <div class="machinery-card__body">
+          <p class="machinery-card__series">RE-PS Series</p>
+          <h3 id="machinery-9">Portable Power Station</h3>
+          <p>LFP battery power stations for site tools, testing and standby supply, rated IP54.</p>
+          <ul class="machinery-card__highlights"><li><b>3500 – 8000 W</b><span>Rated power</span></li><li><b>7000 – 16000 W</b><span>Peak power</span></li><li><b>2662 – 24115 Wh</b><span>Battery capacity</span></li></ul>
+          <details><summary>Models &amp; technical specifications</summary>
+            <ul class="machinery-card__models"><li>PS3500X</li><li>PS3500 PRO</li><li>PS8000 X</li><li>PS8000 PRO</li><li>PS8000 PLUS</li><li>PS8000 MAX</li></ul>
+            <table class="machinery-table"><caption class="visually-hidden">Portable Power Station technical specifications</caption>
       <thead><tr><th scope="col">Parameter</th><th scope="col">PS3500X</th><th scope="col">PS3500 PRO</th><th scope="col">PS8000 X</th></tr></thead>
       <tbody><tr><th scope="row">Rated power</th><td>3500 W</td><td>3500 W</td><td>8000 W</td></tr><tr><th scope="row">Peak power</th><td>7000 W</td><td>7000 W</td><td>16000 W</td></tr><tr><th scope="row">Battery capacity</th><td>2662 Wh</td><td>5120 Wh</td><td>7680 Wh</td></tr><tr><th scope="row">Battery type</th><td>LFP</td><td>LFP</td><td>LFP</td></tr><tr><th scope="row">Charging time</th><td>3.5 h</td><td>3.3 h</td><td>5.0 h</td></tr><tr><th scope="row">IP rating</th><td>IP54</td><td>IP54</td><td>IP54</td></tr></tbody>
     </table>
-  </div>
-  <p class="amb-note">Also available: PS8000 PRO, PS8000 PLUS, PS8000 MAX. WPS-5000 / WPS-6000 share the same LFP chemistry and IP54 rating.</p>
-</div>
-      </div><div class="aarahan-book-face aarahan-book-face--back aarahan-book-page amb-page amb-page--final">
-<div class="aarahan-book-page-inner amb-spec amb-signoff">
-  <p class="aarahan-book-kicker"><span>Arahan Enterprises</span><span>Machinery</span></p>
-  <p class="amb-closing">Powering performance.<br>Engineered for industry.</p>
-  <p class="aarahan-book-text">Material handling, access equipment, power and welding solutions — supplied, delivered and supported across Tamil Nadu and Gujarat.</p>
-  <a class="amb-cta" href="contact.html">Enquire about machinery <span aria-hidden="true">&#8594;</span></a>
-</div>
-      </div></div>
-          <div class="aarahan-book-controls" role="group" aria-label="Book navigation">
-            <button class="aarahan-book-btn" type="button" data-ab-prev aria-label="Previous page">← Previous</button>
-            <p class="aarahan-book-counter"><b data-ab-current>01</b> / <span data-ab-total>05</span></p>
-            <button class="aarahan-book-btn aarahan-book-btn--next" type="button" data-ab-next aria-label="Next page">Next →</button>
-          </div>
+            <p class="machinery-card__note">Also available: PS8000 PRO, PS8000 PLUS, PS8000 MAX. WPS-5000 / WPS-6000 share the same LFP chemistry and IP54 rating.</p>
+          </details>
         </div>
+      </article>
       </div>
-      <div class="aarahan-book-meter">
-        <p class="aarahan-book-label" data-ab-label>Cover</p>
-        <p class="aarahan-book-hint">Use the controls on the page or the ← → keys to turn the pages</p>
-      </div>
-      <p class="visually-hidden" role="status" aria-live="polite" data-ab-status></p>
+      <div class="catalogue-signoff"><p>Powering performance.<br>Engineered for industry.</p><a class="btn btn--primary" href="contact.html">Enquire about machinery <span aria-hidden="true">→</span></a></div>
     </div>
     <div class="aarahan-book-cta"><a class="link-arrow" href="about.html">About Arahan <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   </div>
 </section>
 
-<section class="section section--light section--tint bp-grid" data-spotlight aria-labelledby="cap-title">
+<section class="section section--light equipment-section" aria-labelledby="equipment-title">
+  <div class="container"><div class="section-head"><h2 class="h2" id="equipment-title">Construction <em>equipment.</em></h2></div>
+    <div class="equipment-grid">
+      <figure><img src="assets/vehicles/excavator.png" alt="JCB / excavator" width="313" height="320" loading="lazy"><figcaption>JCB / Excavator</figcaption></figure>
+      <figure><img src="assets/vehicles/wheel-loader.png" alt="Wheel loader" width="690" height="320" loading="lazy"><figcaption>Wheel Loader</figcaption></figure>
+      <figure><img src="assets/vehicles/concrete-mixer.png" alt="Concrete mixer truck" width="691" height="320" loading="lazy"><figcaption>Concrete Mixer Truck</figcaption></figure>
+    </div>
+  </div>
+</section>
+<section class="section section--light section--tint bp-grid" aria-labelledby="cap-title">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow"><span class="eyebrow__idx">02</span>Capabilities</p>
       <div class="section-head__main">
-        <h2 class="h2" id="cap-title" data-split>Two capabilities.<br><em>One point of accountability.</em></h2>
-        <p class="lede" data-reveal data-delay="1">The civil capability behind the finishes — taken up independently or as part of a combined scope.</p>
+        <h2 class="h2" id="cap-title">Two capabilities.<br><em>One point of accountability.</em></h2>
+        <p class="lede">The civil capability behind the finishes — taken up independently or as part of a combined scope.</p>
       </div>
     </div>
     <div class="cap-grid">
-      <article class="cap-card" data-tilt data-tilt-max="5" data-tilt-glare data-reveal="depth">
+      <article class="cap-card">
         <div class="cap-card__media"><img class="" src="assets/images/false-ceiling-interior.webp" alt="Interior with a false ceiling and stone-clad walls" width="552" height="509" loading="lazy" decoding="async"><span class="figure__tag">Representative visual</span></div>
         <div class="cap-card__body">
           <span class="cap-card__k">08 trades</span>
@@ -1231,7 +340,7 @@
           <a class="link-arrow" href="services.html">View finishing services <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
-      <article class="cap-card" data-tilt data-tilt-max="5" data-tilt-glare data-reveal="depth" data-delay="1">
+      <article class="cap-card">
         <div class="cap-card__media"><img class="" src="assets/images/civil-construction-site.webp" alt="Construction site with an elevated concrete structure and crane" width="572" height="746" loading="lazy" decoding="async"><span class="figure__tag">Representative visual</span></div>
         <div class="cap-card__body">
           <span class="cap-card__k">04 capability groups</span>
@@ -1249,43 +358,38 @@
     <div class="section-head">
       <p class="eyebrow"><span class="eyebrow__idx">03</span>Track record</p>
       <div class="section-head__main">
-        <h2 class="h2" id="track-title" data-split>What we have<br><em>already delivered.</em></h2>
-        <p class="lede" data-reveal data-delay="1">Since 2021 we have worked for five reputed organisations across power, infrastructure, industrial and commercial projects — as a civil contractor and as a specialist finishing agency.</p>
+        <h2 class="h2" id="track-title">What we have<br><em>already delivered.</em></h2>
+        <p class="lede">Since 2021 we have worked for five reputed organisations across power, infrastructure, industrial and commercial projects — as a civil contractor and as a specialist finishing agency.</p>
       </div>
     </div>
-    <div class="sector-grid"><article class="sector-card" data-reveal="depth" data-delay="0">
+    <div class="sector-grid"><article class="sector-card">
         <a class="sector-card__link" href="projects.html#sector-01" aria-label="Power sector: read more on the track record page">
           <div class="sector-card__media"><img class="" src="assets/images/civil-construction-site.webp" alt="Construction site with elevated concrete structure, crane and two workers in safety gear" width="572" height="746" loading="lazy" decoding="async"><span class="figure__tag">Representative visual</span></div>
           <div class="sector-card__body"><span class="sector-card__no">01</span><h3>Power sector</h3><p>Civil and allied works on power generation and utility projects, executed to plant safety and permit conditions.</p><span class="sector-card__more"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
         </a>
-      </article><article class="sector-card" data-reveal="depth" data-delay="1">
+      </article><article class="sector-card">
         <a class="sector-card__link" href="projects.html#sector-02" aria-label="EPC partnerships: read more on the track record page">
           <div class="sector-card__media"><img class="" src="assets/images/industrial-building.webp" alt="Modern industrial building exterior with clad facade" width="741" height="377" loading="lazy" decoding="async"><span class="figure__tag">Representative visual</span></div>
           <div class="sector-card__body"><span class="sector-card__no">02</span><h3>EPC partnerships</h3><p>Engaged by EPC contractors as a civil and finishing sub-contractor, working to their quality, safety and billing regimes.</p><span class="sector-card__more"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
         </a>
-      </article><article class="sector-card" data-reveal="depth" data-delay="2">
+      </article><article class="sector-card">
         <a class="sector-card__link" href="projects.html#sector-03" aria-label="Commercial workspace: read more on the track record page">
           <div class="sector-card__media"><img class="" src="assets/images/commercial-workspace.webp" alt="Open-plan commercial office interior with workstations and exposed services" width="732" height="334" loading="lazy" decoding="async"><span class="figure__tag">Representative visual</span></div>
           <div class="sector-card__body"><span class="sector-card__no">03</span><h3>Commercial workspace</h3><p>Interior finishing for commercial workspace projects, carried out alongside occupation and phased handover.</p><span class="sector-card__more"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
         </a>
-      </article><article class="sector-card" data-reveal="depth" data-delay="3">
+      </article><article class="sector-card">
         <a class="sector-card__link" href="projects.html#sector-04" aria-label="Industrial finishing: read more on the track record page">
           <div class="sector-card__media"><img class="" src="assets/images/epoxy-flooring.webp" alt="Epoxy-coated industrial floor with line marking" width="481" height="305" loading="lazy" decoding="async"><span class="figure__tag">Representative visual</span></div>
           <div class="sector-card__body"><span class="sector-card__no">04</span><h3>Industrial finishing</h3><p>Epoxy floors, tiling, stone, railings and painting completed to handover standard in plant and factory buildings.</p><span class="sector-card__more"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></div>
         </a>
       </article></div>
-    <p class="notice" data-reveal><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Scope, values and dates for each engagement are furnished on request with the work orders.</p>
+    <p class="notice"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Scope, values and dates for each engagement are furnished on request with the work orders.</p>
   </div>
 </section>
 
 <!-- Method section, presented as an engineering sheet unrolling from a
      roller. The content below is unchanged; only the wrapper is new. -->
 <section class="section section--light ae-roll" aria-labelledby="method-title" data-roller>
-  <div class="ae-roll__machine" aria-hidden="true">
-    <div class="container">
-      <div class="ae-roll__tube"><span class="ae-roll__grain"></span><span class="ae-roll__cap ae-roll__cap--l"></span><span class="ae-roll__cap ae-roll__cap--r"></span></div>
-    </div>
-  </div>
   <div class="ae-roll__sheet">
    <div class="ae-roll__paper">
     <span class="ae-roll__rule" aria-hidden="true"></span>
@@ -1293,11 +397,11 @@
     <div class="section-head">
       <p class="eyebrow eyebrow--dark"><span class="eyebrow__idx">04</span>Method</p>
       <div class="section-head__main">
-        <h2 class="h2" id="method-title" data-split>How we execute<br><em>the work.</em></h2>
-        <p class="lede" data-reveal data-delay="1">A site engineer and supervisor are assigned to every contract for its full duration and remain the client’s single point of contact from mobilisation to handover.</p>
+        <h2 class="h2" id="method-title">How we execute<br><em>the work.</em></h2>
+        <p class="lede">A site engineer and supervisor are assigned to every contract for its full duration and remain the client’s single point of contact from mobilisation to handover.</p>
       </div>
     </div>
-    <ol class="mini-steps" data-progress-line><li class="mini-step" data-reveal data-delay="0"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">01</span><h3>Mobilisation</h3><p>Site handover, gang deployment, material staging and safety induction within the agreed window.</p></li><li class="mini-step" data-reveal data-delay="1"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">02</span><h3>Samples &amp; Mock-ups</h3><p>Material submittals and a mock-up panel or room approved before bulk work starts.</p></li><li class="mini-step" data-reveal data-delay="2"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">03</span><h3>Stage Execution</h3><p>Work sequenced area by area, with levels, joints and coats checked at each stage.</p></li><li class="mini-step" data-reveal data-delay="3"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">04</span><h3>Measurement &amp; Billing</h3><p>Joint measurement with the client’s engineer; running bills with test records attached.</p></li><li class="mini-step" data-reveal data-delay="4"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">05</span><h3>Snag &amp; Handover</h3><p>Snag list closed area by area, cleaning done, area handed over for occupation.</p></li></ol>
+    <ol class="mini-steps" data-progress-line><li class="mini-step"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">01</span><h3>Mobilisation</h3><p>Site handover, gang deployment, material staging and safety induction within the agreed window.</p></li><li class="mini-step"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">02</span><h3>Samples &amp; Mock-ups</h3><p>Material submittals and a mock-up panel or room approved before bulk work starts.</p></li><li class="mini-step"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">03</span><h3>Stage Execution</h3><p>Work sequenced area by area, with levels, joints and coats checked at each stage.</p></li><li class="mini-step"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">04</span><h3>Measurement &amp; Billing</h3><p>Joint measurement with the client’s engineer; running bills with test records attached.</p></li><li class="mini-step"><span class="mini-step__dot" aria-hidden="true"></span><span class="mini-step__no">05</span><h3>Snag &amp; Handover</h3><p>Snag list closed area by area, cleaning done, area handed over for occupation.</p></li></ol>
     <a class="link-arrow link-arrow--dark" href="method.html">See the full method <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
    </div>
@@ -1309,41 +413,41 @@
     <div class="section-head">
       <p class="eyebrow"><span class="eyebrow__idx">05</span>Client value</p>
       <div class="section-head__main">
-        <h2 class="h2" id="value-title" data-split>Client value &amp;<br><em>delivery strengths.</em></h2>
+        <h2 class="h2" id="value-title">Client value &amp;<br><em>delivery strengths.</em></h2>
         
       </div>
     </div>
-    <div class="vgrid"><article class="vcard vcard--grid" data-tilt data-tilt-max="9" data-reveal data-delay="0">
+    <div class="vgrid"><article class="vcard vcard--grid">
         <div class="vcard__tex" aria-hidden="true"></div>
         <span class="vcard__no">01</span>
         <span class="vcard__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
         <h3 class="vcard__title">Schedule certainty</h3>
         <p class="vcard__text">Resourcing planned against the programme, with the depth to add a shift rather than a delay.</p>
-      </article><article class="vcard vcard--hatch" data-tilt data-tilt-max="9" data-reveal data-delay="1">
+      </article><article class="vcard vcard--hatch">
         <div class="vcard__tex" aria-hidden="true"></div>
         <span class="vcard__no">02</span>
         <span class="vcard__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg></span>
         <h3 class="vcard__title">Finish quality that holds</h3>
         <p class="vcard__text">Approved samples and mock-ups, level and joint checks, snag closure before handover.</p>
-      </article><article class="vcard vcard--stripe" data-tilt data-tilt-max="9" data-reveal data-delay="2">
+      </article><article class="vcard vcard--stripe">
         <div class="vcard__tex" aria-hidden="true"></div>
         <span class="vcard__no">03</span>
         <span class="vcard__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18M5 17v-3a7 7 0 0 1 14 0v3"/><path d="M10 7.5V5h4v2.5"/></svg></span>
         <h3 class="vcard__title">Safety as a condition</h3>
         <p class="vcard__text">Induction and toolbox training, PPE discipline, height and excavation permits.</p>
-      </article><article class="vcard vcard--dots" data-tilt data-tilt-max="9" data-reveal data-delay="0">
+      </article><article class="vcard vcard--dots">
         <div class="vcard__tex" aria-hidden="true"></div>
         <span class="vcard__no">04</span>
         <span class="vcard__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/></svg></span>
         <h3 class="vcard__title">Competitive rates</h3>
         <p class="vcard__text">Direct labour and own equipment keep the rate structure lean without cutting supervision.</p>
-      </article><article class="vcard vcard--contour" data-tilt data-tilt-max="9" data-reveal data-delay="1">
+      </article><article class="vcard vcard--contour">
         <div class="vcard__tex" aria-hidden="true"></div>
         <span class="vcard__no">05</span>
         <span class="vcard__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></span>
         <h3 class="vcard__title">Responsive management</h3>
         <p class="vcard__text">Direct access to site leadership; decisions in hours, not escalation chains.</p>
-      </article><article class="vcard vcard--lines" data-tilt data-tilt-max="9" data-reveal data-delay="2">
+      </article><article class="vcard vcard--lines">
         <div class="vcard__tex" aria-hidden="true"></div>
         <span class="vcard__no">06</span>
         <span class="vcard__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg></span>
@@ -1365,13 +469,13 @@
   </div>
 </section>
 </main>
-<section class="cta-band bp-grid" data-spotlight aria-labelledby="cta-title">
+<section class="cta-band bp-grid" aria-labelledby="cta-title">
   <div class="container cta-band__inner">
     <div>
       <p class="eyebrow"><span class="eyebrow__idx">Next</span>Next steps</p>
-      <h2 class="cta-band__title" id="cta-title" data-split>Confirm the scope,<br><em>and we mobilise.</em></h2>
+      <h2 class="cta-band__title" id="cta-title">Confirm the scope,<br><em>and we mobilise.</em></h2>
     </div>
-    <div class="cta-band__side" data-reveal>
+    <div class="cta-band__side">
       <p>On acceptance we submit material samples for approval, deploy the first gang against the agreed mobilisation date, and issue a week-by-week programme worked back from the client’s completion date.</p>
       <div class="btn-row"><a class="btn btn--primary magnetic" href="contact.html"><span class="btn__label">Discuss Your Project</span><span class="btn__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="btn btn--ghost magnetic" href="tel:+919381940980"><span class="btn__label">Call Now</span><span class="btn__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span></a></div>
     </div>
@@ -1448,279 +552,16 @@
 <div class="container footer__bottom">
     <span>© <span data-year>2026</span> Arahan Enterprises. All rights reserved.</span>
     <span class="footer__domain">arahanenterprises.com</span>
-    <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Reduce motion</button>
+    <span class="motion-toggle" aria-label="Website motion is off">Motion off</span>
     <a class="footer__top link-u" href="#top">Back to top ↑</a>
   </div>
 </footer>
-<script src="js/animations.js" defer></script>
 <!-- js/3d.js is not loaded here: the home page hero is now the building
      video, so there is no canvas[data-scene] for it to drive. The Civil page
      still has its canvas and still loads the module. -->
 <script src="js/main.js" defer></script>
-<script src="js/aarahan-depth.js" defer></script>
 <script src="js/aarahan-social.js" defer></script>
-<script src="js/aarahan-vehicles.js?v=20260924" defer></script>
-<script src="js/aarahan-building.js" defer></script>
-<script src="js/aarahan-roller.js" defer></script>
-<script id="aarahan-about-book-script">
-/* =========================================
-   ARAHAN ABOUT 3D BOOK
-   INDEX.HTML ONLY
-   Self-contained: no globals are created or overwritten.
-   ========================================= */
-(function () {
-  "use strict";
-
-  var root = document.querySelector("[data-aarahan-book]");
-  if (!root) return;
-
-  var bookEl = root.querySelector("[data-aarahan-book-el]");
-  var stage = root.querySelector(".aarahan-book-stage");
-  var leaves = Array.prototype.slice.call(root.querySelectorAll(".aarahan-book-leaf"));
-  var prevBtn = root.querySelector("[data-ab-prev]");
-  var nextBtn = root.querySelector("[data-ab-next]");
-  var curEl = root.querySelector("[data-ab-current]");
-  var totalEl = root.querySelector("[data-ab-total]");
-  var labelEl = root.querySelector("[data-ab-label]");
-  var statusEl = root.querySelector("[data-ab-status]");
-
-  var VIEWS = [
-    "Cover",
-    "Vertical Mast · RE-VM / DVM Series",
-    "Electric Scissor Lift · RE-ES Series",
-    "Boom Lift · RE-TM Series",
-    "Spider Lift · RE-HY Series",
-    "Truck Mounted Boom Lift · RE-TM Series",
-    "Battery Stacker · RE-ST Series",
-    "Battery Pallet Truck · RE-REPT Series",
-    "Welding Solutions · RE Welding Range",
-    "Portable Power Station · RE-PS Series",
-    "Powering performance · Enquiries"
-  ];
-  var total = leaves.length + 1;
-  var view = 0;
-  var opened = false;
-  var userOpened = false;
-  var countersDone = false;
-  var flipTimer = null;
-  var mobileBook = window.matchMedia("(max-width: 768px)");
-  var mobileFace = 0;
-  var mobileBusyUntil = 0;
-
-  /* Each desktop spread contains two faces. On phones visit both in order,
-     using the same leaves, images and tables rather than duplicating content. */
-  function updateMobileBook() {
-    var mobile = mobileBook.matches;
-    leaves.forEach(function (leaf, i) {
-      var active = i === Math.floor(mobileFace / 2);
-      leaf.classList.toggle("is-mobile-page", mobile && active);
-      leaf.classList.toggle("is-mobile-back", mobile && active && mobileFace % 2 === 1);
-      Array.from(leaf.children).forEach(function (face, side) {
-        if (!face.classList.contains("aarahan-book-face")) return;
-        if (mobile && (!active || side !== mobileFace % 2)) face.setAttribute("inert", "");
-        else face.removeAttribute("inert");
-      });
-    });
-    if (!mobile) { if (totalEl) totalEl.textContent = ("0" + total).slice(-2); return; }
-    if (curEl) curEl.textContent = ("0" + (mobileFace + 1)).slice(-2);
-    if (totalEl) totalEl.textContent = leaves.length * 2;
-    if (prevBtn) prevBtn.disabled = mobileFace === 0;
-    if (nextBtn) nextBtn.disabled = mobileFace === leaves.length * 2 - 1;
-    if (statusEl) statusEl.textContent = "Page " + (mobileFace + 1) + " of " + leaves.length * 2 + ": " + VIEWS[view];
-  }
-
-  function turnMobileBook(direction) {
-    if (Date.now() < mobileBusyUntil) return;
-    var next = Math.max(0, Math.min(leaves.length * 2 - 1, mobileFace + direction));
-    if (next === mobileFace) return;
-    mobileFace = next;
-    view = Math.ceil(mobileFace / 2);
-    mobileBusyUntil = Date.now() + (aarahanReducedMotion() ? 0 : 450);
-    updateArahanBookPage();
-    var current = leaves[Math.floor(mobileFace / 2)].children[mobileFace % 2];
-    var inner = current.querySelector(".aarahan-book-page-inner");
-    if (inner) inner.scrollTop = 0;
-  }
-
-  function aarahanReducedMotion() {
-    return document.documentElement.classList.contains("rm") ||
-      (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }
-  function aarahanFinePointer() {
-    return window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  }
-
-  /* Count up the figures on the "at a glance" page, once */
-  function aarahanBookCounters() {
-    if (countersDone) return;
-    countersDone = true;
-    root.querySelectorAll("[data-ab-count]").forEach(function (el) {
-      var target = parseInt(el.getAttribute("data-ab-count"), 10);
-      var from = parseInt(el.getAttribute("data-ab-from") || "0", 10);
-      if (isNaN(target)) return;
-      if (aarahanReducedMotion()) { el.textContent = target; return; }
-      var t0 = null, dur = 1500;
-      (function step(t) {
-        if (t0 === null) t0 = t;
-        var p = Math.min(1, (t - t0) / dur);
-        el.textContent = Math.round(from + (target - from) * (1 - Math.pow(1 - p, 4)));
-        if (p < 1) window.requestAnimationFrame(step);
-      })(window.performance.now());
-    });
-  }
-
-  function updateArahanBookPage() {
-    leaves.forEach(function (leaf, i) {
-      var turned = i < view;
-      leaf.classList.toggle("is-turned", turned);
-      leaf.style.zIndex = turned ? 100 + i : 100 - i;
-    });
-    root.classList.toggle("is-open", view > 0);
-    if (curEl) curEl.textContent = ("0" + (view + 1)).slice(-2);
-    if (labelEl) labelEl.textContent = VIEWS[view];
-    if (prevBtn) prevBtn.disabled = view === 0;
-    if (nextBtn) nextBtn.disabled = view === total - 1;
-    if (statusEl) statusEl.textContent = "Spread " + (view + 1) + " of " + total + ": " + VIEWS[view];
-    if (view >= 1) aarahanBookCounters();
-    updateMobileBook();
-  }
-
-  /* Keep the leaf that is mid-flip above the rest of the stack */
-  function aarahanLiftFlipping(index) {
-    var leaf = leaves[index];
-    if (!leaf) return;
-    leaf.style.zIndex = 200;
-    window.clearTimeout(flipTimer);
-    flipTimer = window.setTimeout(updateArahanBookPage, aarahanReducedMotion() ? 20 : 1260);
-  }
-
-  function nextArahanBookPage() {
-    if (mobileBook.matches) { turnMobileBook(1); return; }
-    if (view >= total - 1) return;
-    var flipping = view;
-    view += 1;
-    updateArahanBookPage();
-    aarahanLiftFlipping(flipping);
-  }
-
-  function previousArahanBookPage() {
-    if (mobileBook.matches) { turnMobileBook(-1); return; }
-    if (view <= 0) return;
-    view -= 1;
-    updateArahanBookPage();
-    aarahanLiftFlipping(view);
-  }
-
-  function initArahanAboutBook() {
-    if (totalEl) totalEl.textContent = ("0" + total).slice(-2);
-    updateArahanBookPage();
-
-    if (nextBtn) nextBtn.addEventListener("click", nextArahanBookPage);
-    if (prevBtn) prevBtn.addEventListener("click", previousArahanBookPage);
-
-    /* "Open the book" on the cover, and the cover itself, both open it */
-    var openBtn = root.querySelector("[data-ab-open]");
-    if (openBtn) {
-      openBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        userOpened = true;
-        if (view === 0) nextArahanBookPage();
-      });
-    }
-    var coverFace = root.querySelector(".aarahan-book-cover");
-    if (coverFace) {
-      coverFace.addEventListener("click", function () {
-        userOpened = true;
-        if (view === 0) nextArahanBookPage();
-      });
-    }
-
-    /* Keyboard: arrow keys while the book area has focus */
-    root.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowRight") { e.preventDefault(); nextArahanBookPage(); }
-      if (e.key === "ArrowLeft") { e.preventDefault(); previousArahanBookPage(); }
-    });
-
-    /* Subtle mouse-driven 3D, desktop pointers only */
-    if (aarahanFinePointer()) {
-      stage.addEventListener("pointermove", function (e) {
-        if (mobileBook.matches || !root.classList.contains("is-entered") || aarahanReducedMotion()) return;
-        var r = stage.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        bookEl.style.setProperty("--ab-ry", (-7 + px * 14).toFixed(2) + "deg");
-        bookEl.style.setProperty("--ab-rx", (8 - py * 10).toFixed(2) + "deg");
-      });
-      stage.addEventListener("pointerleave", function () {
-        bookEl.style.removeProperty("--ab-ry");
-        bookEl.style.removeProperty("--ab-rx");
-      });
-    }
-
-    var startTouch = null;
-    stage.addEventListener("touchstart", function (event) {
-      startTouch = mobileBook.matches && event.touches.length === 1
-        ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
-    }, { passive: true });
-    stage.addEventListener("touchend", function (event) {
-      if (!startTouch || !event.changedTouches.length) return;
-      var dx = event.changedTouches[0].clientX - startTouch.x;
-      var dy = event.changedTouches[0].clientY - startTouch.y;
-      startTouch = null;
-      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.8) {
-        userOpened = true;
-        turnMobileBook(dx < 0 ? 1 : -1);
-      }
-    }, { passive: true });
-    stage.addEventListener("touchcancel", function () { startTouch = null; }, { passive: true });
-    mobileBook.addEventListener("change", function () {
-      mobileFace = Math.min(leaves.length * 2 - 1, view === 0 ? 0 : view * 2 - 1);
-      bookEl.style.removeProperty("--ab-rx");
-      bookEl.style.removeProperty("--ab-ry");
-      updateArahanBookPage();
-    });
-
-    /* Entrance: lift in, then open the cover. Runs once. */
-    function enter() {
-      if (opened) return;
-      opened = true;
-      root.classList.add("is-entered");
-      if (aarahanReducedMotion()) { view = 1; mobileFace = 1; updateArahanBookPage(); return; }
-      window.setTimeout(function () { if (view === 0 && !userOpened) nextArahanBookPage(); }, 1250);
-    }
-
-    if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) { enter(); io.disconnect(); }
-        });
-      }, { threshold: 0.01, rootMargin: "-60px 0px -60px 0px" });
-      io.observe(root);
-    } else {
-      enter();
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initArahanAboutBook);
-  } else {
-    initArahanAboutBook();
-  }
-})();
-</script>
 <!-- Construction convoy: decorative only — aria-hidden, pointer-events: none.
      Order is fixed by the CSS delays: excavator, wheel loader, concrete mixer. -->
-<div class="aarahan-convoy" aria-hidden="true">
-  <div class="aarahan-convoy__ground"></div>
-  <div class="aarahan-convoy__unit aarahan-convoy__unit--excavator">
-    <img src="assets/vehicles/excavator.png" alt="" width="313" height="320" decoding="async">
-  </div>
-  <div class="aarahan-convoy__unit aarahan-convoy__unit--loader">
-    <img src="assets/vehicles/wheel-loader.png" alt="" width="690" height="320" decoding="async">
-  </div>
-  <div class="aarahan-convoy__unit aarahan-convoy__unit--mixer">
-    <img src="assets/vehicles/concrete-mixer.png" alt="" width="691" height="320" decoding="async">
-  </div>
-</div>
 </body>
 </html>

@@ -12,12 +12,12 @@ Frontend built with **HTML5, CSS3 and vanilla JavaScript**, with a small Node.js
 
 ```
 aarahan-enterprises/
-├── index.html                  Home: 3D hero, stats, capabilities, track record, method, client value
-├── about.html                  Background, profile, 3D capability stack, workforce, mission/vision, values colonnade
+├── index.html                  Home: static building hero, machinery catalogue, equipment, capabilities
+├── about.html                  Background, profile, capability summary, workforce, mission/vision, values colonnade
 ├── services.html               Service ecosystem hub + 8 finishing services
-├── civil-infrastructure.html   3D civil site hero + interactive infrastructure explorer
+├── civil-infrastructure.html   Static construction image + interactive infrastructure explorer
 ├── projects.html               Track record by sector, where we work
-├── method.html                 Scroll-pinned execution timeline, single point of contact, next steps
+├── method.html                 Vertical execution timeline, single point of contact, next steps
 ├── safety-quality.html         Safety, quality, statutory compliance, housekeeping
 ├── clients.html                Organisations (text only) + client value
 ├── commercial.html             Contract models and commercial terms
@@ -26,14 +26,12 @@ aarahan-enterprises/
 ├── sitemap.xml · robots.txt · site.webmanifest
 ├── css/
 │   ├── style.css               Tokens, base, layout, components, page modules
-│   ├── animations.css          Keyframes, loader, reveal states, reduced-motion rules
+│   ├── aarahan-static.css      Permanent motion-off presentation and machinery cards
 │   ├── responsive.css          Breakpoints 1280 → 380 px, print
-│   └── aarahan-social.css      Footer 3D social tiles (scoped .aarahan-social-*)
+│   └── aarahan-social.css      Static footer social tiles (scoped .aarahan-social-*)
 ├── js/
-│   ├── navigation.js           Loaded in <head>: shared AE helpers, header, menu, progress bar, page transitions
-│   ├── animations.js           Split text, scroll reveal, counters, 3D tilt, magnetic buttons, grid spotlight, parallax
-│   ├── 3d.js                   Existing Three.js Civil hero with graceful fallback
-│   ├── main.js                 Loader, footer, capability stack, colonnade, ecosystem, explorer, timeline, enquiry form
+│   ├── navigation.js           Loaded in <head>: shared static AE helpers and accessible menu
+│   ├── main.js                 Static controls, ecosystem, explorer, timeline, enquiry form
 │   └── aarahan-social.js       Footer 3D social tiles + SOCIAL LINK CONFIG (see §9)
 └── assets/
     ├── images/                 Logo, representative visuals (WebP), Open Graph image
@@ -50,7 +48,7 @@ npm ci
 npm run dev
 ```
 
-Open the localhost URL printed by the server. `npm test` runs SMTP-mocked API and motion-state tests without sending email. `npm run build` copies only public website files into the ignored `public/` folder.
+Open the localhost URL printed by the server. `npm test` runs SMTP-mocked API and permanent motion-off contract tests without sending email. `npm run build` copies only public website files into the ignored `public/` folder.
 
 ## 3. Deploy
 
@@ -62,18 +60,17 @@ The existing production project is **dn-asset1/aarahan-enterprises-website** on 
 
 After the domain is live, submit `https://arahanenterprises.com/sitemap.xml` in Google Search Console.
 
-### Motion hierarchy
+### Permanent motion-off presentation
 
-`css/aarahan-depth.css` and `js/aarahan-depth.js` own reversible section depth and image parallax. Reading strips, CTAs and forms stay flat; the machinery book gets reduced section motion so page turns remain usable. `animations.js` owns staggered reveals, damped card tilt and bounded magnetic buttons. Native vertical scrolling stays untouched. Pointer effects are desktop-only, mobile motion is lighter, and the existing footer motion preference is authoritative. The building video plays once; hidden tabs pause decoding and reduced motion holds the completed building. No custom cursor is introduced because the existing project has none.
+All eleven pages use `css/aarahan-static.css` and the `static-site rm` root classes. Motion remains off regardless of OS settings or an old saved preference. Navigation uses normal browser scrolling and page loading. The footer reports **Motion off** without a toggle that can reactivate it.
 
-## 4. External dependencies (CDN)
+The home hero uses the 79 KB `assets/images/completed-building.webp` still extracted from the supplied footage. Civil uses an existing representative construction photograph. No page loads video, Three.js, scroll/roller/depth, vehicle or page-flip scripts. Legacy animation files remain unlinked in source history; they are not frontend dependencies.
 
-| Dependency | Used for | Loaded from |
-|---|---|---|
-| Three.js r170 (existing ES module) | Civil page hero only; Home uses the supplied video | `cdn.jsdelivr.net/npm/three@0.170.0` via dynamic `import()` |
-| Google Fonts: Barlow Condensed, Inter, IBM Plex Mono | Typography | `fonts.googleapis.com` |
+The original nine machinery categories, images, models and technical tables are preserved in responsive cards with native, keyboard-accessible specification disclosures. The three vehicle images form a stationary equipment row. About capability descriptions and Method stages remain visible without scrolling triggers.
 
-If either is unreachable, the site still works. The 3D hero falls back to a static line drawing, and text falls back to system fonts.
+## 4. External dependencies
+
+Google Fonts provides Barlow Condensed, Inter and IBM Plex Mono with system-font fallbacks. No frontend animation library is loaded. Nodemailer remains server-side only.
 
 ## 5. Brand colour system
 
@@ -90,7 +87,7 @@ All colour lives in one place — the `:root` block at the top of `css/style.css
 | `--off-white` | `#F7F3EC` | Main light sections, body text on green |
 | `--dark-text` | `#2B2B2B` | Body copy on light surfaces |
 
-Measured balance across all 11 pages, sampled from full-page renders at 1440px: **53.6% neutral (off-white / sand / beige), 26.6% green, 13.1% brown, and peach as a thin accent**. Peach measures well under 5% by area because it is used for rules, chips and icons rather than fills — that is the intent, not a shortfall.
+The established off-white, sand, green and brown surface system is preserved, with peach reserved for small accents and CTAs.
 
 ### Contrast-safe variants
 
@@ -121,24 +118,19 @@ The semantic layer beneath the palette (`--ink`, `--char`, `--accent`, `--second
 
 ## 6. Features
 
-- Cinematic 3D hero (home): an RCC frame that assembles footing → column → beam → slab → finishes, with a tower crane, starter bars on the top storey, a blueprint ground grid, dimension lines, dust particles, a light sweep, mouse parallax, a scroll-driven camera rise and an "exploded" storey view
-- 3D civil site (civil page): footings and pedestals, equipment foundations, a cable trench with covers, a pipeline in a backfilled trench, a control room and chain-link and barbed-wire fencing
-- Live HUD labels projected from 3D anchor points
-- Architectural wireframe loader (first page of a session only; it clears itself even if JavaScript fails)
-- CSS 3D components: capability stack (Substrate → Civil → Finishing → Quality → Handover), values colonnade, tilted photo frames with dimension lines, 3D tilt cards with glare, a rotating 404 frame and an animated safety shield
-- Service ecosystem hub, accessible tabbed infrastructure explorer with self-drawing isometric drawings, and a scroll-pinned horizontal execution timeline (vertical on smaller screens)
-- Scroll reveals, masked split headings, number counters, a progress bar, magnetic CTAs, a blueprint-grid cursor spotlight and soft page transitions
-- Sticky header that is transparent over the hero, turns solid on scroll and hides on scroll-down, with active-page indication and a full-screen mobile menu with focus management
-- Enquiry form that sends owner notifications and a visitor confirmation through the server-side SMTP service
+- Static architectural hero, service and equipment cards, readable machinery catalogue.
+- Stable sticky header, active page indication and accessible mobile navigation.
+- Click/keyboard-driven service ecosystem and civil capability tabs, with no automatic cycling.
+- Existing enquiry form backed by the Node/Nodemailer API and Vercel adapter.
+- Existing brand palette, company details, contact links, footer and all eleven pages.
 
 ## 7. Performance and accessibility
 
-- The existing Three.js renderer is loaded only on Civil. Rendering pauses when the hero is off-screen or the tab is hidden. Pixel ratio is capped, and on mobile there are no shadows and fewer particles.
-- Images are WebP, lazy-loaded, with explicit dimensions.
-- External frontend requests are the fonts and (on Civil) Three.js; SMTP runs server-side.
-- Semantic landmarks, one `h1` per page, skip link, visible focus states, ARIA on the menu, tabs and live regions, and keyboard support for the explorer tabs.
-- `prefers-reduced-motion` is respected, and visitors can also switch motion off with the **Reduce motion** toggle in every footer.
-- SEO: unique titles and descriptions, canonical URLs, Open Graph / Twitter tags, `GeneralContractor` + `BreadcrumbList` structured data, sitemap and robots.
+- Compressed static WebP hero; no video decoding, WebGL or decorative animation loops.
+- Lazy-loaded machinery and supporting imagery; responsive grids with no horizontal page scrolling.
+- Permanent motion-off CSS includes hover states, pseudo-elements and form feedback.
+- Semantic landmarks, one H1 per page, skip link, focus states, menu focus management, accessible tabs and live form status.
+- SEO titles, descriptions, canonical URLs, Open Graph, structured data, sitemap and favicons are retained. The existing custom-domain metadata should only be changed when the site owner changes the canonical domain.
 
 ## 8. Content sources and rules
 
@@ -146,7 +138,7 @@ All company facts come from the *Aarahan Enterprises Business Proposal*: service
 
 ## 9. Social media links (footer tiles)
 
-The footer contains a 3D social tile block for **Facebook, WhatsApp, Google Business and Instagram**. No social accounts were found anywhere in the supplied material, so **no URLs were invented** — the tiles ship switched off.
+The footer contains a static social tile block for **Facebook, WhatsApp, Google Business and Instagram**. No social accounts were found anywhere in the supplied material, so **no URLs were invented** — the tiles ship switched off.
 
 To switch them on, edit the config at the top of `js/aarahan-social.js` (one file, all pages):
 

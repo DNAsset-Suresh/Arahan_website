@@ -151,7 +151,7 @@
   function initArahanLogistics() {
     measure();
 
-    if (reducedMotion()) { showCompleted(); }
+    if (reducedMotion()) { showCompleted(); return; }
 
     /* Only run while the block is on screen — never from page load alone */
     if ("IntersectionObserver" in window) {
